@@ -10,6 +10,7 @@ import {
     github,
     gla,
     google,
+    hackerrank,
     hospital,
     html,
     infosys,
@@ -81,7 +82,7 @@ export const experiences = [
             "Pursuing Bachelor of Technology in Computer Science & Engineering at GLA University.",
             "Driven by creativity and a strong passion for full-stack engineering, AI automation, and interactive web tools.",
             "Solid foundations in Data Structures, Algorithms, Software Engineering, and Database Management Systems.",
-            "Active competitive programmer on LeetCode and Codeforces, consistently honing problem-solving capabilities.",
+            "Active competitive programmer on LeetCode, Codeforces, and HackerRank, consistently honing problem-solving capabilities.",
         ],
     },
     {
@@ -144,6 +145,16 @@ export const socialLinks = [
         name: 'Codeforces',
         iconUrl: codeforces,
         link: 'https://codeforces.com/profile/OmSharma_cs',
+    },
+    {
+        name: 'HackerRank',
+        iconUrl: hackerrank,
+        link: 'https://www.hackerrank.com/profile/iOmSharma52',
+    },
+    {
+        name: 'Instagram',
+        iconUrl: instagram,
+        link: 'https://www.instagram.com/om.chaturvedi52?stkn=MTN4dDhjdm4xNGJtZg==',
     }
 ];
 

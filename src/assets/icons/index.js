@@ -37,6 +37,7 @@ import infosys from './infosys.svg'
 import hospital from './hospital.svg'
 import instagram from './instagram.svg'
 import portfolio3d from './portfolio3d.svg'
+import hackerrank from './hackerrank.svg'
 
 export {
     css,
@@ -77,5 +78,6 @@ export {
     infosys,
     hospital,
     instagram,
-    portfolio3d
+    portfolio3d,
+    hackerrank
 }

@@ -5,6 +5,7 @@ import { Suspense, useRef, useState } from "react";
 import { Fox } from "../models";
 import useAlert from "../hooks/useAlert";
 import { Alert, Loader } from "../components";
+import { useTheme } from "../context/ThemeContext";
 
 const Contact = () => {
   const formRef = useRef();
@@ -12,6 +13,7 @@ const Contact = () => {
   const { alert, showAlert, hideAlert } = useAlert();
   const [loading, setLoading] = useState(false);
   const [currentAnimation, setCurrentAnimation] = useState("idle");
+  const { isNight } = useTheme();
 
   const handleChange = ({ target: { name, value } }) => {
     setForm({ ...form, [name]: value });
@@ -74,24 +76,28 @@ const Contact = () => {
   };
 
   return (
-    <section className='relative flex lg:flex-row flex-col max-container'>
+    <section className="relative flex lg:flex-row flex-col max-container">
       {alert.show && <Alert {...alert} />}
 
-      <div className='flex-1 min-w-[50%] flex flex-col'>
-        <h1 className='head-text'>Get in Touch</h1>
+      <div className="flex-1 min-w-[50%] flex flex-col">
+        <h1 className="head-text">Get in Touch</h1>
 
         <form
           ref={formRef}
           onSubmit={handleSubmit}
-          className='w-full flex flex-col gap-7 mt-14'
+          className="w-full flex flex-col gap-7 mt-14"
         >
-          <label className='text-black-500 font-semibold'>
+          <label className={`font-semibold ${isNight ? "text-slate-200" : "text-slate-700"}`}>
             Name
             <input
-              type='text'
-              name='name'
-              className='input'
-              placeholder='John'
+              type="text"
+              name="name"
+              className={`input ${
+                isNight
+                  ? "bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:ring-blue-400"
+                  : ""
+              }`}
+              placeholder="John"
               required
               value={form.name}
               onChange={handleChange}
@@ -99,13 +105,17 @@ const Contact = () => {
               onBlur={handleBlur}
             />
           </label>
-          <label className='text-black-500 font-semibold'>
+          <label className={`font-semibold ${isNight ? "text-slate-200" : "text-slate-700"}`}>
             Email
             <input
-              type='email'
-              name='email'
-              className='input'
-              placeholder='John@gmail.com'
+              type="email"
+              name="email"
+              className={`input ${
+                isNight
+                  ? "bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:ring-blue-400"
+                  : ""
+              }`}
+              placeholder="John@gmail.com"
               required
               value={form.email}
               onChange={handleChange}
@@ -113,13 +123,17 @@ const Contact = () => {
               onBlur={handleBlur}
             />
           </label>
-          <label className='text-black-500 font-semibold'>
+          <label className={`font-semibold ${isNight ? "text-slate-200" : "text-slate-700"}`}>
             Your Message
             <textarea
-              name='message'
-              rows='4'
-              className='textarea'
-              placeholder='Write your thoughts here...'
+              name="message"
+              rows="4"
+              className={`textarea ${
+                isNight
+                  ? "bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:ring-blue-400"
+                  : ""
+              }`}
+              placeholder="Write your thoughts here..."
               value={form.message}
               onChange={handleChange}
               onFocus={handleFocus}
@@ -128,9 +142,9 @@ const Contact = () => {
           </label>
 
           <button
-            type='submit'
+            type="submit"
             disabled={loading}
-            className='btn'
+            className="btn font-semibold"
             onFocus={handleFocus}
             onBlur={handleBlur}
           >
@@ -139,7 +153,7 @@ const Contact = () => {
         </form>
       </div>
 
-      <div className='lg:w-1/2 w-full lg:h-auto md:h-[550px] h-[350px]'>
+      <div className="lg:w-1/2 w-full lg:h-auto md:h-[550px] h-[350px]">
         <Canvas
           camera={{
             position: [0, 0, 5],
@@ -148,14 +162,22 @@ const Contact = () => {
             far: 1000,
           }}
         >
-          <directionalLight position={[0, 0, 1]} intensity={2.5} />
-          <ambientLight intensity={1} />
-          <pointLight position={[5, 10, 0]} intensity={2} />
+          <directionalLight
+            position={[0, 0, 1]}
+            intensity={isNight ? 1.2 : 2.5}
+            color={isNight ? "#a5b4fc" : "#ffffff"}
+          />
+          <ambientLight intensity={isNight ? 0.6 : 1} />
+          <pointLight
+            position={[5, 10, 0]}
+            intensity={isNight ? 1 : 2}
+            color={isNight ? "#818cf8" : "#ffffff"}
+          />
           <spotLight
             position={[10, 10, 10]}
             angle={0.15}
             penumbra={1}
-            intensity={2}
+            intensity={isNight ? 1 : 2}
           />
 
           <Suspense fallback={<Loader />}>

@@ -1,23 +1,29 @@
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
-
 import { Footer, Navbar } from "./components";
 import { About, Contact, Home, Projects } from "./pages";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
-const App = () => {
+const MainContent = () => {
+  const { isNight } = useTheme();
+
   return (
-    <main className='bg-slate-300/20'>
+    <main
+      className={`min-h-screen transition-colors duration-500 ${
+        isNight ? "bg-slate-950 text-slate-100" : "bg-slate-300/20 text-slate-800"
+      }`}
+    >
       <Router>
         <Navbar />
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route
-            path='/*'
+            path="/*"
             element={
               <>
                 <Routes>
-                  <Route path='/about' element={<About />} />
-                  <Route path='/projects' element={<Projects />} />
-                  <Route path='/contact' element={<Contact />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/projects" element={<Projects />} />
+                  <Route path="/contact" element={<Contact />} />
                 </Routes>
                 <Footer />
               </>
@@ -26,6 +32,14 @@ const App = () => {
         </Routes>
       </Router>
     </main>
+  );
+};
+
+const App = () => {
+  return (
+    <ThemeProvider>
+      <MainContent />
+    </ThemeProvider>
   );
 };
 
