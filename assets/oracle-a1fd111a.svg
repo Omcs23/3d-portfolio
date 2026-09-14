@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="oracleRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EA2E2E" />
+      <stop offset="100%" stop-color="#C74634" />
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <rect x="15" y="15" width="170" height="170" rx="36" fill="#161B22"/>
+  <!-- Oracle Classic Red Oval Ring -->
+  <path d="M65 60 H135 C157 60 175 78 175 100 C175 122 157 140 135 140 H65 C43 140 25 122 25 100 C25 78 43 60 65 60 Z M65 80 C54 80 45 89 45 100 C45 111 54 120 65 120 H135 C146 120 155 111 155 100 C155 89 146 80 135 80 Z" fill="url(#oracleRed)"/>
+  <!-- Cloud Overlay Icon inside Ring -->
+  <path d="M82 106 C80 102 82 96 87 94 C90 88 98 86 104 89 C108 84 117 84 122 89 C127 89 131 94 130 100 C134 102 135 107 132 111 C129 114 124 114 124 114 H85 C81 114 78 110 82 106 Z" fill="#FFFFFF" opacity="0.9"/>
+</svg>
