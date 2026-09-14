@@ -214,8 +214,8 @@ PROFILES:
         </div>
       </div>
 
-      {/* Profiles & Links Section */}
-      <div className="py-8 flex flex-col">
+      {/* Profiles & Links Section (Desktop / Laptop view only) */}
+      <div className="py-8 hidden md:flex flex-col">
         <h3 className="subhead-text">Coding & Social Profiles</h3>
         <p className={`mt-2 text-sm ${isNight ? "text-slate-400" : "text-slate-500"}`}>
           Connect with me across competitive programming platforms and social networks:

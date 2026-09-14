@@ -18,7 +18,7 @@ const Footer = () => {
           . All rights reserved.
         </p>
 
-        <div className="flex gap-4 justify-center items-center flex-wrap">
+        <div className="hidden md:flex gap-4 justify-center items-center flex-wrap">
           {socialLinks.map((link) => (
             <Link
               key={link.name}
