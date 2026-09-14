@@ -22,7 +22,7 @@ const About = () => {
 
       <div className='mt-5 flex flex-col gap-3 text-slate-500 leading-relaxed'>
         <p>
-          Final year B.Tech Computer Science & Engineering student at <strong>GLA University</strong>.
+          B.Tech Computer Science & Engineering student at <strong>GLA University</strong>.
         </p>
         <p>
           I am a creative full-stack developer and problem solver driven by turning complex ideas into functional, intuitive digital solutions. With strong hands-on expertise in the <strong>MERN stack</strong>, <strong>Java</strong>, and <strong>Python</strong>, I build scalable web applications, automation bots, and interactive 3D web experiences.

@@ -8,7 +8,12 @@ import {
     express,
     git,
     github,
+    gla,
+    google,
+    hospital,
     html,
+    infosys,
+    instagram,
     java,
     javascript,
     leetcode,
@@ -18,6 +23,8 @@ import {
     mui,
     nextjs,
     nodejs,
+    oracle,
+    portfolio3d,
     pricewise,
     python,
     react,
@@ -65,13 +72,13 @@ export const skills = [
 
 export const experiences = [
     {
-        title: "B.Tech Computer Science & Engineering (Final Year)",
+        title: "B.Tech Computer Science & Engineering",
         company_name: "GLA University",
-        icon: starbucks,
+        icon: gla,
         iconBg: "#accbe1",
         date: "2022 - 2026",
         points: [
-            "Pursuing Final Year Bachelor of Technology in Computer Science & Engineering at GLA University.",
+            "Pursuing Bachelor of Technology in Computer Science & Engineering at GLA University.",
             "Driven by creativity and a strong passion for full-stack engineering, AI automation, and interactive web tools.",
             "Solid foundations in Data Structures, Algorithms, Software Engineering, and Database Management Systems.",
             "Active competitive programmer on LeetCode and Codeforces, consistently honing problem-solving capabilities.",
@@ -80,7 +87,7 @@ export const experiences = [
     {
         title: "OCI 2025 Certified Generative AI & DevOps Professional",
         company_name: "Oracle Cloud Infrastructure",
-        icon: meta,
+        icon: oracle,
         iconBg: "#fbc3bc",
         date: "2025",
         points: [
@@ -91,7 +98,7 @@ export const experiences = [
     {
         title: "Cybersecurity Professional Certificate",
         company_name: "Coursera / Google",
-        icon: tesla,
+        icon: google,
         iconBg: "#a2d2ff",
         date: "2025",
         points: [
@@ -102,7 +109,7 @@ export const experiences = [
     {
         title: "Java & MERN Stack Certifications",
         company_name: "Infosys Springboard",
-        icon: shopify,
+        icon: infosys,
         iconBg: "#b7e4c7",
         date: "2024 - 2025",
         points: [
@@ -142,21 +149,21 @@ export const socialLinks = [
 
 export const projects = [
     {
-        iconUrl: estate,
+        iconUrl: hospital,
         theme: 'btn-back-blue',
         name: 'Hospital Management System',
         description: 'A comprehensive healthcare management web application designed to streamline patient registrations, doctor appointment scheduling, medical records, and hospital administrative operations.',
         link: 'https://github.com/Omcs23/hospital-management-system',
     },
     {
-        iconUrl: snapgram,
+        iconUrl: instagram,
         theme: 'btn-back-pink',
         name: 'Instagram Automation Bot (WIP)',
         description: 'An intelligent automation bot for Instagram comments and replies. Features user-configured comment triggers, automated context-aware replies, and background engagement handling.',
         link: 'https://github.com/Omcs23/instagram-automation-bot',
     },
     {
-        iconUrl: pricewise,
+        iconUrl: portfolio3d,
         theme: 'btn-back-red',
         name: '3D Interactive Portfolio',
         description: 'An immersive 3D developer portfolio website built with React, Three.js, React Three Fiber, and Tailwind CSS featuring interactive island models.',

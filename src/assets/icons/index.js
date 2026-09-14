@@ -30,6 +30,13 @@ import java from './java.svg'
 import python from './python.svg'
 import leetcode from './leetcode.svg'
 import codeforces from './codeforces.svg'
+import gla from './gla.svg'
+import oracle from './oracle.svg'
+import google from './google.svg'
+import infosys from './infosys.svg'
+import hospital from './hospital.svg'
+import instagram from './instagram.svg'
+import portfolio3d from './portfolio3d.svg'
 
 export {
     css,
@@ -63,5 +70,12 @@ export {
     java,
     python,
     leetcode,
-    codeforces
+    codeforces,
+    gla,
+    oracle,
+    google,
+    infosys,
+    hospital,
+    instagram,
+    portfolio3d
 }

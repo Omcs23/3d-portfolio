@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="glaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A2540" />
+      <stop offset="100%" stop-color="#1A365D" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F6D365" />
+      <stop offset="100%" stop-color="#FDA085" />
+    </linearGradient>
+  </defs>
+  <!-- Shield Outline -->
+  <path d="M100 15 L170 45 V105 C170 148 138 180 100 192 C62 180 30 148 30 105 V45 Z" fill="url(#glaGrad)" stroke="#D4AF37" stroke-width="6"/>
+  <!-- Inner Shield Accent -->
+  <path d="M100 27 L158 52 V103 C158 138 132 165 100 176 C68 165 42 138 42 103 V52 Z" fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.6"/>
+  <!-- Open Book -->
+  <path d="M60 115 C75 105 90 110 100 115 C110 110 125 105 140 115 V145 C125 135 110 140 100 145 C90 140 75 135 60 145 Z" fill="#FFFFFF"/>
+  <path d="M100 115 V145" stroke="#0A2540" stroke-width="3"/>
+  <!-- Mortarboard / Graduation Cap -->
+  <polygon points="100,55 145,73 100,91 55,73" fill="url(#goldGrad)"/>
+  <polygon points="75,81 75,100 100,108 125,100 125,81 100,91" fill="#FFFFFF" opacity="0.9"/>
+  <path d="M140 75 V100" stroke="#F6D365" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="140" cy="103" r="4" fill="#F6D365"/>
+  <!-- Star -->
+  <polygon points="100,34 103,42 111,42 105,47 107,55 100,50 93,55 95,47 89,42 97,42" fill="#F6D365"/>
+</svg>

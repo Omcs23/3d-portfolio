@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="infyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#007CC3" />
+      <stop offset="100%" stop-color="#005A9C" />
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <rect x="15" y="15" width="170" height="170" rx="36" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="4"/>
+  <!-- Infosys Iconic Blue Typography Mark -->
+  <g fill="url(#infyGrad)">
+    <!-- i dot -->
+    <circle cx="50" cy="65" r="9"/>
+    <!-- i stem -->
+    <rect x="42" y="82" width="16" height="50" rx="4"/>
+    <!-- n -->
+    <path d="M72 82 H86 V90 C90 84 98 80 107 80 C120 80 127 88 127 102 V132 H111 V105 C111 97 107 93 100 93 C92 93 88 98 88 106 V132 H72 V82 Z"/>
+    <!-- Springboard Star/Spark Emblem -->
+    <path d="M152 55 L156 67 L168 71 L156 75 L152 87 L148 75 L136 71 L148 67 Z" fill="#FFA000"/>
+    <circle cx="152" cy="71" r="3" fill="#FFFFFF"/>
+  </g>
+  <!-- Code brackets below -->
+  <path d="M60 152 L48 160 L60 168 M140 152 L152 160 L140 168 M108 148 L92 172" stroke="#007CC3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
