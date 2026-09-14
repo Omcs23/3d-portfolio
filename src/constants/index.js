@@ -76,7 +76,7 @@ export const experiences = [
         company_name: "GLA University",
         icon: gla,
         iconBg: "#accbe1",
-        date: "2022 - 2026",
+        date: "2023 - 2026",
         points: [
             "Pursuing Bachelor of Technology in Computer Science & Engineering at GLA University.",
             "Driven by creativity and a strong passion for full-stack engineering, AI automation, and interactive web tools.",
