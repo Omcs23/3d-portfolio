@@ -9,58 +9,31 @@ const getAutoTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  // Track if user explicitly selected a manual override
-  const [isManual, setIsManual] = useState(() => {
-    return localStorage.getItem("theme_is_manual") === "true";
-  });
-
+  // Use sessionStorage so manual toggles only apply for the current session/visit,
+  // returning automatically to the time-based schedule when reopening/revisiting.
   const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    const manualFlag = localStorage.getItem("theme_is_manual") === "true";
-    if (manualFlag && savedTheme) {
-      return savedTheme;
+    const savedSessionTheme = sessionStorage.getItem("session_theme");
+    if (savedSessionTheme === "day" || savedSessionTheme === "night") {
+      return savedSessionTheme;
     }
-    // Auto-detect based on local time when entering portfolio
     return getAutoTheme();
   });
 
   const isNight = theme === "night";
 
-  // Re-check auto theme every minute if user has not set a manual override
+  // Periodically update theme if session_theme is not explicitly set by user action
   useEffect(() => {
-    const checkAutoTheme = () => {
-      const manualFlag = localStorage.getItem("theme_is_manual") === "true";
-      if (!manualFlag) {
-        const autoTheme = getAutoTheme();
-        setTheme(autoTheme);
-      }
-    };
-
-    checkAutoTheme();
-    const interval = setInterval(checkAutoTheme, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    localStorage.setItem("theme_is_manual", isManual ? "true" : "false");
+    sessionStorage.setItem("session_theme", theme);
 
     if (isNight) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [theme, isNight, isManual]);
+  }, [theme, isNight]);
 
   const toggleTheme = () => {
-    setIsManual(true);
     setTheme((prevTheme) => (prevTheme === "day" ? "night" : "day"));
-  };
-
-  const resetToAuto = () => {
-    setIsManual(false);
-    localStorage.removeItem("theme_is_manual");
-    setTheme(getAutoTheme());
   };
 
   return (
@@ -68,9 +41,7 @@ export const ThemeProvider = ({ children }) => {
       value={{
         theme,
         isNight,
-        isManual,
         toggleTheme,
-        resetToAuto,
         autoDetectedTheme: getAutoTheme(),
       }}
     >
@@ -86,4 +57,5 @@ export const useTheme = () => {
   }
   return context;
 };
+
 

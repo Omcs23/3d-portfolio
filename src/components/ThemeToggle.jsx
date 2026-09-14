@@ -1,30 +1,30 @@
 import { useTheme } from "../context/ThemeContext";
 
 const ThemeToggle = ({ className = "" }) => {
-  const { isNight, isManual, toggleTheme, resetToAuto } = useTheme();
+  const { isNight, toggleTheme } = useTheme();
 
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
+    <div className={`flex items-center ${className}`}>
       <button
         onClick={toggleTheme}
         type="button"
         aria-label="Toggle Day and Night Mode"
         title={
-          isManual
-            ? `Manual Mode: ${isNight ? "Night" : "Day"}. Click to switch.`
-            : `Auto Time Active: ${isNight ? "Night" : "Day"} (6 AM - 6 PM Day, 6 PM - 6 AM Night). Click to switch manually.`
+          isNight
+            ? "Night Mode Active (6 PM - 6 AM). Click to switch to Day."
+            : "Day Mode Active (6 AM - 6 PM). Click to switch to Night."
         }
         className={`relative inline-flex items-center justify-center px-3 py-2 rounded-xl transition-all duration-300 transform active:scale-95 shadow-md ${
           isNight
-            ? "bg-slate-800/90 text-amber-300 border border-slate-700/80 shadow-amber-500/10 hover:bg-slate-700/90 hover:shadow-amber-500/20"
-            : "bg-white/90 text-sky-600 border border-sky-100 shadow-sky-500/10 hover:bg-sky-50 hover:shadow-sky-500/20"
+            ? "bg-white text-slate-900 border border-slate-200/80 shadow-slate-900/10 hover:bg-slate-100"
+            : "bg-slate-900/90 text-amber-300 border border-slate-700/80 shadow-slate-900/20 hover:bg-slate-800"
         }`}
       >
         <div className="relative w-5 h-5 flex items-center justify-center">
           {isNight ? (
-            /* Crescent Moon Icon with Star Sparkles */
+            /* Crescent Moon Icon */
             <svg
-              className="w-5 h-5 transition-transform duration-500 rotate-0 hover:rotate-12"
+              className="w-5 h-5 transition-transform duration-500 rotate-0 hover:rotate-12 text-slate-900"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -40,7 +40,7 @@ const ThemeToggle = ({ className = "" }) => {
           ) : (
             /* Glowing Sun Icon */
             <svg
-              className="w-5 h-5 transition-transform duration-500 rotate-0 hover:rotate-45"
+              className="w-5 h-5 transition-transform duration-500 rotate-0 hover:rotate-45 text-amber-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -56,34 +56,14 @@ const ThemeToggle = ({ className = "" }) => {
           )}
         </div>
 
-        <div className="ml-2 flex flex-col items-start text-left leading-tight hidden sm:flex">
-          <span className="text-xs font-bold tracking-wide">
-            {isNight ? "Night" : "Day"}
-          </span>
-          <span className="text-[10px] opacity-75 font-medium">
-            {isManual ? "Manual" : "Auto Time"}
-          </span>
-        </div>
+        <span className="ml-2 text-xs font-bold tracking-wide">
+          {isNight ? "Night" : "Day"}
+        </span>
       </button>
-
-      {isManual && (
-        <button
-          onClick={resetToAuto}
-          type="button"
-          aria-label="Reset to Auto Time Mode"
-          title="Reset to Automatic Time Mode (6 AM - 6 PM Day, 6 PM - 6 AM Night)"
-          className={`px-2.5 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95 ${
-            isNight
-              ? "bg-slate-800/80 hover:bg-slate-800 text-amber-300/90 border border-slate-700"
-              : "bg-white/90 hover:bg-white text-sky-600 border border-sky-100"
-          }`}
-        >
-          ⏱️ Auto
-        </button>
-      )}
     </div>
   );
 };
 
 export default ThemeToggle;
+
 
