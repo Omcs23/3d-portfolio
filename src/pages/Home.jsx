@@ -63,7 +63,9 @@ const Home = () => {
     <section className="w-full h-screen relative overflow-hidden">
       {/* Night mode ambient starry sky backdrop overlay */}
       {isNight && (
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950/60 pointer-events-none transition-opacity duration-700 z-0" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950/60 pointer-events-none transition-opacity duration-700 z-0">
+          <div className="stars-overlay absolute inset-0 opacity-60 pointer-events-none" />
+        </div>
       )}
 
       <div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center">
