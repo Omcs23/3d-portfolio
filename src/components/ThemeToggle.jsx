@@ -14,17 +14,17 @@ const ThemeToggle = ({ className = "" }) => {
             ? "Night Mode Active (6 PM - 6 AM). Click to switch to Day."
             : "Day Mode Active (6 AM - 6 PM). Click to switch to Night."
         }
-        className={`relative inline-flex items-center justify-center px-3 py-2 rounded-xl transition-all duration-300 transform active:scale-95 shadow-md ${
+        className={`relative inline-flex items-center justify-center px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl transition-all duration-300 transform active:scale-95 shadow-md ${
           isNight
             ? "bg-white text-slate-900 border border-slate-200/80 shadow-slate-900/10 hover:bg-slate-100"
             : "bg-slate-900/90 text-amber-300 border border-slate-700/80 shadow-slate-900/20 hover:bg-slate-800"
         }`}
       >
-        <div className="relative w-5 h-5 flex items-center justify-center">
+        <div className="relative w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center shrink-0">
           {isNight ? (
             /* Crescent Moon Icon */
             <svg
-              className="w-5 h-5 transition-transform duration-500 rotate-0 hover:rotate-12 text-slate-900"
+              className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-500 rotate-0 hover:rotate-12 text-slate-900"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -40,7 +40,7 @@ const ThemeToggle = ({ className = "" }) => {
           ) : (
             /* Glowing Sun Icon */
             <svg
-              className="w-5 h-5 transition-transform duration-500 rotate-0 hover:rotate-45 text-amber-400"
+              className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-500 rotate-0 hover:rotate-45 text-amber-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -56,7 +56,7 @@ const ThemeToggle = ({ className = "" }) => {
           )}
         </div>
 
-        <span className="ml-2 text-xs font-bold tracking-wide">
+        <span className="ml-1.5 sm:ml-2 text-[11px] sm:text-xs font-bold tracking-wide">
           {isNight ? "Night" : "Day"}
         </span>
       </button>
@@ -65,5 +65,3 @@ const ThemeToggle = ({ className = "" }) => {
 };
 
 export default ThemeToggle;
-
-

@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import HomeInfo from "./HomeInfo";
 import ThemeToggle from "./ThemeToggle";
+import Preloader from "./Preloader";
 
 export {
     CTA,
@@ -13,5 +14,6 @@ export {
     Navbar,
     Footer,
     HomeInfo,
-    ThemeToggle
+    ThemeToggle,
+    Preloader
 }

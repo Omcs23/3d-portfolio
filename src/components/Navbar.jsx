@@ -9,21 +9,21 @@ const Navbar = () => {
     <header className="header">
       <NavLink
         to="/"
-        className="w-10 h-10 rounded-lg bg-white dark:bg-slate-800 items-center justify-center flex font-bold shadow-md transition-colors"
+        className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white dark:bg-slate-800 items-center justify-center flex font-bold shadow-md transition-colors shrink-0"
       >
-        <p className="blue-gradient_text font-extrabold">OS</p>
+        <p className="blue-gradient_text font-extrabold text-sm sm:text-base">OS</p>
       </NavLink>
 
-      <div className="flex items-center gap-6">
-        <nav className="flex text-lg gap-6 font-semibold items-center">
+      <div className="flex items-center gap-3 sm:gap-6">
+        <nav className="flex text-base sm:text-lg gap-3 sm:gap-6 font-semibold items-center">
           <NavLink
             to="/about"
             className={({ isActive }) =>
               isActive
                 ? "text-blue-500 font-bold drop-shadow"
                 : isNight
-                ? "text-slate-200 hover:text-blue-400"
-                : "text-slate-700 hover:text-blue-600"
+                ? "text-slate-200 hover:text-blue-400 transition-colors"
+                : "text-slate-700 hover:text-blue-600 transition-colors"
             }
           >
             About
@@ -34,8 +34,8 @@ const Navbar = () => {
               isActive
                 ? "text-blue-500 font-bold drop-shadow"
                 : isNight
-                ? "text-slate-200 hover:text-blue-400"
-                : "text-slate-700 hover:text-blue-600"
+                ? "text-slate-200 hover:text-blue-400 transition-colors"
+                : "text-slate-700 hover:text-blue-600 transition-colors"
             }
           >
             Projects
@@ -49,5 +49,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-

@@ -1,17 +1,22 @@
+import { useState } from "react";
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
-import { Footer, Navbar } from "./components";
+import { Footer, Navbar, Preloader } from "./components";
 import { About, Contact, Home, Projects } from "./pages";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
 const MainContent = () => {
   const { isNight } = useTheme();
+  const [hasPreloaded, setHasPreloaded] = useState(false);
 
   return (
     <main
-      className={`min-h-screen transition-colors duration-500 ${
+      className={`min-h-screen w-full transition-colors duration-500 ${
         isNight ? "bg-slate-950 text-slate-100" : "bg-slate-300/20 text-slate-800"
       }`}
     >
+      {!hasPreloaded && (
+        <Preloader onComplete={() => setHasPreloaded(true)} />
+      )}
       <Router>
         <Navbar />
         <Routes>
