@@ -5,7 +5,7 @@ import {
 } from "react-vertical-timeline-component";
 
 import { CTA, Alert } from "../components";
-import { experiences, skills, socialLinks } from "../constants";
+import { education, certifications, skills, socialLinks } from "../constants";
 import useAlert from "../hooks/useAlert";
 import { useTheme } from "../context/ThemeContext";
 
@@ -287,69 +287,154 @@ PROFILES:
           </p>
         </div>
 
-        <div className="mt-12 flex">
-          <VerticalTimeline lineColor={isNight ? "#334155" : "#e2e8f0"}>
-            {experiences.map((experience) => (
-              <VerticalTimelineElement
-                key={experience.company_name}
-                date={experience.date}
-                iconStyle={{ background: experience.iconBg }}
-                icon={
-                  <div className="flex justify-center items-center w-full h-full">
-                    <img
-                      src={experience.icon}
-                      alt={experience.company_name}
-                      className="w-[60%] h-[60%] object-contain"
-                    />
-                  </div>
-                }
-                contentStyle={{
-                  background: isNight ? "#0f172a" : "#ffffff",
-                  color: isNight ? "#f8fafc" : "#0f172a",
-                  borderBottom: "8px",
-                  borderStyle: "solid",
-                  borderBottomColor: experience.iconBg,
-                  boxShadow: isNight
-                    ? "0 4px 20px -2px rgba(0, 0, 0, 0.5)"
-                    : "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
-                }}
-                contentArrowStyle={{
-                  borderRight: `7px solid ${isNight ? "#0f172a" : "#ffffff"}`,
-                }}
-              >
-                <div>
-                  <h3
-                    className={`text-xl font-poppins font-semibold ${
-                      isNight ? "text-white" : "text-black"
-                    }`}
-                  >
-                    {experience.title}
-                  </h3>
-                  <p
-                    className={`font-medium text-base ${
-                      isNight ? "text-slate-300" : "text-slate-600"
-                    }`}
-                    style={{ margin: 0 }}
-                  >
-                    {experience.company_name}
-                  </p>
-                </div>
-
-                <ul className="my-5 list-disc ml-5 space-y-2">
-                  {experience.points.map((point, index) => (
-                    <li
-                      key={`experience-point-${index}`}
-                      className={`font-normal pl-1 text-sm ${
-                        isNight ? "text-slate-300/80" : "text-slate-600/90"
+        {/* Education Timeline */}
+        <div className="mt-10 flex flex-col">
+          <h4
+            className={`text-xl font-poppins font-semibold border-b pb-2 ${
+              isNight ? "text-slate-200 border-slate-700" : "text-slate-700 border-slate-200"
+            }`}
+          >
+            Education
+          </h4>
+          <div className="mt-6 flex">
+            <VerticalTimeline lineColor={isNight ? "#334155" : "#e2e8f0"}>
+              {education.map((item) => (
+                <VerticalTimelineElement
+                  key={item.company_name + item.title}
+                  date={item.date}
+                  iconStyle={{ background: item.iconBg }}
+                  icon={
+                    <div className="flex justify-center items-center w-full h-full">
+                      <img
+                        src={item.icon}
+                        alt={item.company_name}
+                        className="w-[60%] h-[60%] object-contain"
+                      />
+                    </div>
+                  }
+                  contentStyle={{
+                    background: isNight ? "#0f172a" : "#ffffff",
+                    color: isNight ? "#f8fafc" : "#0f172a",
+                    borderBottom: "8px",
+                    borderStyle: "solid",
+                    borderBottomColor: item.iconBg,
+                    boxShadow: isNight
+                      ? "0 4px 20px -2px rgba(0, 0, 0, 0.5)"
+                      : "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+                  }}
+                  contentArrowStyle={{
+                    borderRight: `7px solid ${isNight ? "#0f172a" : "#ffffff"}`,
+                  }}
+                >
+                  <div>
+                    <h3
+                      className={`text-xl font-poppins font-semibold ${
+                        isNight ? "text-white" : "text-black"
                       }`}
                     >
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </VerticalTimelineElement>
-            ))}
-          </VerticalTimeline>
+                      {item.title}
+                    </h3>
+                    <p
+                      className={`font-medium text-base ${
+                        isNight ? "text-slate-300" : "text-slate-600"
+                      }`}
+                      style={{ margin: 0 }}
+                    >
+                      {item.company_name}
+                    </p>
+                  </div>
+
+                  <ul className="my-5 list-disc ml-5 space-y-2">
+                    {item.points.map((point, index) => (
+                      <li
+                        key={`edu-point-${index}`}
+                        className={`font-normal pl-1 text-sm ${
+                          isNight ? "text-slate-300/80" : "text-slate-600/90"
+                        }`}
+                      >
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </VerticalTimelineElement>
+              ))}
+            </VerticalTimeline>
+          </div>
+        </div>
+
+        {/* Certifications Timeline */}
+        <div className="mt-14 flex flex-col">
+          <h4
+            className={`text-xl font-poppins font-semibold border-b pb-2 ${
+              isNight ? "text-slate-200 border-slate-700" : "text-slate-700 border-slate-200"
+            }`}
+          >
+            Certifications & Training
+          </h4>
+          <div className="mt-6 flex">
+            <VerticalTimeline lineColor={isNight ? "#334155" : "#e2e8f0"}>
+              {certifications.map((item) => (
+                <VerticalTimelineElement
+                  key={item.company_name + item.title}
+                  date={item.date}
+                  iconStyle={{ background: item.iconBg }}
+                  icon={
+                    <div className="flex justify-center items-center w-full h-full">
+                      <img
+                        src={item.icon}
+                        alt={item.company_name}
+                        className="w-[60%] h-[60%] object-contain"
+                      />
+                    </div>
+                  }
+                  contentStyle={{
+                    background: isNight ? "#0f172a" : "#ffffff",
+                    color: isNight ? "#f8fafc" : "#0f172a",
+                    borderBottom: "8px",
+                    borderStyle: "solid",
+                    borderBottomColor: item.iconBg,
+                    boxShadow: isNight
+                      ? "0 4px 20px -2px rgba(0, 0, 0, 0.5)"
+                      : "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+                  }}
+                  contentArrowStyle={{
+                    borderRight: `7px solid ${isNight ? "#0f172a" : "#ffffff"}`,
+                  }}
+                >
+                  <div>
+                    <h3
+                      className={`text-xl font-poppins font-semibold ${
+                        isNight ? "text-white" : "text-black"
+                      }`}
+                    >
+                      {item.title}
+                    </h3>
+                    <p
+                      className={`font-medium text-base ${
+                        isNight ? "text-slate-300" : "text-slate-600"
+                      }`}
+                      style={{ margin: 0 }}
+                    >
+                      {item.company_name}
+                    </p>
+                  </div>
+
+                  <ul className="my-5 list-disc ml-5 space-y-2">
+                    {item.points.map((point, index) => (
+                      <li
+                        key={`cert-point-${index}`}
+                        className={`font-normal pl-1 text-sm ${
+                          isNight ? "text-slate-300/80" : "text-slate-600/90"
+                        }`}
+                      >
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </VerticalTimelineElement>
+              ))}
+            </VerticalTimeline>
+          </div>
         </div>
       </div>
 

@@ -71,7 +71,7 @@ export const skills = [
     }
 ];
 
-export const experiences = [
+export const education = [
     {
         title: "B.Tech Computer Science & Engineering",
         company_name: "GLA University",
@@ -85,6 +85,9 @@ export const experiences = [
             "Active competitive programmer on LeetCode, Codeforces, and HackerRank, consistently honing problem-solving capabilities.",
         ],
     },
+];
+
+export const certifications = [
     {
         title: "OCI 2025 Certified Generative AI & DevOps Professional",
         company_name: "Oracle Cloud Infrastructure",
@@ -119,6 +122,8 @@ export const experiences = [
         ],
     },
 ];
+
+export const experiences = [...education, ...certifications];
 
 export const socialLinks = [
     {
