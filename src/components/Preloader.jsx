@@ -7,7 +7,7 @@ const Preloader = ({ onComplete }) => {
   const { isNight } = useTheme();
 
   const [displayProgress, setDisplayProgress] = useState(0);
-  const [isReadyToExit, setIsReadyToExit] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
 
@@ -44,39 +44,49 @@ const Preloader = ({ onComplete }) => {
   useEffect(() => {
     const fallbackTimer = setTimeout(() => {
       setDisplayProgress(100);
-      setIsReadyToExit(true);
+      setIsLoaded(true);
     }, 4000);
 
     return () => clearTimeout(fallbackTimer);
   }, []);
 
-  // When displayProgress hits 100%, trigger exit sequence
+  // When displayProgress reaches 100%, set isLoaded to true (showing the Enter button)
   useEffect(() => {
     if (displayProgress >= 98 || (targetProgress === 100 && displayProgress >= 95)) {
-      const exitTimer = setTimeout(() => {
+      const loadTimer = setTimeout(() => {
         setDisplayProgress(100);
-        setIsReadyToExit(true);
-      }, 300);
+        setIsLoaded(true);
+      }, 200);
 
-      return () => clearTimeout(exitTimer);
+      return () => clearTimeout(loadTimer);
     }
   }, [displayProgress, targetProgress]);
 
-  // Handle smooth fade reveal animation & scroll restoration
+  // Handle user action (clicking Enter World or pressing Enter/Space key)
+  const handleEnterWorld = () => {
+    if (isExiting) return;
+    setIsExiting(true);
+    // Immediately restore body scroll
+    document.body.style.overflow = "";
+
+    const finishTimer = setTimeout(() => {
+      setIsFinished(true);
+      if (onComplete) onComplete();
+    }, 550);
+  };
+
+  // Keyboard shortcut: press Enter or Space key to enter world when ready
   useEffect(() => {
-    if (isReadyToExit && !isExiting) {
-      setIsExiting(true);
-      // Immediately restore body scroll when reveal starts
-      document.body.style.overflow = "";
+    const handleKeyDown = (e) => {
+      if (isLoaded && (e.key === "Enter" || e.key === " ")) {
+        e.preventDefault();
+        handleEnterWorld();
+      }
+    };
 
-      const finishTimer = setTimeout(() => {
-        setIsFinished(true);
-        if (onComplete) onComplete();
-      }, 500);
-
-      return () => clearTimeout(finishTimer);
-    }
-  }, [isReadyToExit, isExiting, onComplete]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isLoaded, isExiting]);
 
   if (isFinished) return null;
 
@@ -134,9 +144,13 @@ const Preloader = ({ onComplete }) => {
 
           {/* Sub-tag indicator */}
           <div className="flex items-center gap-1.5 mt-1 opacity-80">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping inline-block" />
+            <span
+              className={`w-1.5 h-1.5 rounded-full inline-block ${
+                isLoaded ? "bg-emerald-400" : "bg-blue-500 animate-ping"
+              }`}
+            />
             <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.25em] font-mono text-blue-500 dark:text-blue-400 font-bold">
-              3D DEVELOPER
+              {isLoaded ? "WORLD READY" : "3D DEVELOPER"}
             </span>
           </div>
         </div>
@@ -172,40 +186,74 @@ const Preloader = ({ onComplete }) => {
         </h1>
 
         <p className="text-xs sm:text-base opacity-75 max-w-xs sm:max-w-sm font-normal leading-relaxed">
-          Preparing interactive 3D scene & assets...
+          {isLoaded
+            ? "Interactive 3D scene & assets loaded successfully."
+            : "Preparing interactive 3D scene & assets..."}
         </p>
       </div>
 
-      {/* Bottom Loading Progress Bar */}
-      <div className="relative z-10 w-full max-w-xs sm:max-w-md mx-auto mb-4 sm:mb-6 flex flex-col items-center px-2">
-        <div className="w-full flex justify-between items-center text-xs font-semibold mb-2 tracking-wider">
-          <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping inline-block" />
-            <span className={isNight ? "text-slate-300" : "text-slate-600"}>
-              LOADING...
-            </span>
-          </span>
-          <span className="blue-gradient_text font-mono text-xs sm:text-sm font-bold">
-            {displayProgress}%
-          </span>
-        </div>
+      {/* Bottom Area: Shows Progress Bar during loading, or Glowing ENTER WORLD Button at 100% */}
+      <div className="relative z-10 w-full max-w-xs sm:max-w-md mx-auto mb-4 sm:mb-6 flex flex-col items-center px-2 min-h-[90px] justify-center">
+        {isLoaded ? (
+          /* Interactive ENTER WORLD Button when 100% loaded */
+          <div className="flex flex-col items-center animate-fade-up">
+            <button
+              onClick={handleEnterWorld}
+              type="button"
+              className="group relative px-8 py-3.5 rounded-xl font-extrabold text-sm sm:text-base tracking-widest uppercase transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl bg-gradient-to-r from-[#00c6ff] via-[#0092ff] to-[#0072ff] text-white flex items-center gap-3 cursor-pointer"
+            >
+              <span>ENTER MY WORLD</span>
+              <svg
+                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2.5"
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </button>
+            <p className="text-[10px] opacity-60 mt-2 font-mono tracking-wider">
+              Press ENTER key or click button to start
+            </p>
+          </div>
+        ) : (
+          /* Loading Progress Bar & Percentage */
+          <div className="w-full flex flex-col items-center">
+            <div className="w-full flex justify-between items-center text-xs font-semibold mb-2 tracking-wider">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping inline-block" />
+                <span className={isNight ? "text-slate-300" : "text-slate-600"}>
+                  LOADING...
+                </span>
+              </span>
+              <span className="blue-gradient_text font-mono text-xs sm:text-sm font-bold">
+                {displayProgress}%
+              </span>
+            </div>
 
-        <div
-          className={`w-full h-2 sm:h-2.5 rounded-full p-0.5 overflow-hidden transition-all duration-300 ${
-            isNight
-              ? "bg-slate-900 border border-slate-800"
-              : "bg-slate-200/80 border border-slate-300/50"
-          }`}
-        >
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-[#00c6ff] via-[#0092ff] to-[#0072ff] transition-all duration-150 ease-out shadow-sm"
-            style={{ width: `${displayProgress}%` }}
-          />
-        </div>
+            <div
+              className={`w-full h-2 sm:h-2.5 rounded-full p-0.5 overflow-hidden transition-all duration-300 ${
+                isNight
+                  ? "bg-slate-900 border border-slate-800"
+                  : "bg-slate-200/80 border border-slate-300/50"
+              }`}
+            >
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[#00c6ff] via-[#0092ff] to-[#0072ff] transition-all duration-150 ease-out shadow-sm"
+                style={{ width: `${displayProgress}%` }}
+              />
+            </div>
 
-        <p className="text-[10px] sm:text-[11px] opacity-50 mt-2 sm:mt-3 font-medium tracking-wide">
-          Interactive Experience Powered by Three.js
-        </p>
+            <p className="text-[10px] sm:text-[11px] opacity-50 mt-2 sm:mt-3 font-medium tracking-wide">
+              Interactive Experience Powered by Three.js
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
