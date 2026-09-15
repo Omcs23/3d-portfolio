@@ -9,9 +9,15 @@ const Navbar = () => {
     <header className="header">
       <NavLink
         to="/"
-        className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white dark:bg-slate-800 items-center justify-center flex font-bold shadow-md transition-colors shrink-0"
+        aria-label="Home"
+        className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white dark:bg-slate-800 items-center justify-center flex font-bold shadow-md transition-all duration-300 hover:scale-105 active:scale-95 shrink-0"
       >
-        <p className="blue-gradient_text font-extrabold text-sm sm:text-base">OS</p>
+        <svg
+          className="w-5 h-5 sm:w-5 sm:h-5 text-blue-500 fill-current"
+          viewBox="0 0 24 24"
+        >
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+        </svg>
       </NavLink>
 
       <div className="flex items-center gap-3 sm:gap-6">
