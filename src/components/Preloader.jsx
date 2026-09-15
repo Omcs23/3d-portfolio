@@ -82,6 +82,7 @@ const Preloader = ({ onComplete }) => {
 
   return (
     <div
+      data-preloader="true"
       className={`fixed inset-0 z-50 flex flex-col items-center justify-between py-10 sm:py-12 px-4 sm:px-6 select-none transition-all duration-500 ease-in-out ${
         isExiting ? "opacity-0 scale-105 pointer-events-none" : "opacity-100 scale-100"
       } ${
