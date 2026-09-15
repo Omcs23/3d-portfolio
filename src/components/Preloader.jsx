@@ -175,7 +175,7 @@ const Preloader = ({ onComplete }) => {
         </div>
 
         <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] font-semibold text-blue-500 dark:text-blue-400 mb-2">
-          3D Interactive Portfolio
+          A WORLD IN 3D
         </p>
 
         <h1 className="text-2xl sm:text-4xl font-extrabold tracking-wider font-poppins mb-2 sm:mb-3 uppercase">
@@ -185,10 +185,8 @@ const Preloader = ({ onComplete }) => {
           <span className="blue-gradient_text">WORLD</span>
         </h1>
 
-        <p className="text-xs sm:text-base opacity-75 max-w-xs sm:max-w-sm font-normal leading-relaxed">
-          {isLoaded
-            ? "Interactive 3D scene & assets loaded successfully."
-            : "Preparing interactive 3D scene & assets..."}
+        <p className="text-xs sm:text-base opacity-75 max-w-xs sm:max-w-md font-normal leading-relaxed">
+          Explore a world brought to life through 3D models, atmosphere, motion and imagination.
         </p>
       </div>
 
