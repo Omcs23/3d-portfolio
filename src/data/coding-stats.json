@@ -1,0 +1,110 @@
+{
+  "lastUpdated": "2026-09-17T13:49:17.552Z",
+  "platforms": {
+    "leetcode": {
+      "username": "OmSharma152",
+      "profileUrl": "https://leetcode.com/u/OmSharma152/",
+      "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
+      "ranking": 2011677,
+      "stats": {
+        "totalSolved": 78,
+        "easySolved": 30,
+        "mediumSolved": 34,
+        "hardSolved": 14,
+        "currentStreak": 2,
+        "longestStreak": 2,
+        "totalActiveDays": 13
+      },
+      "submissionCalendar": {
+        "1759708800": 1,
+        "1761091200": 6,
+        "1761264000": 2,
+        "1761436800": 9,
+        "1762300800": 9,
+        "1763510400": 5,
+        "1763596800": 2,
+        "1764115200": 3,
+        "1773360000": 6,
+        "1773964800": 7,
+        "1783382400": 6,
+        "1783987200": 6,
+        "1784073600": 3
+      },
+      "recentSubmissions": [
+        {
+          "title": "Jump Game II",
+          "titleSlug": "jump-game-ii",
+          "timestamp": 1784088099,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Jump Game",
+          "titleSlug": "jump-game",
+          "timestamp": 1784085740,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "House Robber",
+          "titleSlug": "house-robber",
+          "timestamp": 1784004880,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Min Cost Climbing Stairs",
+          "titleSlug": "min-cost-climbing-stairs",
+          "timestamp": 1784003271,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Climbing Stairs",
+          "titleSlug": "climbing-stairs",
+          "timestamp": 1784002155,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Minimum Size Subarray Sum",
+          "titleSlug": "minimum-size-subarray-sum",
+          "timestamp": 1783399809,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Concatenate Non-Zero Digits and Multiply by Sum I",
+          "titleSlug": "concatenate-non-zero-digits-and-multiply-by-sum-i",
+          "timestamp": 1783399536,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Max Consecutive Ones III",
+          "titleSlug": "max-consecutive-ones-iii",
+          "timestamp": 1783399415,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Minimum Size Subarray Sum",
+          "titleSlug": "minimum-size-subarray-sum",
+          "timestamp": 1783398920,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Longest Substring Without Repeating Characters",
+          "titleSlug": "longest-substring-without-repeating-characters",
+          "timestamp": 1783396257,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        }
+      ]
+    },
+    "codeforces": null,
+    "hackerrank": null,
+    "github": null
+  }
+}

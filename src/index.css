@@ -209,4 +209,39 @@ body:has(.card[data-color="green"]:hover) {
   }
 }
 
+/* Mobile Responsiveness & Timeline Overrides */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+@media (max-width: 1169px) {
+  .vertical-timeline--two-columns .vertical-timeline-element-content {
+    margin-left: 50px !important;
+    padding: 1rem !important;
+  }
+  .vertical-timeline--two-columns .vertical-timeline-element-icon {
+    width: 36px !important;
+    height: 36px !important;
+    left: 4px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .vertical-timeline {
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  .vertical-timeline-element-content {
+    margin-left: 42px !important;
+    padding: 0.875rem !important;
+    border-radius: 0.75rem !important;
+  }
+  .vertical-timeline-element-icon {
+    width: 32px !important;
+    height: 32px !important;
+    left: 2px !important;
+  }
+}
+
 

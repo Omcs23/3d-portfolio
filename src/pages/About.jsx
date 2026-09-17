@@ -4,7 +4,7 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 
-import { CTA, Alert } from "../components";
+import { CTA, Alert, CodingJourney } from "../components";
 import { education, certifications, skills, socialLinks } from "../constants";
 import useAlert from "../hooks/useAlert";
 import { useTheme } from "../context/ThemeContext";
@@ -172,11 +172,11 @@ PROFILES:
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
             <button
               onClick={handleCopyResumeText}
               type="button"
-              className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center gap-2 shadow-sm active:scale-95 ${
+              className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 ${
                 copiedType === "text"
                   ? "bg-emerald-600 text-white"
                   : isNight
@@ -190,7 +190,7 @@ PROFILES:
             <button
               onClick={handleCopyResumeLink}
               type="button"
-              className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center gap-2 shadow-sm active:scale-95 ${
+              className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 ${
                 copiedType === "link"
                   ? "bg-emerald-600 text-white"
                   : isNight
@@ -206,7 +206,7 @@ PROFILES:
               target="_blank"
               rel="noopener noreferrer"
               download="Om_Sharma_Resume.pdf"
-              className="btn px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-md hover:shadow-blue-500/20 active:scale-95 transition-all"
+              className="btn px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-blue-500/20 active:scale-95 transition-all w-full sm:w-auto"
             >
               <span>👁️ View / Download PDF</span>
             </a>
@@ -221,7 +221,7 @@ PROFILES:
           Connect with me across competitive programming platforms and social networks:
         </p>
 
-        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {socialLinks
             .filter((s) => s.name !== "Contact")
             .map((profile) => (
@@ -230,7 +230,7 @@ PROFILES:
                 href={profile.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`p-4 rounded-xl border flex flex-col items-center justify-center gap-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${
+                className={`p-3.5 sm:p-4 rounded-xl border flex flex-col items-center justify-center gap-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${
                   isNight
                     ? "bg-slate-900/80 border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/80"
                     : "bg-white border-slate-200/80 hover:border-blue-400 hover:shadow-blue-500/10"
@@ -239,7 +239,7 @@ PROFILES:
                 <img
                   src={profile.iconUrl}
                   alt={profile.name}
-                  className="w-8 h-8 object-contain"
+                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain"
                 />
                 <span
                   className={`text-xs font-semibold font-poppins ${
@@ -253,13 +253,16 @@ PROFILES:
         </div>
       </div>
 
+      {/* Coding Journey & Statistics Section */}
+      <CodingJourney />
+
       {/* Skills Section */}
       <div className="py-10 flex flex-col">
         <h3 className="subhead-text">My Skills</h3>
 
-        <div className="mt-12 flex flex-wrap gap-12">
+        <div className="mt-8 sm:mt-12 flex flex-wrap gap-5 sm:gap-10 justify-center sm:justify-start">
           {skills.map((skill) => (
-            <div className="block-container w-20 h-20" key={skill.name}>
+            <div className="block-container w-16 h-16 sm:w-20 sm:h-20" key={skill.name}>
               <div className="btn-back rounded-xl" />
               <div className="btn-front rounded-xl flex justify-center items-center">
                 <img

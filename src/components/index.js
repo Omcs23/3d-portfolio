@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import HomeInfo from "./HomeInfo";
 import ThemeToggle from "./ThemeToggle";
 import Preloader from "./Preloader";
+import CodingJourney from "./CodingJourney/CodingJourney";
 
 export {
     CTA,
@@ -15,5 +16,6 @@ export {
     Footer,
     HomeInfo,
     ThemeToggle,
-    Preloader
+    Preloader,
+    CodingJourney
 }

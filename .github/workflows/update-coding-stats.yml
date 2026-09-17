@@ -1,0 +1,38 @@
+name: Update Coding Statistics
+
+on:
+  schedule:
+    # Runs twice a day at 00:00 and 12:00 UTC
+    - cron: "0 0,12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch Latest LeetCode Statistics
+        run: node .github/scripts/fetch-leetcode.js
+
+      - name: Commit & Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add src/data/coding-stats.json
+          if git diff --staged --quiet; then
+            echo "No changes in coding-stats.json to commit."
+          else
+            git commit -m "chore: auto-update coding statistics [skip ci]"
+            git push
+          fi
