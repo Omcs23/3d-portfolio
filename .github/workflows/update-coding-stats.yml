@@ -33,6 +33,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes in coding-stats.json to commit."
           else
-            git commit -m "chore: auto-update coding statistics [skip ci]"
+            git commit -m "chore: auto-update coding statistics"
             git push
           fi
