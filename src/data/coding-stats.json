@@ -1,19 +1,19 @@
 {
-  "lastUpdated": "2026-09-18T06:14:45.812Z",
+  "lastUpdated": "2026-09-18T16:17:43.446Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
       "profileUrl": "https://leetcode.com/u/OmSharma152/",
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
-      "ranking": 2011677,
+      "ranking": 1670461,
       "stats": {
-        "totalSolved": 79,
-        "easySolved": 30,
-        "mediumSolved": 35,
-        "hardSolved": 14,
-        "currentStreak": 1,
+        "totalSolved": 100,
+        "easySolved": 31,
+        "mediumSolved": 48,
+        "hardSolved": 21,
+        "currentStreak": 2,
         "longestStreak": 2,
-        "totalActiveDays": 14
+        "totalActiveDays": 15
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -29,76 +29,77 @@
         "1783382400": 6,
         "1783987200": 6,
         "1784073600": 3,
-        "1789603200": 1
+        "1789603200": 1,
+        "1789689600": 21
       },
       "recentSubmissions": [
         {
-          "title": "Longest Palindromic Substring",
-          "titleSlug": "longest-palindromic-substring",
-          "timestamp": 1789668355,
+          "title": "Minimum Window Substring",
+          "titleSlug": "minimum-window-substring",
+          "timestamp": 1789715505,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Jump Game II",
-          "titleSlug": "jump-game-ii",
-          "timestamp": 1784088099,
+          "title": "N-Queens II",
+          "titleSlug": "n-queens-ii",
+          "timestamp": 1789715325,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Jump Game",
-          "titleSlug": "jump-game",
-          "timestamp": 1784085740,
+          "title": "Trapping Rain Water",
+          "titleSlug": "trapping-rain-water",
+          "timestamp": 1789715206,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "House Robber",
-          "titleSlug": "house-robber",
-          "timestamp": 1784004880,
+          "title": "Divide Two Integers",
+          "titleSlug": "divide-two-integers",
+          "timestamp": 1789715055,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Min Cost Climbing Stairs",
-          "titleSlug": "min-cost-climbing-stairs",
-          "timestamp": 1784003271,
+          "title": "First Missing Positive",
+          "titleSlug": "first-missing-positive",
+          "timestamp": 1789714957,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Climbing Stairs",
-          "titleSlug": "climbing-stairs",
-          "timestamp": 1784002155,
+          "title": "Valid Number",
+          "titleSlug": "valid-number",
+          "timestamp": 1789714842,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Minimum Size Subarray Sum",
-          "titleSlug": "minimum-size-subarray-sum",
-          "timestamp": 1783399809,
+          "title": "Letter Combinations of a Phone Number",
+          "titleSlug": "letter-combinations-of-a-phone-number",
+          "timestamp": 1789714738,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Concatenate Non-Zero Digits and Multiply by Sum I",
-          "titleSlug": "concatenate-non-zero-digits-and-multiply-by-sum-i",
-          "timestamp": 1783399536,
+          "title": "Generate Parentheses",
+          "titleSlug": "generate-parentheses",
+          "timestamp": 1789714629,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Max Consecutive Ones III",
-          "titleSlug": "max-consecutive-ones-iii",
-          "timestamp": 1783399415,
+          "title": "Longest Common Prefix",
+          "titleSlug": "longest-common-prefix",
+          "timestamp": 1789714557,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Minimum Size Subarray Sum",
-          "titleSlug": "minimum-size-subarray-sum",
-          "timestamp": 1783398920,
+          "title": "Maximum Number of Non-Overlapping Substrings",
+          "titleSlug": "maximum-number-of-non-overlapping-substrings",
+          "timestamp": 1789714345,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
