@@ -207,8 +207,8 @@ function parseLeetCodeGraphQLData(data, username) {
   const { currentStreak, longestStreak } = calculateStreaks(calendarObj);
 
   const lcStreak = user.userCalendar?.streak || 0;
-  const finalCurrentStreak = Math.max(currentStreak, lcStreak);
-  const finalLongestStreak = Math.max(longestStreak, finalCurrentStreak);
+  const finalCurrentStreak = Object.keys(calendarObj).length > 0 ? currentStreak : lcStreak;
+  const finalLongestStreak = Math.max(longestStreak, finalCurrentStreak, lcStreak);
 
   const recentSubmissions = (data.recentAcSubmissionList || []).map(s => ({
     title: s.title,
