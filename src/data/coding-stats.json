@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-17T13:49:17.552Z",
+  "lastUpdated": "2026-09-18T04:27:08.637Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -7,13 +7,13 @@
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
       "ranking": 2011677,
       "stats": {
-        "totalSolved": 78,
+        "totalSolved": 79,
         "easySolved": 30,
-        "mediumSolved": 34,
+        "mediumSolved": 35,
         "hardSolved": 14,
         "currentStreak": 2,
         "longestStreak": 2,
-        "totalActiveDays": 13
+        "totalActiveDays": 14
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -28,9 +28,17 @@
         "1773964800": 7,
         "1783382400": 6,
         "1783987200": 6,
-        "1784073600": 3
+        "1784073600": 3,
+        "1789603200": 1
       },
       "recentSubmissions": [
+        {
+          "title": "Longest Palindromic Substring",
+          "titleSlug": "longest-palindromic-substring",
+          "timestamp": 1789668355,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Jump Game II",
           "titleSlug": "jump-game-ii",
@@ -91,13 +99,6 @@
           "title": "Minimum Size Subarray Sum",
           "titleSlug": "minimum-size-subarray-sum",
           "timestamp": 1783398920,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Longest Substring Without Repeating Characters",
-          "titleSlug": "longest-substring-without-repeating-characters",
-          "timestamp": 1783396257,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
