@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-18T16:17:43.446Z",
+  "lastUpdated": "2026-09-19T04:24:44.965Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -7,10 +7,10 @@
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
       "ranking": 1670461,
       "stats": {
-        "totalSolved": 100,
-        "easySolved": 31,
-        "mediumSolved": 48,
-        "hardSolved": 21,
+        "totalSolved": 105,
+        "easySolved": 33,
+        "mediumSolved": 49,
+        "hardSolved": 23,
         "currentStreak": 2,
         "longestStreak": 2,
         "totalActiveDays": 15
@@ -30,9 +30,44 @@
         "1783987200": 6,
         "1784073600": 3,
         "1789603200": 1,
-        "1789689600": 21
+        "1789689600": 26
       },
       "recentSubmissions": [
+        {
+          "title": "Multiply Strings",
+          "titleSlug": "multiply-strings",
+          "timestamp": 1789757225,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Find the Index of the First Occurrence in a String",
+          "titleSlug": "find-the-index-of-the-first-occurrence-in-a-string",
+          "timestamp": 1789757140,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Merge Two Sorted Lists",
+          "titleSlug": "merge-two-sorted-lists",
+          "timestamp": 1789757058,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Longest Valid Parentheses",
+          "titleSlug": "longest-valid-parentheses",
+          "timestamp": 1789756966,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Permutation Sequence",
+          "titleSlug": "permutation-sequence",
+          "timestamp": 1789756886,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Minimum Window Substring",
           "titleSlug": "minimum-window-substring",
@@ -65,41 +100,6 @@
           "title": "First Missing Positive",
           "titleSlug": "first-missing-positive",
           "timestamp": 1789714957,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Valid Number",
-          "titleSlug": "valid-number",
-          "timestamp": 1789714842,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Letter Combinations of a Phone Number",
-          "titleSlug": "letter-combinations-of-a-phone-number",
-          "timestamp": 1789714738,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Generate Parentheses",
-          "titleSlug": "generate-parentheses",
-          "timestamp": 1789714629,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Longest Common Prefix",
-          "titleSlug": "longest-common-prefix",
-          "timestamp": 1789714557,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Maximum Number of Non-Overlapping Substrings",
-          "titleSlug": "maximum-number-of-non-overlapping-substrings",
-          "timestamp": 1789714345,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
