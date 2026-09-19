@@ -62,7 +62,7 @@ const Preloader = ({ onComplete }) => {
 
   // Handle exiting preloader
   const handleEnterWorld = () => {
-    if (isExiting) return;
+    if (!isLoaded || isExiting) return;
     setIsExiting(true);
     document.body.style.overflow = "";
 
@@ -75,7 +75,7 @@ const Preloader = ({ onComplete }) => {
   // Keyboard shortcut: Press Enter or Space to skip/enter when ready
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if ((e.key === "Enter" || e.key === " ") && (isLoaded || displayProgress > 50)) {
+      if ((e.key === "Enter" || e.key === " ") && isLoaded) {
         e.preventDefault();
         handleEnterWorld();
       }
@@ -83,7 +83,7 @@ const Preloader = ({ onComplete }) => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isLoaded, displayProgress, isExiting]);
+  }, [isLoaded, isExiting]);
 
   if (isFinished) return null;
 
@@ -118,9 +118,12 @@ const Preloader = ({ onComplete }) => {
       <div className="w-full max-w-2xl sm:max-w-4xl mx-auto pb-2 flex flex-col items-center shrink-0">
         <button
           type="button"
+          disabled={!isLoaded}
           onClick={handleEnterWorld}
-          className={`w-full h-14 sm:h-16 rounded-full relative overflow-hidden transition-all duration-300 shadow-2xl flex items-center justify-center cursor-pointer ${
-            isLoaded ? "hover:scale-[1.01] active:scale-[0.99] animate-pulse" : "active:scale-[0.99]"
+          className={`w-full h-14 sm:h-16 rounded-full relative overflow-hidden transition-all duration-300 shadow-2xl flex items-center justify-center ${
+            isLoaded
+              ? "cursor-pointer hover:scale-[1.01] active:scale-[0.99] animate-pulse"
+              : "cursor-not-allowed opacity-90"
           }`}
           style={{ backgroundColor: "#8187F5" }}
         >

@@ -327,7 +327,7 @@ const CodingJourney = () => {
                 : "bg-slate-50/80 border-slate-200 text-slate-800"
             }`}
           >
-            <div className="text-2xl">📅</div>
+            <div className="text-2xl">🗓️</div>
             <div>
               <div className="text-xs font-semibold text-slate-400 uppercase">
                 Total Active Days
