@@ -36,14 +36,14 @@ const Navbar = () => {
           <NavLink
             to="/about"
             className={({ isActive }) =>
-              `outline-none focus:outline-none focus-visible:outline-none focus:ring-0 select-none ${
+              `px-3.5 py-1.5 rounded-full font-bold text-sm sm:text-base transition-all duration-200 select-none outline-none focus:outline-none ${
                 isActive
                   ? isNight
-                    ? "text-sky-400 font-extrabold px-3 py-1 rounded-xl bg-slate-900/90 border border-sky-500/40 shadow-[0_0_15px_rgba(56,189,248,0.25)]"
-                    : "text-blue-600 font-extrabold px-3 py-1 rounded-xl bg-white/90 border border-blue-200 shadow-md"
+                    ? "bg-indigo-600 text-white font-extrabold shadow-md shadow-indigo-950/60"
+                    : "bg-blue-600 text-white font-extrabold shadow-md shadow-blue-500/20"
                   : isNight
-                  ? "text-slate-100 hover:text-sky-300 px-2.5 py-1 transition-all duration-300 hover:scale-105"
-                  : "text-slate-900 hover:text-blue-600 px-2.5 py-1 transition-all duration-300 hover:scale-105"
+                  ? "text-slate-100 hover:text-white hover:bg-slate-800/60"
+                  : "text-slate-800 hover:text-blue-600 hover:bg-slate-100/80"
               }`
             }
           >
@@ -53,14 +53,14 @@ const Navbar = () => {
           <NavLink
             to="/projects"
             className={({ isActive }) =>
-              `outline-none focus:outline-none focus-visible:outline-none focus:ring-0 select-none ${
+              `px-3.5 py-1.5 rounded-full font-bold text-sm sm:text-base transition-all duration-200 select-none outline-none focus:outline-none ${
                 isActive
                   ? isNight
-                    ? "text-sky-400 font-extrabold px-3 py-1 rounded-xl bg-slate-900/90 border border-sky-500/40 shadow-[0_0_15px_rgba(56,189,248,0.25)]"
-                    : "text-blue-600 font-extrabold px-3 py-1 rounded-xl bg-white/90 border border-blue-200 shadow-md"
+                    ? "bg-indigo-600 text-white font-extrabold shadow-md shadow-indigo-950/60"
+                    : "bg-blue-600 text-white font-extrabold shadow-md shadow-blue-500/20"
                   : isNight
-                  ? "text-slate-100 hover:text-sky-300 px-2.5 py-1 transition-all duration-300 hover:scale-105"
-                  : "text-slate-900 hover:text-blue-600 px-2.5 py-1 transition-all duration-300 hover:scale-105"
+                  ? "text-slate-100 hover:text-white hover:bg-slate-800/60"
+                  : "text-slate-800 hover:text-blue-600 hover:bg-slate-100/80"
               }`
             }
           >
