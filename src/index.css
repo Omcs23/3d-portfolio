@@ -51,7 +51,12 @@ body:has(.card[data-color="green"]:hover) {
   }
 
   .header {
-    @apply flex justify-between items-center sm:px-16 px-4 py-4 max-w-5xl mx-auto absolute top-0 bg-transparent z-10 right-0 left-0 w-full;
+    @apply flex justify-between items-center sm:px-16 px-4 py-4 max-w-5xl mx-auto fixed top-0 bg-transparent z-40 right-0 left-0 w-full pointer-events-auto;
+  }
+
+  .overscroll-contain {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .footer {

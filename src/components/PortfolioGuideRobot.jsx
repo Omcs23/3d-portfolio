@@ -141,7 +141,57 @@ const PortfolioGuideRobot = () => {
   const [isTyping, setIsTyping] = useState(false);
 
   const chatContainerRef = useRef(null);
+  const optionsContainerRef = useRef(null);
   const inactivityTimerRef = useRef(null);
+
+  // Prevent touch overscroll / scroll chaining to parent window on mobile devices
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const attachTouchGuard = (el) => {
+      if (!el) return () => {};
+
+      let startY = 0;
+
+      const handleTouchStart = (e) => {
+        if (e.touches.length === 1) {
+          startY = e.touches[0].clientY;
+        }
+      };
+
+      const handleTouchMove = (e) => {
+        if (e.touches.length !== 1) return;
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - startY;
+
+        const isAtTop = el.scrollTop <= 0;
+        const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+
+        if ((isAtTop && deltaY > 0) || (isAtBottom && deltaY < 0)) {
+          if (e.cancelable) {
+            e.preventDefault();
+          }
+        }
+        e.stopPropagation();
+      };
+
+      el.addEventListener("touchstart", handleTouchStart, { passive: true });
+      el.addEventListener("touchmove", handleTouchMove, { passive: false });
+
+      return () => {
+        el.removeEventListener("touchstart", handleTouchStart);
+        el.removeEventListener("touchmove", handleTouchMove);
+      };
+    };
+
+    const cleanupChat = attachTouchGuard(chatContainerRef.current);
+    const cleanupOpts = attachTouchGuard(optionsContainerRef.current);
+
+    return () => {
+      cleanupChat();
+      cleanupOpts();
+    };
+  }, [isOpen]);
 
   // Initial speech auto-hide timer after 3.5 seconds
   useEffect(() => {
@@ -403,7 +453,9 @@ const PortfolioGuideRobot = () => {
       {/* 2. CHAT POPUP WINDOW */}
       {isOpen && (
         <div
-          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[340px] max-h-[62vh] sm:max-h-[480px] h-[62vh] sm:h-[460px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-right ${
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[340px] max-h-[62vh] sm:max-h-[480px] h-[62vh] sm:h-[460px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-right overscroll-contain ${
             isNight
               ? "bg-slate-900/95 backdrop-blur-md border-slate-700/80 text-slate-100 shadow-slate-950/80"
               : "bg-white/95 backdrop-blur-md border-slate-200 text-slate-800 shadow-xl"
@@ -453,7 +505,7 @@ const PortfolioGuideRobot = () => {
           {/* Chat History Area */}
           <div
             ref={chatContainerRef}
-            className="flex-1 p-3.5 overflow-y-auto custom-scrollbar space-y-3 text-xs sm:text-sm scroll-smooth"
+            className="flex-1 p-3.5 overflow-y-auto custom-scrollbar overscroll-contain space-y-3 text-xs sm:text-sm scroll-smooth"
           >
             {chatHistory.map((msg, index) => (
               <div
@@ -513,7 +565,10 @@ const PortfolioGuideRobot = () => {
             <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 px-1">
               Quick Options:
             </span>
-            <div className="flex flex-wrap gap-1 max-h-[120px] overflow-y-auto custom-scrollbar p-0.5">
+            <div
+              ref={optionsContainerRef}
+              className="flex flex-wrap gap-1 max-h-[120px] overflow-y-auto custom-scrollbar overscroll-contain p-0.5"
+            >
               {INITIAL_OPTIONS.map((opt) => (
                 <button
                   key={opt.id}
