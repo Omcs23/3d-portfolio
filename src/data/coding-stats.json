@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-19T15:48:04.403Z",
+  "lastUpdated": "2026-09-20T04:43:01.577Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -7,13 +7,13 @@
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
       "ranking": 1602241,
       "stats": {
-        "totalSolved": 105,
-        "easySolved": 33,
-        "mediumSolved": 49,
+        "totalSolved": 107,
+        "easySolved": 34,
+        "mediumSolved": 50,
         "hardSolved": 23,
-        "currentStreak": 2,
-        "longestStreak": 2,
-        "totalActiveDays": 15
+        "currentStreak": 3,
+        "longestStreak": 3,
+        "totalActiveDays": 16
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -30,9 +30,24 @@
         "1783987200": 6,
         "1784073600": 3,
         "1789603200": 1,
-        "1789689600": 26
+        "1789689600": 26,
+        "1789776000": 2
       },
       "recentSubmissions": [
+        {
+          "title": "Combine Two Tables",
+          "titleSlug": "combine-two-tables",
+          "timestamp": 1789837235,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Circle and Rectangle Overlapping",
+          "titleSlug": "circle-and-rectangle-overlapping",
+          "timestamp": 1789837125,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Multiply Strings",
           "titleSlug": "multiply-strings",
@@ -86,20 +101,6 @@
           "title": "Trapping Rain Water",
           "titleSlug": "trapping-rain-water",
           "timestamp": 1789715206,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Divide Two Integers",
-          "titleSlug": "divide-two-integers",
-          "timestamp": 1789715055,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "First Missing Positive",
-          "titleSlug": "first-missing-positive",
-          "timestamp": 1789714957,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
