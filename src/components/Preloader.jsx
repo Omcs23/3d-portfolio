@@ -11,9 +11,12 @@ const Preloader = ({ onComplete }) => {
 
   // Lock body scroll while preloader is active, restore when unmounted
   useEffect(() => {
+    window.scrollTo(0, 0);
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, []);
 
@@ -70,6 +73,7 @@ const Preloader = ({ onComplete }) => {
     if (!isLoaded || isExiting) return;
     setIsExiting(true);
     document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
 
     const finishTimer = setTimeout(() => {
       setIsFinished(true);
@@ -95,8 +99,8 @@ const Preloader = ({ onComplete }) => {
   return (
     <div
       data-preloader="true"
-      className={`fixed inset-0 z-[9999] w-full h-[100dvh] max-h-[100dvh] bg-black text-white flex flex-col justify-between px-6 sm:px-12 py-6 sm:py-10 select-none overflow-hidden box-border transition-all duration-700 ease-in-out ${
-        isExiting ? "opacity-0 scale-98 pointer-events-none" : "opacity-100 scale-100"
+      className={`fixed top-0 left-0 right-0 bottom-0 inset-0 z-[99999] w-full h-full bg-black text-white flex flex-col justify-between px-6 sm:px-12 py-6 sm:py-10 select-none overflow-hidden box-border transition-opacity duration-500 ease-in-out ${
+        isExiting ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
       {/* Top Headline Section */}
