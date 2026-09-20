@@ -90,7 +90,13 @@ const CodingJourney = () => {
             >
               <span>{p.label}</span>
               {!p.active && (
-                <span className="text-[9px] px-1 py-0.2 rounded bg-slate-800/40 text-slate-400 font-normal">
+                <span
+                  className={`text-[9px] px-1.5 py-0.5 rounded-full font-extrabold uppercase tracking-wider ${
+                    isNight
+                      ? "bg-indigo-950/90 text-indigo-300 border border-indigo-700/60"
+                      : "bg-blue-100 text-blue-800 border border-blue-300/90 shadow-sm"
+                  }`}
+                >
                   Soon
                 </span>
               )}
