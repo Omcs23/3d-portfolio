@@ -134,12 +134,12 @@ const Home = () => {
           type="button"
           onClick={() => setIsPlayingMusic(!isPlayingMusic)}
           aria-label={isPlayingMusic ? "Mute music" : "Play music"}
-          className="p-1.5 rounded-full transition-transform hover:scale-110 active:scale-95 focus:outline-none"
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl border border-slate-200/60 dark:border-slate-700/60"
         >
           <img
             src={!isPlayingMusic ? soundoff : soundon}
             alt="jukebox"
-            className="w-10 h-10 object-contain drop-shadow-md"
+            className="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow-md"
           />
         </button>
       </div>

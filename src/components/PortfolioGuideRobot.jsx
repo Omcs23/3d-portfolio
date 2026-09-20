@@ -7,7 +7,7 @@ const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, classN
   const sizeClasses = {
     sm: "w-7 h-7",
     md: "w-9 h-9",
-    lg: "w-11 h-11 sm:w-12 sm:h-12",
+    lg: "w-7 h-7 sm:w-8 sm:h-8",
   };
 
   return (
@@ -593,11 +593,11 @@ const PortfolioGuideRobot = () => {
         onClick={toggleOpen}
         aria-label="Open Bhola Guru Guide"
         type="button"
-        className="pointer-events-auto relative group flex items-center justify-center p-0.5 transition-transform duration-300 hover:scale-115 active:scale-95 focus:outline-none"
+        className="pointer-events-auto relative group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl border border-slate-200/60 dark:border-slate-700/60"
       >
         {/* Soft Environment-Matched Ambient Glow Ring */}
         <div
-          className={`absolute inset-0 rounded-full opacity-60 blur-md group-hover:opacity-90 transition-opacity animate-pulse ${
+          className={`absolute inset-0 rounded-full opacity-50 blur-md group-hover:opacity-80 transition-opacity animate-pulse ${
             isSleeping
               ? "bg-indigo-500/40"
               : isNight
@@ -612,7 +612,7 @@ const PortfolioGuideRobot = () => {
         {/* Quick notification dot */}
         {showInitialSpeech && !isOpen && (
           <span
-            className={`absolute top-0 right-0 w-2.5 h-2.5 rounded-full border border-slate-900 z-20 animate-ping ${
+            className={`absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full border border-slate-900 z-20 animate-ping ${
               isNight ? "bg-indigo-400" : "bg-sky-400"
             }`}
           />
