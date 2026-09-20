@@ -374,7 +374,7 @@ const PortfolioGuideRobot = () => {
   return (
     <aside
       aria-label="Bhola Guru Island Guide"
-      className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-[99] flex flex-col items-end pointer-events-none"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[99] flex flex-col items-end pointer-events-none"
     >
       {/* 1. INITIAL SPEECH BUBBLE POPUP */}
       {showInitialSpeech && !isOpen && (
@@ -403,7 +403,7 @@ const PortfolioGuideRobot = () => {
       {/* 2. CHAT POPUP WINDOW */}
       {isOpen && (
         <div
-          className={`pointer-events-auto mb-3 w-[88vw] sm:w-[340px] max-h-[480px] h-[76vh] sm:h-[460px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-right ${
+          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[340px] max-h-[62vh] sm:max-h-[480px] h-[62vh] sm:h-[460px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-right ${
             isNight
               ? "bg-slate-900/95 backdrop-blur-md border-slate-700/80 text-slate-100 shadow-slate-950/80"
               : "bg-white/95 backdrop-blur-md border-slate-200 text-slate-800 shadow-xl"

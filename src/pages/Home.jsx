@@ -59,8 +59,15 @@ const Home = () => {
   const [biplaneScale, biplanePosition] = adjustBiplaneForScreenSize();
   const [islandScale, islandPosition] = adjustIslandForScreenSize();
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
-    <section className="w-full h-screen h-[100dvh] relative overflow-hidden">
+    <section className="w-full h-screen h-[100dvh] relative overflow-hidden touch-none select-none">
       {/* Night mode ambient starry sky backdrop overlay */}
       {isNight && (
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950/60 pointer-events-none transition-opacity duration-700 z-0">
@@ -122,7 +129,7 @@ const Home = () => {
         </Suspense>
       </Canvas>
 
-      <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-30">
+      <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-30">
         <button
           type="button"
           onClick={() => setIsPlayingMusic(!isPlayingMusic)}
