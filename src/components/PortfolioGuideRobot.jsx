@@ -424,7 +424,7 @@ const PortfolioGuideRobot = () => {
   return (
     <aside
       aria-label="Bhola Guru Island Guide"
-      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[99] flex flex-col items-end pointer-events-none"
+      className="fixed bottom-4 sm:bottom-6 left-0 right-0 w-full max-w-5xl mx-auto px-4 sm:px-16 z-[99] flex flex-col items-end pointer-events-none"
     >
       {/* 1. INITIAL SPEECH BUBBLE POPUP */}
       {showInitialSpeech && !isOpen && (
@@ -593,7 +593,7 @@ const PortfolioGuideRobot = () => {
         onClick={toggleOpen}
         aria-label="Open Bhola Guru Guide"
         type="button"
-        className="pointer-events-auto relative group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl border border-slate-200/60 dark:border-slate-700/60"
+        className="pointer-events-auto relative group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl border border-slate-200/60 dark:border-slate-700/60"
       >
         {/* Soft Environment-Matched Ambient Glow Ring */}
         <div

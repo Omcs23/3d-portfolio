@@ -14,7 +14,7 @@ const ThemeToggle = ({ className = "" }) => {
             ? "Night Mode Active. Click to switch to Day Mode."
             : "Day Mode Active. Click to switch to Night Mode."
         }
-        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center transition-all duration-300 transform active:scale-95 shadow-md ${
+        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center transition-all duration-300 transform active:scale-95 shadow-md outline-none focus:outline-none focus-visible:outline-none focus:ring-0 select-none ${
           isNight
             ? "bg-slate-900 text-indigo-300 border border-slate-700/80 hover:bg-slate-800 hover:scale-105"
             : "bg-white text-amber-500 border border-slate-200/80 hover:bg-slate-50 hover:scale-105"
