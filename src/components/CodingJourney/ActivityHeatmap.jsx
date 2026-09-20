@@ -174,7 +174,7 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
                       key={day.dateStr}
                       onMouseEnter={() => !day.isFuture && setHoveredDay(day)}
                       onMouseLeave={() => setHoveredDay(null)}
-                      className={`w-3 h-3 rounded-[3px] border transition-all duration-150 cursor-pointer hover:scale-125 hover:z-10 ${getIntensityClass(
+                      className={`w-3 h-3 rounded-[3px] border transition-transform duration-100 cursor-pointer hover:scale-125 hover:z-10 ${getIntensityClass(
                         day.count,
                         day.isFuture
                       )}`}

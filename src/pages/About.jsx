@@ -300,7 +300,7 @@ PROFILES:
             Education
           </h4>
           <div className="mt-6 flex">
-            <VerticalTimeline lineColor={isNight ? "#334155" : "#e2e8f0"}>
+            <VerticalTimeline animate={false} lineColor={isNight ? "#334155" : "#e2e8f0"}>
               {education.map((item) => (
                 <VerticalTimelineElement
                   key={item.company_name + item.title}
@@ -375,7 +375,7 @@ PROFILES:
             Certifications & Training
           </h4>
           <div className="mt-6 flex">
-            <VerticalTimeline lineColor={isNight ? "#334155" : "#e2e8f0"}>
+            <VerticalTimeline animate={false} lineColor={isNight ? "#334155" : "#e2e8f0"}>
               {certifications.map((item) => (
                 <VerticalTimelineElement
                   key={item.company_name + item.title}

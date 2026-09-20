@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const ThemeContext = createContext();
 
@@ -9,8 +9,6 @@ const getAutoTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  // Use sessionStorage so manual toggles only apply for the current session/visit,
-  // returning automatically to the time-based schedule when reopening/revisiting.
   const [theme, setTheme] = useState(() => {
     const savedSessionTheme = sessionStorage.getItem("session_theme");
     if (savedSessionTheme === "day" || savedSessionTheme === "night") {
@@ -21,7 +19,6 @@ export const ThemeProvider = ({ children }) => {
 
   const isNight = theme === "night";
 
-  // Periodically update theme if session_theme is not explicitly set by user action
   useEffect(() => {
     sessionStorage.setItem("session_theme", theme);
 
@@ -32,19 +29,18 @@ export const ThemeProvider = ({ children }) => {
     }
   }, [theme, isNight]);
 
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "day" ? "night" : "day"));
-  };
+  const value = useMemo(
+    () => ({
+      theme,
+      isNight,
+      toggleTheme: () => setTheme((prev) => (prev === "day" ? "night" : "day")),
+      autoDetectedTheme: getAutoTheme(),
+    }),
+    [theme, isNight]
+  );
 
   return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        isNight,
-        toggleTheme,
-        autoDetectedTheme: getAutoTheme(),
-      }}
-    >
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );
