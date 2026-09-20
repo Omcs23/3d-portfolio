@@ -3,30 +3,37 @@ import { Suspense, useEffect, useRef, useState } from "react";
 
 import sakura from "../assets/sakura.mp3";
 import { HomeInfo, Loader } from "../components";
-import { soundoff, soundon } from "../assets/icons";
 import { Bird, Island, Plane, Sky } from "../models";
 import { useTheme } from "../context/ThemeContext";
 
-const Home = () => {
+const Home = ({ hasPreloaded = false }) => {
   const { isNight } = useTheme();
 
-  const audioRef = useRef(new Audio(sakura));
-  audioRef.current.volume = 0.4;
-  audioRef.current.loop = true;
+  const audioRef = useRef(null);
 
   const [currentStage, setCurrentStage] = useState(1);
   const [isRotating, setIsRotating] = useState(false);
-  const [isPlayingMusic, setIsPlayingMusic] = useState(false);
 
   useEffect(() => {
-    if (isPlayingMusic) {
-      audioRef.current.play();
+    if (!audioRef.current) {
+      const audio = new Audio(sakura);
+      audio.volume = 0.4;
+      audio.loop = true;
+      audioRef.current = audio;
+    }
+
+    if (hasPreloaded && audioRef.current) {
+      audioRef.current.play().catch((error) => {
+        console.log("Audio play deferred or blocked:", error);
+      });
     }
 
     return () => {
-      audioRef.current.pause();
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
     };
-  }, [isPlayingMusic]);
+  }, [hasPreloaded]);
 
   const adjustBiplaneForScreenSize = () => {
     let screenScale, screenPosition;
@@ -128,21 +135,6 @@ const Home = () => {
           />
         </Suspense>
       </Canvas>
-
-      <div className="fixed bottom-4 sm:bottom-6 left-0 right-0 w-full max-w-5xl mx-auto px-4 sm:px-16 z-30 pointer-events-none flex justify-start items-end">
-        <button
-          type="button"
-          onClick={() => setIsPlayingMusic(!isPlayingMusic)}
-          aria-label={isPlayingMusic ? "Mute music" : "Play music"}
-          className="pointer-events-auto w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl border border-slate-200/60 dark:border-slate-700/60"
-        >
-          <img
-            src={!isPlayingMusic ? soundoff : soundon}
-            alt="jukebox"
-            className="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow-md select-none"
-          />
-        </button>
-      </div>
     </section>
   );
 };
