@@ -1,12 +1,18 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const { isNight } = useTheme();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   return (
-    <header className="header">
+    <header
+      className={`${
+        isHome ? "fixed top-0" : "absolute top-0"
+      } flex justify-between items-center sm:px-16 px-4 py-4 max-w-5xl mx-auto z-40 right-0 left-0 w-full pointer-events-auto`}
+    >
       <NavLink
         to="/"
         aria-label="Home"

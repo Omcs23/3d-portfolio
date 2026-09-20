@@ -16,7 +16,7 @@ const MainContent = () => {
         <Preloader onComplete={() => setHasPreloaded(true)} />
       )}
       <main
-        className={`w-full transition-colors duration-500 relative ${
+        className={`w-full relative ${
           isHome ? "h-screen h-[100dvh] overflow-hidden" : "min-h-screen"
         } ${
           isNight ? "bg-slate-950 text-slate-100" : "bg-slate-300/20 text-slate-800"

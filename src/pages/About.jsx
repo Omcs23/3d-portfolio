@@ -81,7 +81,7 @@ PROFILES:
       </h1>
 
       <div
-        className={`mt-5 flex flex-col gap-3 leading-relaxed transition-colors ${
+        className={`mt-5 flex flex-col gap-3 leading-relaxed ${
           isNight ? "text-slate-300" : "text-slate-600"
         }`}
       >
