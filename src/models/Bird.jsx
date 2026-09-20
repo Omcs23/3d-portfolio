@@ -15,12 +15,15 @@ export function Bird() {
   const { actions } = useAnimations(animations, birdRef);
 
   // Play the "Take 001" animation when the component mounts
-  // Note: Animation names can be found on the Sketchfab website where the 3D model is hosted.
   useEffect(() => {
-    actions["Take 001"].play();
-  }, []);
+    if (actions && actions["Take 001"]) {
+      actions["Take 001"].play();
+    }
+  }, [actions]);
 
   useFrame(({ clock, camera }) => {
+    if (!birdRef.current) return;
+
     // Update the Y position to simulate bird-like motion using a sine wave
     birdRef.current.position.y = Math.sin(clock.elapsedTime) * 0.2 + 2;
 
@@ -46,11 +49,9 @@ export function Bird() {
   });
 
   return (
-    // to create and display 3D objects
     <mesh ref={birdRef} position={[-5, 2, 1]} scale={[0.003, 0.003, 0.003]}>
-      // use the primitive element when you want to directly embed a complex 3D
-      model or scene
       <primitive object={scene} />
     </mesh>
   );
 }
+

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useProgress } from "@react-three/drei";
 
 const Preloader = ({ onComplete }) => {
-  const { progress, active, total } = useProgress();
+  const { progress, active, total, loaded } = useProgress();
 
   const [displayProgress, setDisplayProgress] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,48 +17,53 @@ const Preloader = ({ onComplete }) => {
     };
   }, []);
 
-  // Calculate target progress: if active is false or total is 0 (cached/non-3D route), target is 100 immediately
-  const targetProgress =
-    !active || total === 0 || progress >= 100
-      ? 100
-      : Math.min(100, Math.max(0, Math.round(progress)));
+  // Safe numerical progress (guards against NaN / undefined)
+  const safeProgress = typeof progress === "number" && !isNaN(progress) ? progress : 0;
 
-  // Smoothly increment displayProgress to match targetProgress
+  // Determine effective target percentage
+  const targetProgress =
+    (total > 0 && loaded >= total) || safeProgress >= 100
+      ? 100
+      : active && safeProgress > 0
+      ? Math.min(99, Math.max(10, Math.round(safeProgress)))
+      : 95; // Smooth initial ramp target while gltf starts loading
+
+  // Smooth progress ticker
   useEffect(() => {
-    const step = targetProgress === 100 ? 4 : 2;
     const interval = setInterval(() => {
       setDisplayProgress((prev) => {
         if (prev < targetProgress) {
+          const step = targetProgress === 100 ? 5 : 2;
           return Math.min(prev + step, targetProgress);
         }
         return prev;
       });
-    }, 16);
+    }, 20);
 
     return () => clearInterval(interval);
   }, [targetProgress]);
 
-  // Maximum fallback safety timer (3.5 seconds) so user is never blocked
+  // Safety fallback timer (2.2s) ensures completion
   useEffect(() => {
-    const fallbackTimer = setTimeout(() => {
+    const safetyTimer = setTimeout(() => {
       setDisplayProgress(100);
       setIsLoaded(true);
-    }, 3500);
+    }, 2200);
 
-    return () => clearTimeout(fallbackTimer);
+    return () => clearTimeout(safetyTimer);
   }, []);
 
-  // Set isLoaded when progress reaches 98-100%
+  // Trigger isLoaded when progress reaches 98%+
   useEffect(() => {
-    if (displayProgress >= 98 || (targetProgress === 100 && displayProgress >= 95)) {
+    if (displayProgress >= 98) {
       const loadTimer = setTimeout(() => {
         setDisplayProgress(100);
         setIsLoaded(true);
-      }, 200);
+      }, 150);
 
       return () => clearTimeout(loadTimer);
     }
-  }, [displayProgress, targetProgress]);
+  }, [displayProgress]);
 
   // Handle exiting preloader
   const handleEnterWorld = () => {
@@ -130,12 +135,12 @@ const Preloader = ({ onComplete }) => {
           {/* White Progress Fill bar */}
           <div
             className="absolute top-0 left-0 bottom-0 bg-white transition-all duration-150 ease-out"
-            style={{ width: `${displayProgress}%` }}
+            style={{ width: `${Math.round(displayProgress)}%` }}
           />
 
           {/* Bold Black Text inside pill */}
           <span className="relative z-10 font-extrabold text-sm sm:text-base tracking-[0.2em] uppercase text-black">
-            {isLoaded ? "CLICK TO ENTER" : "LOADING..."}
+            {isLoaded ? "CLICK TO ENTER" : `LOADING... ${Math.round(displayProgress)}%`}
           </span>
         </button>
 

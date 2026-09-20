@@ -7,6 +7,7 @@ import HomeInfo from "./HomeInfo";
 import ThemeToggle from "./ThemeToggle";
 import Preloader from "./Preloader";
 import CodingJourney from "./CodingJourney/CodingJourney";
+import PortfolioGuideRobot from "./PortfolioGuideRobot";
 
 export {
     CTA,
@@ -17,5 +18,6 @@ export {
     HomeInfo,
     ThemeToggle,
     Preloader,
-    CodingJourney
+    CodingJourney,
+    PortfolioGuideRobot
 }

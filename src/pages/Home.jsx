@@ -60,7 +60,7 @@ const Home = () => {
   const [islandScale, islandPosition] = adjustIslandForScreenSize();
 
   return (
-    <section className="w-full h-screen relative overflow-hidden">
+    <section className="w-full h-screen h-[100dvh] relative overflow-hidden">
       {/* Night mode ambient starry sky backdrop overlay */}
       {isNight && (
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950/60 pointer-events-none transition-opacity duration-700 z-0">
@@ -73,7 +73,7 @@ const Home = () => {
       </div>
 
       <Canvas
-        className={`w-full h-screen bg-transparent touch-none ${
+        className={`w-full h-screen h-[100dvh] bg-transparent touch-none ${
           isRotating ? "cursor-grabbing" : "cursor-grab"
         }`}
         camera={{ near: 0.1, far: 1000 }}
@@ -104,7 +104,7 @@ const Home = () => {
           />
 
           <Bird />
-          <Sky isRotating={isRotating} />
+          <Sky isRotating={isRotating} isNight={isNight} />
           <Island
             isRotating={isRotating}
             setIsRotating={setIsRotating}
@@ -122,13 +122,19 @@ const Home = () => {
         </Suspense>
       </Canvas>
 
-      <div className="absolute bottom-2 left-2 z-10">
-        <img
-          src={!isPlayingMusic ? soundoff : soundon}
-          alt="jukebox"
+      <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-30">
+        <button
+          type="button"
           onClick={() => setIsPlayingMusic(!isPlayingMusic)}
-          className="w-10 h-10 cursor-pointer object-contain hover:scale-110 transition-transform"
-        />
+          aria-label={isPlayingMusic ? "Mute music" : "Play music"}
+          className="p-1.5 rounded-full transition-transform hover:scale-110 active:scale-95 focus:outline-none"
+        >
+          <img
+            src={!isPlayingMusic ? soundoff : soundon}
+            alt="jukebox"
+            className="w-10 h-10 object-contain drop-shadow-md"
+          />
+        </button>
       </div>
     </section>
   );
