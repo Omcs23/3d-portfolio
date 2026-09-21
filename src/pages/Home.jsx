@@ -2,7 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useRef, useState } from "react";
 
 import sakura from "../assets/sakura.mp3";
-import { HomeInfo, Loader } from "../components";
+import { HomeInfo, Loader, MeteorShower } from "../components";
 import { Bird, Island, Plane, Sky } from "../models";
 import { useTheme } from "../context/ThemeContext";
 
@@ -75,6 +75,9 @@ const Home = ({ hasPreloaded = false }) => {
 
   return (
     <section className="w-full h-screen h-[100dvh] relative overflow-hidden touch-none select-none">
+      {/* Space Meteors & Small Roaming Asteroids Canvas */}
+      <MeteorShower />
+
       {/* Night mode ambient starry sky backdrop overlay */}
       {isNight && (
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950/60 pointer-events-none transition-opacity duration-700 z-0">

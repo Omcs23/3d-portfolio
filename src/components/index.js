@@ -8,6 +8,7 @@ import ThemeToggle from "./ThemeToggle";
 import Preloader from "./Preloader";
 import CodingJourney from "./CodingJourney/CodingJourney";
 import PortfolioGuideRobot from "./PortfolioGuideRobot";
+import MeteorShower from "./MeteorShower";
 
 export {
     CTA,
@@ -19,5 +20,6 @@ export {
     ThemeToggle,
     Preloader,
     CodingJourney,
-    PortfolioGuideRobot
+    PortfolioGuideRobot,
+    MeteorShower
 }

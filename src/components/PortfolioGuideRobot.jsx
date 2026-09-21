@@ -1,103 +1,160 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { monkey3d } from "../assets/images";
 
-// Boundary-free Clean Cartoon Monkey Avatar Component (Supports Sleeping state)
+// Boundary-free 3D Monkey Avatar Component (No background cover, Wide Open Eyes Awake vs Closed Eyes Sleeping)
 const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, className = "" }) => {
   const sizeClasses = {
-    sm: "w-7 h-7",
-    md: "w-9 h-9",
-    lg: "w-7 h-7 sm:w-8 sm:h-8",
+    sm: "w-8 h-8",
+    md: "w-10 h-10",
+    lg: "w-14 h-14 sm:w-16 sm:h-16",
   };
 
   return (
     <div className={`relative flex items-center justify-center shrink-0 ${sizeClasses[size]} ${className}`}>
       {/* Floating ZZZs when sleeping */}
       {isSleeping && (
-        <span className="absolute -top-2.5 -right-1 text-[11px] sm:text-xs font-bold text-indigo-400 dark:text-indigo-300 animate-pulse z-30 select-none">
+        <span className="absolute -top-3 -right-1 text-xs sm:text-sm font-bold text-indigo-400 dark:text-indigo-300 animate-bounce z-30 select-none drop-shadow">
           💤
         </span>
       )}
 
-      {/* Boundary-free Vector Monkey Face SVG */}
+      {/* Boundary-Free 3D Vector Monkey Character (No Background Container) */}
       <svg
-        viewBox="0 0 64 64"
+        viewBox="0 0 70 70"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={`w-full h-full transition-all duration-300 ${
+        className={`w-full h-full transition-all duration-300 transform ${
           isSleeping
-            ? "opacity-90 grayscale-[15%]"
+            ? "opacity-85 grayscale-[15%] scale-95"
             : isNight
-            ? "drop-shadow-[0_2px_10px_rgba(165,180,252,0.6)]"
-            : "drop-shadow-[0_2px_10px_rgba(56,189,248,0.5)]"
+            ? "drop-shadow-[0_4px_16px_rgba(165,180,252,0.7)]"
+            : "drop-shadow-[0_4px_16px_rgba(56,189,248,0.7)]"
         }`}
       >
-        {/* Outer Ears */}
-        <circle cx="10" cy="30" r="8.5" fill="#8d5b4c" stroke="#4a2e22" strokeWidth="1.5" />
-        <circle cx="10" cy="30" r="5" fill="#f3b899" />
-        
-        <circle cx="54" cy="30" r="8.5" fill="#8d5b4c" stroke="#4a2e22" strokeWidth="1.5" />
-        <circle cx="54" cy="30" r="5" fill="#f3b899" />
+        <defs>
+          {/* 3D Fur Radial Gradient */}
+          <radialGradient id="monkeyFur" cx="35" cy="30" r="30" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#a36955" />
+            <stop offset="70%" stopColor="#7a4635" />
+            <stop offset="100%" stopColor="#4f271a" />
+          </radialGradient>
 
-        {/* Head Main Shape */}
-        <circle cx="32" cy="31" r="21" fill="#8d5b4c" stroke="#4a2e22" strokeWidth="1.5" />
+          {/* 3D Face Muzzle Radial Gradient */}
+          <radialGradient id="monkeyFace" cx="35" cy="36" r="18" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#ffe3d1" />
+            <stop offset="75%" stopColor="#f7c5a8" />
+            <stop offset="100%" stopColor="#e5a885" />
+          </radialGradient>
 
-        {/* Muzzle / Face Contour */}
+          {/* 3D Inner Ear Gradient */}
+          <linearGradient id="monkeyEarInner" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ffcca8" />
+            <stop offset="100%" stopColor="#e39d78" />
+          </linearGradient>
+
+          {/* 3D Eye Pupil Radial Gradient */}
+          <radialGradient id="monkeyEyePupil" cx="35%" cy="35%" r="65%">
+            <stop offset="0%" stopColor="#4a2511" />
+            <stop offset="70%" stopColor="#210c04" />
+            <stop offset="100%" stopColor="#0b0301" />
+          </radialGradient>
+
+          {/* Soft 3D Drop Shadow */}
+          <filter id="soft3dShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#000000" floodOpacity="0.25" />
+          </filter>
+        </defs>
+
+        {/* 1. OUTER EARS WITH 3D SHADING */}
+        <g filter="url(#soft3dShadow)">
+          {/* Left Ear */}
+          <circle cx="11" cy="33" r="10" fill="url(#monkeyFur)" stroke="#381b11" strokeWidth="1.5" />
+          <circle cx="11" cy="33" r="6" fill="url(#monkeyEarInner)" />
+
+          {/* Right Ear */}
+          <circle cx="59" cy="33" r="10" fill="url(#monkeyFur)" stroke="#381b11" strokeWidth="1.5" />
+          <circle cx="59" cy="33" r="6" fill="url(#monkeyEarInner)" />
+        </g>
+
+        {/* 2. 3D MAIN HEAD SPHERE */}
+        <circle cx="35" cy="34" r="23" fill="url(#monkeyFur)" stroke="#381b11" strokeWidth="1.8" filter="url(#soft3dShadow)" />
+
+        {/* Top Fur Tuft / Hair Highlight */}
+        <path d="M 31 11 Q 35 6 39 11 Q 37 13 35 12 Q 33 13 31 11 Z" fill="#b87a64" opacity="0.9" />
+
+        {/* 3. 3D MUZZLE & CHEEKS SHAPE */}
         <path
-          d="M 18 31 C 18 19, 46 19, 46 31 C 46 43, 18 43, 18 31 Z"
-          fill="#f5c7a9"
+          d="M 19 34 C 19 21, 51 21, 51 34 C 51 47, 19 47, 19 34 Z"
+          fill="url(#monkeyFace)"
+          stroke="#4f271a"
+          strokeWidth="1.2"
         />
 
-        {/* Eyes: Awake vs Sleeping */}
+        {/* 4. EYES: AWAKE (WIDE OPEN 3D EYES) VS SLEEPING (CLOSED EYELIDS) */}
         {isSleeping ? (
           <>
-            {/* Sleeping Closed Eyelids (u u shape) */}
+            {/* Sleeping Closed Eyelids (Peaceful Sleeping Expression) */}
             <path
-              d="M 21 27.5 Q 25 31.5 29 27.5"
-              stroke="#2d1710"
-              strokeWidth="2.2"
+              d="M 22 30 Q 27 35 32 30"
+              stroke="#36170d"
+              strokeWidth="2.8"
               strokeLinecap="round"
+              fill="none"
             />
             <path
-              d="M 35 27.5 Q 39 31.5 43 27.5"
-              stroke="#2d1710"
-              strokeWidth="2.2"
+              d="M 38 30 Q 43 35 48 30"
+              stroke="#36170d"
+              strokeWidth="2.8"
               strokeLinecap="round"
+              fill="none"
             />
+            {/* Eyelashes detail */}
+            <path d="M 23 32 L 21 34 M 31 32 L 33 34" stroke="#36170d" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M 39 32 L 37 34 M 47 32 L 49 34" stroke="#36170d" strokeWidth="1.5" strokeLinecap="round" />
           </>
         ) : (
           <>
-            {/* Awake Eyes */}
-            <ellipse cx="25" cy="27.5" rx="4" ry="4.5" fill="#ffffff" />
-            <ellipse cx="39" cy="27.5" rx="4" ry="4.5" fill="#ffffff" />
-            
-            <circle cx="25" cy="28" r="2.5" fill="#2d1710" />
-            <circle cx="39" cy="28" r="2.5" fill="#2d1710" />
-
+            {/* WIDE OPEN EXPRESSIVE 3D GLOSSY EYES */}
+            {/* Left Eye Base & Iris */}
+            <ellipse cx="27" cy="29" rx="5" ry="6" fill="#ffffff" stroke="#36170d" strokeWidth="0.8" />
+            <ellipse cx="27" cy="29.5" rx="3.5" ry="4.2" fill="url(#monkeyEyePupil)" />
             {/* Eye Catchlights */}
-            <circle cx="26" cy="27" r="1" fill="#ffffff" />
-            <circle cx="40" cy="27" r="1" fill="#ffffff" />
+            <circle cx="28.5" cy="28" r="1.4" fill="#ffffff" />
+            <circle cx="25.8" cy="31" r="0.7" fill="#ffffff" />
+
+            {/* Right Eye Base & Iris */}
+            <ellipse cx="43" cy="29" rx="5" ry="6" fill="#ffffff" stroke="#36170d" strokeWidth="0.8" />
+            <ellipse cx="43" cy="29.5" rx="3.5" ry="4.2" fill="url(#monkeyEyePupil)" />
+            {/* Eye Catchlights */}
+            <circle cx="44.5" cy="28" r="1.4" fill="#ffffff" />
+            <circle cx="41.8" cy="31" r="0.7" fill="#ffffff" />
           </>
         )}
 
-        {/* Nose */}
-        <ellipse cx="32" cy="34" rx="2.5" ry="1.8" fill="#4a2e22" />
+        {/* 5. 3D NOSE */}
+        <ellipse cx="35" cy="36.5" rx="3" ry="2.2" fill="#381b11" />
+        <ellipse cx="34.2" cy="35.8" rx="1" ry="0.6" fill="#693b2a" />
 
-        {/* Mouth: Awake smile vs Sleeping mouth */}
+        {/* 6. MOUTH: AWAKE SMILE VS SLEEPING MOUTH */}
         {isSleeping ? (
-          <ellipse cx="32" cy="39" rx="2.2" ry="1.5" fill="#4a2e22" />
+          /* Sleeping peaceful small mouth */
+          <ellipse cx="35" cy="41.5" rx="2.5" ry="1.8" fill="#4a271a" />
         ) : (
+          /* Awake Warm Smile */
           <path
-            d="M 26 38.5 Q 32 44 38 38.5"
-            stroke="#4a2e22"
-            strokeWidth="2"
+            d="M 28 41 Q 35 47 42 41"
+            stroke="#381b11"
+            strokeWidth="2.5"
             strokeLinecap="round"
+            fill="none"
           />
         )}
 
-        {/* Rosy Cheeks */}
-        <circle cx="20" cy="35" r="2.5" fill="#f87171" opacity="0.65" />
-        <circle cx="44" cy="35" r="2.5" fill="#f87171" opacity="0.65" />
+        {/* 7. ROSY BLUSHING CHEEKS */}
+        <circle cx="21.5" cy="37.5" r="3" fill="#ff6b6b" opacity="0.45" />
+        <circle cx="48.5" cy="37.5" r="3" fill="#ff6b6b" opacity="0.45" />
       </svg>
     </div>
   );
@@ -131,6 +188,7 @@ const PortfolioGuideRobot = () => {
   const [showInitialSpeech, setShowInitialSpeech] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [isSleeping, setIsSleeping] = useState(false);
+  const [isInitialFloating, setIsInitialFloating] = useState(true);
   const [chatHistory, setChatHistory] = useState([
     {
       sender: "robot",
@@ -143,6 +201,15 @@ const PortfolioGuideRobot = () => {
   const chatContainerRef = useRef(null);
   const optionsContainerRef = useRef(null);
   const inactivityTimerRef = useRef(null);
+
+  // Initial floating entry motion timer: float across screen for 6s then dock to corner
+  useEffect(() => {
+    const motionTimer = setTimeout(() => {
+      setIsInitialFloating(false);
+    }, 6000);
+
+    return () => clearTimeout(motionTimer);
+  }, []);
 
   // Prevent touch overscroll / scroll chaining to parent window on mobile devices
   useEffect(() => {
@@ -202,15 +269,15 @@ const PortfolioGuideRobot = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // 10-second inactivity sleep timer logic
+  // 12-second inactivity sleep timer logic (both initial site load AND during chat)
   const startInactivityTimer = () => {
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
     }
 
-    if (isOpen && !isSleeping) {
-      inactivityTimerRef.current = setTimeout(() => {
-        setIsSleeping(true);
+    inactivityTimerRef.current = setTimeout(() => {
+      setIsSleeping(true);
+      if (isOpen) {
         setChatHistory((prev) => [
           ...prev,
           {
@@ -219,12 +286,12 @@ const PortfolioGuideRobot = () => {
             action: null,
           },
         ]);
-      }, 10000); // 10 seconds
-    }
+      }
+    }, 12000); // 12 seconds of no interaction -> sleep!
   };
 
   useEffect(() => {
-    if (isOpen && !isSleeping) {
+    if (!isSleeping) {
       startInactivityTimer();
     } else {
       if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
@@ -400,6 +467,7 @@ const PortfolioGuideRobot = () => {
   };
 
   const toggleOpen = () => {
+    setIsInitialFloating(false);
     setShowInitialSpeech(false);
     
     // If opening while sleeping, wake up!
@@ -424,12 +492,14 @@ const PortfolioGuideRobot = () => {
   return (
     <aside
       aria-label="Bhola Guru Island Guide"
-      className="fixed bottom-4 sm:bottom-6 left-0 right-0 w-full max-w-5xl mx-auto px-4 sm:px-16 z-[99] flex flex-col items-end pointer-events-none"
+      className={`fixed bottom-4 sm:bottom-6 left-0 right-0 w-full max-w-5xl mx-auto px-4 sm:px-16 z-[99] flex flex-col items-end pointer-events-none transition-all duration-1000 ${
+        isInitialFloating && !isOpen ? "animate-monkey-entry-wave" : ""
+      }`}
     >
       {/* 1. INITIAL SPEECH BUBBLE POPUP */}
       {showInitialSpeech && !isOpen && (
         <div
-          className={`pointer-events-auto mb-2 px-3.5 py-2.5 rounded-2xl shadow-lg border text-xs sm:text-sm font-medium transition-all duration-500 animate-bounce max-w-[220px] sm:max-w-[260px] ${
+          className={`pointer-events-auto mb-2 px-3.5 py-2.5 rounded-2xl shadow-lg border text-xs sm:text-sm font-medium transition-all duration-500 animate-bounce max-w-[240px] sm:max-w-[280px] ${
             isNight
               ? "bg-slate-900/95 text-slate-100 border-indigo-500/30 shadow-indigo-950/60"
               : "bg-white/95 text-slate-800 border-sky-300/60 shadow-sky-500/20"
@@ -439,7 +509,7 @@ const PortfolioGuideRobot = () => {
           }}
         >
           <div className="flex items-center gap-1.5">
-            <span>Pranam! 🙏 Bhola Guru here! 🐒</span>
+            <span>Pranam! 🙏 Bhola Guru in motion! 🐒</span>
           </div>
           {/* Speech tail */}
           <div
@@ -472,8 +542,8 @@ const PortfolioGuideRobot = () => {
             <div className="flex items-center gap-2">
               <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} />
               <div>
-                <h3 className="font-bold text-xs sm:text-sm font-poppins leading-tight">
-                  Bhola Guru 🐒
+                <h3 className="font-bold text-xs sm:text-sm font-poppins leading-tight flex items-center gap-1">
+                  <span>Bhola Guru</span> 🐒
                 </h3>
                 {isSleeping ? (
                   <span className="text-[10px] text-indigo-400 dark:text-indigo-300 font-medium flex items-center gap-1">
@@ -588,31 +658,33 @@ const PortfolioGuideRobot = () => {
         </div>
       )}
 
-      {/* 3. MINIMIZED BOUNDARY-FREE FLOATING MONKEY AVATAR BUTTON */}
+      {/* 3. BOUNDARY-FREE 3D FLOATING MONKEY AVATAR BUTTON WITH CONTINUOUS MOTION */}
       <button
         onClick={toggleOpen}
         aria-label="Open Bhola Guru Guide"
         type="button"
-        className="pointer-events-auto relative group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl border border-slate-200/60 dark:border-slate-700/60"
+        className={`pointer-events-auto relative group flex items-center justify-center focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-transparent border-none p-0 cursor-pointer ${
+          !isOpen ? "animate-monkey-float" : ""
+        }`}
       >
-        {/* Soft Environment-Matched Ambient Glow Ring */}
+        {/* Soft Ambient Character Aura (No rigid box or circle border) */}
         <div
-          className={`absolute inset-0 rounded-full opacity-50 blur-md group-hover:opacity-80 transition-opacity animate-pulse ${
+          className={`absolute inset-1 rounded-full opacity-40 blur-lg group-hover:opacity-80 transition-opacity animate-pulse ${
             isSleeping
               ? "bg-indigo-500/40"
               : isNight
               ? "bg-indigo-500/60"
-              : "bg-sky-400/70"
+              : "bg-sky-400/60"
           }`}
         />
 
-        {/* Boundary-Free Monkey Avatar */}
+        {/* Boundary-Free 3D Monkey Avatar */}
         <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} className="relative z-10" />
 
         {/* Quick notification dot */}
         {showInitialSpeech && !isOpen && (
           <span
-            className={`absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full border border-slate-900 z-20 animate-ping ${
+            className={`absolute top-0 right-0 w-3 h-3 rounded-full border border-slate-900 z-20 animate-ping ${
               isNight ? "bg-indigo-400" : "bg-sky-400"
             }`}
           />
@@ -623,3 +695,4 @@ const PortfolioGuideRobot = () => {
 };
 
 export default PortfolioGuideRobot;
+

@@ -290,4 +290,44 @@ html, body {
   scrollbar-color: rgba(71, 85, 105, 0.5) transparent;
 }
 
+/* 3D Bot Monkey Motion & Floating Animations */
+@keyframes monkey-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-7px) rotate(-3deg) scale(1.02);
+  }
+  50% {
+    transform: translateY(-2px) rotate(2deg) scale(0.99);
+  }
+  75% {
+    transform: translateY(-9px) rotate(-1deg) scale(1.03);
+  }
+}
+
+@keyframes monkey-entry-wave {
+  0%, 100% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+  25% {
+    transform: translate(-18px, -12px) rotate(-6deg);
+  }
+  50% {
+    transform: translate(12px, -6px) rotate(4deg);
+  }
+  75% {
+    transform: translate(-8px, -16px) rotate(-3deg);
+  }
+}
+
+.animate-monkey-float {
+  animation: monkey-float 3.8s ease-in-out infinite;
+}
+
+.animate-monkey-entry-wave {
+  animation: monkey-entry-wave 4s ease-in-out infinite;
+}
+
+
 
