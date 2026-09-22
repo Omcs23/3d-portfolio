@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-21T18:10:10.966Z",
+  "lastUpdated": "2026-09-22T04:37:44.609Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -7,13 +7,13 @@
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
       "ranking": 1566478,
       "stats": {
-        "totalSolved": 108,
+        "totalSolved": 109,
         "easySolved": 35,
-        "mediumSolved": 50,
+        "mediumSolved": 51,
         "hardSolved": 23,
-        "currentStreak": 4,
-        "longestStreak": 4,
-        "totalActiveDays": 17
+        "currentStreak": 5,
+        "longestStreak": 5,
+        "totalActiveDays": 18
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -32,9 +32,17 @@
         "1789603200": 1,
         "1789689600": 26,
         "1789776000": 2,
-        "1789862400": 1
+        "1789862400": 1,
+        "1789948800": 1
       },
       "recentSubmissions": [
+        {
+          "title": "Find X Value of Array I",
+          "titleSlug": "find-x-value-of-array-i",
+          "timestamp": 1790024102,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Reverse Degree of a String",
           "titleSlug": "reverse-degree-of-a-string",
@@ -95,13 +103,6 @@
           "title": "Minimum Window Substring",
           "titleSlug": "minimum-window-substring",
           "timestamp": 1789715505,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "N-Queens II",
-          "titleSlug": "n-queens-ii",
-          "timestamp": 1789715325,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
