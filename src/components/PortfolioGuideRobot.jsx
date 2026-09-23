@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 
 // Sleek Modern Minimalist Lamp Component
-const ModernMinimalLamp = ({ isNight, isSleeping }) => {
-  const isGlowing = isNight && !isSleeping;
+const ModernMinimalLamp = ({ isNight, isSleeping, isOpen = false }) => {
+  const isGlowing = isNight && !isSleeping && !isOpen;
 
   return (
     <div className="absolute -top-7 -left-3.5 w-12 h-16 pointer-events-none z-30 transition-all duration-500">
@@ -73,7 +73,7 @@ const ModernMinimalLamp = ({ isNight, isSleeping }) => {
   );
 };
 
-// Boundary-free 3D Monkey Avatar Component (Emmy - Female Island Guide Monkey with cute flower accessory & minimal lamp)
+// Boundary-free 3D Monkey Avatar Component (Emmy - Female Island Guide Monkey with cute flower accessory)
 const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, className = "" }) => {
   const sizeClasses = {
     sm: "w-8 h-8",
@@ -83,9 +83,6 @@ const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, classN
 
   return (
     <div className={`relative flex items-center justify-center shrink-0 ${sizeClasses[size]} ${className}`}>
-      {/* Modern Minimalist Lamp on Emmy (visible on large avatar button) */}
-      {size === "lg" && <ModernMinimalLamp isNight={isNight} isSleeping={isSleeping} />}
-
       {/* Floating ZZZs when sleeping */}
       {isSleeping && (
         <span className="absolute -top-3 -right-1 text-xs sm:text-sm font-bold text-indigo-400 dark:text-indigo-300 animate-bounce z-30 select-none drop-shadow">
@@ -1060,29 +1057,44 @@ const PortfolioGuideRobot = () => {
         </div>
       )}
 
-      {/* BOUNDARY-FREE 3D FLOATING MONKEY AVATAR BUTTON */}
-      <button
-        onClick={toggleOpen}
-        aria-label="Open Emmy Guide"
-        type="button"
-        className={`pointer-events-auto relative group flex items-center justify-center focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-transparent border-none p-0 cursor-pointer ${
-          !isOpen ? "animate-monkey-float" : ""
-        }`}
-      >
-        {/* Soft Ambient Character Aura */}
+      {/* DOCK ANCHOR CONTAINER FOR PERSISTENT LAMP AND FLOATING MONKEY AVATAR */}
+      <div className="relative pointer-events-auto flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 shrink-0">
+        {/* Modern Minimalist Lamp - Always stays at its home location */}
         <div
-          className={`absolute inset-1 rounded-full opacity-40 blur-lg group-hover:opacity-80 transition-opacity animate-pulse ${
-            isSleeping
-              ? "bg-indigo-500/40"
-              : isNight
-              ? "bg-indigo-500/60"
-              : "bg-sky-400/60"
-          }`}
-        />
+          onClick={isOpen ? toggleOpen : undefined}
+          className={`absolute inset-0 z-20 ${isOpen ? "cursor-pointer" : "pointer-events-none"}`}
+          title={isOpen ? "Close Emmy Guide" : undefined}
+        >
+          <ModernMinimalLamp isNight={isNight} isSleeping={isSleeping} isOpen={isOpen} />
+        </div>
 
-        {/* Boundary-Free 3D Monkey Avatar */}
-        <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} className="relative z-10" />
-      </button>
+        {/* Boundary-Free 3D Floating Monkey Avatar Button (Removes when chat mode is active, comes back when closed) */}
+        <button
+          onClick={toggleOpen}
+          aria-label={isOpen ? "Close Emmy Guide" : "Open Emmy Guide"}
+          type="button"
+          tabIndex={isOpen ? -1 : 0}
+          className={`relative group flex items-center justify-center focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-transparent border-none p-0 animate-monkey-float transition-all duration-300 transform w-full h-full z-10 ${
+            isOpen
+              ? "scale-0 opacity-0 pointer-events-none"
+              : "scale-100 opacity-100 pointer-events-auto cursor-pointer"
+          }`}
+        >
+          {/* Soft Ambient Character Aura */}
+          <div
+            className={`absolute inset-1 rounded-full opacity-40 blur-lg group-hover:opacity-80 transition-opacity animate-pulse ${
+              isSleeping
+                ? "bg-indigo-500/40"
+                : isNight
+                ? "bg-indigo-500/60"
+                : "bg-sky-400/60"
+            }`}
+          />
+
+          {/* Boundary-Free 3D Monkey Avatar */}
+          <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} className="relative z-10" />
+        </button>
+      </div>
     </aside>
   );
 };
