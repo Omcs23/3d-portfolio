@@ -14,7 +14,6 @@ import "react-vertical-timeline-component/style.min.css";
 const About = () => {
   const { alert, showAlert, hideAlert } = useAlert();
   const [copiedType, setCopiedType] = useState(null);
-  const [showPdfPreview, setShowPdfPreview] = useState(false);
   const { isNight } = useTheme();
 
   const handleCopyResumeText = () => {
@@ -67,6 +66,19 @@ PROFILES:
       setCopiedType(null);
       hideAlert();
     }, 3000);
+  };
+
+  const handleViewAndDownloadResume = () => {
+    // Open PDF in a new tab for viewing
+    window.open("/Om_Sharma_Resume.pdf", "_blank", "noopener,noreferrer");
+
+    // Simultaneously trigger download to system
+    const link = document.createElement("a");
+    link.href = "/Om_Sharma_Resume.pdf";
+    link.download = "Om_Sharma_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -203,67 +215,14 @@ PROFILES:
             </button>
 
             <button
-              onClick={() => setShowPdfPreview(!showPdfPreview)}
+              onClick={handleViewAndDownloadResume}
               type="button"
-              className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 ${
-                showPdfPreview
-                  ? "bg-indigo-600 text-white"
-                  : isNight
-                  ? "bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
-                  : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
-              }`}
-            >
-              <span>{showPdfPreview ? "✖️ Hide Preview" : "👁️ View PDF Resume"}</span>
-            </button>
-
-            <a
-              href="/Om_Sharma_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 ${
-                isNight
-                  ? "bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
-                  : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
-              }`}
-            >
-              <span>↗️ Open PDF in New Tab</span>
-            </a>
-
-            <a
-              href="/Om_Sharma_Resume.pdf"
-              target="_blank"
-              download="Om_Sharma_Resume.pdf"
               className="btn px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-blue-500/20 active:scale-95 transition-all w-full sm:w-auto"
             >
-              <span>📥 Download PDF Resume</span>
-            </a>
+              <span>👁️📥 View & Download Resume PDF</span>
+            </button>
           </div>
         </div>
-
-        {/* Embedded PDF Viewer */}
-        {showPdfPreview && (
-          <div className="mt-6 pt-6 border-t border-slate-700/30 flex flex-col gap-3">
-            <div className="flex items-center justify-between px-2">
-              <span className={`text-xs font-semibold uppercase tracking-wider ${isNight ? "text-slate-400" : "text-slate-500"}`}>
-                Interactive PDF Document Preview
-              </span>
-              <a
-                href="/Om_Sharma_Resume.pdf"
-                download="Om_Sharma_Resume.pdf"
-                className="text-xs text-blue-500 hover:underline font-medium flex items-center gap-1"
-              >
-                📥 Direct Download PDF
-              </a>
-            </div>
-            <div className="w-full h-[550px] sm:h-[750px] rounded-xl overflow-hidden border border-slate-700/50 shadow-inner bg-slate-900">
-              <iframe
-                src="/Om_Sharma_Resume.pdf"
-                className="w-full h-full border-0"
-                title="Om Sharma Resume PDF"
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Profiles & Links Section */}
