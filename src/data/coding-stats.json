@@ -1,19 +1,19 @@
 {
-  "lastUpdated": "2026-09-24T04:31:09.797Z",
+  "lastUpdated": "2026-09-24T17:01:10.971Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
       "profileUrl": "https://leetcode.com/u/OmSharma152/",
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
-      "ranking": 1532562,
+      "ranking": 1487523,
       "stats": {
-        "totalSolved": 115,
-        "easySolved": 35,
+        "totalSolved": 120,
+        "easySolved": 39,
         "mediumSolved": 55,
-        "hardSolved": 25,
-        "currentStreak": 7,
-        "longestStreak": 7,
-        "totalActiveDays": 20
+        "hardSolved": 26,
+        "currentStreak": 8,
+        "longestStreak": 8,
+        "totalActiveDays": 21
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -35,9 +35,45 @@
         "1789862400": 1,
         "1789948800": 1,
         "1790035200": 2,
-        "1790121600": 4
+        "1790121600": 4,
+        "1790208000": 5
       },
       "recentSubmissions": [
+        {
+          "title": "Sqrt(x)",
+          "titleSlug": "sqrtx",
+          "timestamp": 1790258665,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Length of Last Word",
+          "titleSlug": "length-of-last-word",
+          "timestamp": 1790258242,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Add Binary",
+          "titleSlug": "add-binary",
+          "timestamp": 1790258171,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Sudoku Solver",
+          "titleSlug": "sudoku-solver",
+          "timestamp": 1790258074,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Smallest Index With Digit Sum Equal to Index",
+          "titleSlug": "smallest-index-with-digit-sum-equal-to-index",
+          "timestamp": 1790257943,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Wildcard Matching",
           "titleSlug": "wildcard-matching",
@@ -70,41 +106,6 @@
           "title": "Second Highest Salary",
           "titleSlug": "second-highest-salary",
           "timestamp": 1790105224,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Find X Value of Array II",
-          "titleSlug": "find-x-value-of-array-ii",
-          "timestamp": 1790104872,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Find X Value of Array I",
-          "titleSlug": "find-x-value-of-array-i",
-          "timestamp": 1790024102,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Reverse Degree of a String",
-          "titleSlug": "reverse-degree-of-a-string",
-          "timestamp": 1789890117,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Combine Two Tables",
-          "titleSlug": "combine-two-tables",
-          "timestamp": 1789837235,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Circle and Rectangle Overlapping",
-          "titleSlug": "circle-and-rectangle-overlapping",
-          "timestamp": 1789837125,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
