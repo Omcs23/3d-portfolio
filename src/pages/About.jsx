@@ -271,7 +271,7 @@ PROFILES:
       <div className="py-10 flex flex-col">
         <h3 className="subhead-text">My Skills</h3>
 
-        <div className="mt-8 sm:mt-12 flex flex-wrap gap-5 sm:gap-10 justify-center sm:justify-start">
+        <div className="mt-8 sm:mt-12 flex flex-wrap gap-5 sm:gap-10 justify-center">
           {skills.map((skill) => (
             <div className="block-container w-16 h-16 sm:w-20 sm:h-20" key={skill.name}>
               <div className="btn-back rounded-xl" />
