@@ -837,7 +837,14 @@ const PortfolioGuideRobot = () => {
       }
       setIsOpen(false);
     } else if (action.type === "download") {
-      window.open(action.target, "_blank", "noopener,noreferrer");
+      const pathname = window.location.pathname;
+      const basePath = pathname.endsWith("/")
+        ? pathname
+        : pathname.substring(0, pathname.lastIndexOf("/") + 1);
+      const fullUrl = action.target.startsWith("/")
+        ? `${window.location.origin}${basePath}${action.target.slice(1)}`
+        : action.target;
+      window.open(fullUrl, "_blank", "noopener,noreferrer");
     }
   };
 

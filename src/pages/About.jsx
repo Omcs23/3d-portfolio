@@ -52,8 +52,16 @@ PROFILES:
     }, 3000);
   };
 
+  const getResumeUrl = () => {
+    const pathname = window.location.pathname;
+    const basePath = pathname.endsWith("/")
+      ? pathname
+      : pathname.substring(0, pathname.lastIndexOf("/") + 1);
+    return `${window.location.origin}${basePath}Om_Sharma_Resume.pdf`;
+  };
+
   const handleCopyResumeLink = () => {
-    const resumeLink = `${window.location.origin}/Om_Sharma_Resume.pdf`;
+    const resumeLink = getResumeUrl();
     navigator.clipboard.writeText(resumeLink);
     setCopiedType("link");
     showAlert({
@@ -66,19 +74,6 @@ PROFILES:
       setCopiedType(null);
       hideAlert();
     }, 3000);
-  };
-
-  const handleViewAndDownloadResume = () => {
-    // Open PDF in a new tab for viewing
-    window.open("/Om_Sharma_Resume.pdf", "_blank", "noopener,noreferrer");
-
-    // Simultaneously trigger download to system
-    const link = document.createElement("a");
-    link.href = "/Om_Sharma_Resume.pdf";
-    link.download = "Om_Sharma_Resume.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
@@ -214,13 +209,15 @@ PROFILES:
               <span>{copiedType === "link" ? "✓ Copied!" : "🔗 Copy PDF Link"}</span>
             </button>
 
-            <button
-              onClick={handleViewAndDownloadResume}
-              type="button"
+            <a
+              href={getResumeUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              download="Om_Sharma_Resume.pdf"
               className="btn px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-blue-500/20 active:scale-95 transition-all w-full sm:w-auto"
             >
               <span>📥 Download Resume</span>
-            </button>
+            </a>
           </div>
         </div>
       </div>
