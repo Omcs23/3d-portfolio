@@ -219,7 +219,7 @@ PROFILES:
               type="button"
               className="btn px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-blue-500/20 active:scale-95 transition-all w-full sm:w-auto"
             >
-              <span>👁️📥 View & Download Resume PDF</span>
+              <span>📥 Download Resume</span>
             </button>
           </div>
         </div>
