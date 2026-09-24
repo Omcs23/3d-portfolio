@@ -18,11 +18,12 @@ const About = () => {
 
   const handleCopyResumeText = () => {
     const resumeSummary = `OM SHARMA
+Mathura, India | +91 7404420131 | om.sharma_cs23@gla.ac.in
 B.Tech Computer Science & Engineering @ GLA University (2023 - 2027)
 Full-Stack Developer | Competitive Programmer | AI & DevOps Certified
 
 SUMMARY:
-Creative Full-Stack Developer and Problem Solver with hands-on experience in MERN Stack (MongoDB, Express.js, React.js, Node.js), Java, and Python. Active competitive programmer on LeetCode, Codeforces, and HackerRank.
+Detail-oriented Full-Stack Developer with a solid foundation in Computer Science principles. Proficient in MongoDB, Express.js, React, Node.js, and multi-language development (Java/Python). Certified by Oracle, Google, and Infosys in GenAI, DevOps, and Cybersecurity. Active competitive programmer ready to contribute to high-impact software engineering roles.
 
 CERTIFICATIONS:
 - Oracle OCI 2025 Certified Generative AI Professional
@@ -35,8 +36,7 @@ PROFILES:
 - LinkedIn: https://www.linkedin.com/in/om-sharma-88109b296
 - LeetCode: https://leetcode.com/u/OmSharma152/
 - Codeforces: https://codeforces.com/profile/OmSharma_cs
-- HackerRank: https://www.hackerrank.com/profile/iOmSharma52
-- Instagram: https://www.instagram.com/om.chaturvedi52`;
+- HackerRank: https://www.hackerrank.com/profile/iOmSharma52`;
 
     navigator.clipboard.writeText(resumeSummary);
     setCopiedType("text");
@@ -53,7 +53,7 @@ PROFILES:
   };
 
   const handleCopyResumeLink = () => {
-    const resumeLink = `${window.location.origin}/Om_Sharma_Resume.pdf`;
+    const resumeLink = `${window.location.origin}/Om_Sharma_Resume.html`;
     navigator.clipboard.writeText(resumeLink);
     setCopiedType("link");
     showAlert({
@@ -202,13 +202,12 @@ PROFILES:
             </button>
 
             <a
-              href="/Om_Sharma_Resume.pdf"
+              href="/Om_Sharma_Resume.html"
               target="_blank"
               rel="noopener noreferrer"
-              download="Om_Sharma_Resume.pdf"
               className="btn px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-blue-500/20 active:scale-95 transition-all w-full sm:w-auto"
             >
-              <span>👁️ View / Download PDF</span>
+              <span>👁️ View / Print Resume</span>
             </a>
           </div>
         </div>

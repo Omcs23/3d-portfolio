@@ -40,26 +40,6 @@ import {
 
 export const skills = [
     {
-        imageUrl: mongodb,
-        name: "MongoDB",
-        type: "Database",
-    },
-    {
-        imageUrl: express,
-        name: "Express",
-        type: "Backend",
-    },
-    {
-        imageUrl: react,
-        name: "React",
-        type: "Frontend",
-    },
-    {
-        imageUrl: nodejs,
-        name: "Node.js",
-        type: "Backend",
-    },
-    {
         imageUrl: java,
         name: "Java",
         type: "Programming Language",
@@ -68,21 +48,70 @@ export const skills = [
         imageUrl: python,
         name: "Python",
         type: "Programming Language",
+    },
+    {
+        imageUrl: javascript,
+        name: "JavaScript",
+        type: "Programming Language",
+    },
+    {
+        imageUrl: html,
+        name: "HTML5",
+        type: "Frontend",
+    },
+    {
+        imageUrl: css,
+        name: "CSS3",
+        type: "Frontend",
+    },
+    {
+        imageUrl: tailwindcss,
+        name: "Tailwind CSS",
+        type: "Frontend",
+    },
+    {
+        imageUrl: react,
+        name: "React.js",
+        type: "Frontend",
+    },
+    {
+        imageUrl: nodejs,
+        name: "Node.js",
+        type: "Backend",
+    },
+    {
+        imageUrl: express,
+        name: "Express.js",
+        type: "Backend",
+    },
+    {
+        imageUrl: mongodb,
+        name: "MongoDB",
+        type: "Database",
+    },
+    {
+        imageUrl: git,
+        name: "Git",
+        type: "Version Control",
+    },
+    {
+        imageUrl: github,
+        name: "GitHub",
+        type: "Version Control",
     }
 ];
 
 export const education = [
     {
-        title: "B.Tech Computer Science & Engineering",
-        company_name: "GLA University",
+        title: "Bachelor of Technology (B.Tech) - CSE",
+        company_name: "GLA University, Mathura",
         icon: gla,
         iconBg: "#accbe1",
         date: "2023 - 2027",
         points: [
-            "Pursuing Bachelor of Technology in Computer Science & Engineering at GLA University.",
-            "Driven by creativity and a strong passion for full-stack engineering, AI automation, and interactive web tools.",
-            "Solid foundations in Data Structures, Algorithms, Software Engineering, and Database Management Systems.",
-            "Active competitive programmer on LeetCode, Codeforces, and HackerRank, consistently honing problem-solving capabilities.",
+            "Bachelor of Technology in Computer Science & Engineering at GLA University, Mathura (Graduation Year: 2027).",
+            "Solid theoretical and practical foundation in core CS subjects: Data Structures & Algorithms (DSA), Object-Oriented Programming (OOPs), Database Management Systems (DBMS), Operating Systems (OS), and Computer Networks (CN).",
+            "Active competitive programmer with 100+ problems solved on LeetCode, 100+ on Codeforces, and 5-Star badges in Java & Python on HackerRank.",
         ],
     },
 ];
@@ -95,8 +124,8 @@ export const certifications = [
         iconBg: "#fbc3bc",
         date: "2025",
         points: [
-            "Oracle Cloud Infrastructure 2025 Certified Generative AI Professional - Expertise in LLMs, prompt engineering, and cloud AI solutions.",
-            "Oracle Cloud Infrastructure 2025 Certified DevOps Professional - Proficient in cloud infrastructure automation, CI/CD pipelines, and microservices.",
+            "Oracle OCI 2025 Certified Generative AI Professional - Skilled in LLMs, prompt engineering, and Cloud AI implementations.",
+            "Oracle OCI 2025 Certified DevOps Professional - Proficient in cloud infrastructure, CI/CD automation, and modern deployment strategies.",
         ],
     },
     {
@@ -107,18 +136,18 @@ export const certifications = [
         date: "2025",
         points: [
             "Earned Google Cybersecurity Professional Certificate on Coursera.",
-            "Mastered network security protocols, vulnerability assessment, threat analysis, incident response, and secure API integration.",
+            "Specialized in threat detection, network security protocols, vulnerability assessments, and security compliance.",
         ],
     },
     {
-        title: "Java & MERN Stack Certifications",
+        title: "Java & MERN Stack Certified",
         company_name: "Infosys Springboard",
         icon: infosys,
         iconBg: "#b7e4c7",
         date: "2024 - 2025",
         points: [
-            "Certified in Java Programming & Object-Oriented Software Design.",
-            "Certified in MERN Stack Development (MongoDB, Express.js, React.js, Node.js) for end-to-end web applications.",
+            "Java & Object-Oriented Programming Certified by Infosys Springboard.",
+            "MERN Stack Certified by Infosys Springboard for full-stack web application development.",
         ],
     },
 ];
@@ -168,8 +197,15 @@ export const projects = [
         iconUrl: hospital,
         theme: 'btn-back-blue',
         name: 'Hospital Management System',
-        description: 'A comprehensive healthcare management web application designed to streamline patient registrations, doctor appointment scheduling, medical records, and hospital administrative operations.',
+        description: 'A comprehensive healthcare management web application designed to streamline patient registrations, doctor appointment scheduling, medical records, and hospital administrative operations. Built with Node.js, Express.js, MongoDB, Mongoose, JavaScript, HTML/CSS.',
         link: 'https://github.com/Omcs23/hospital-management-system',
+    },
+    {
+        iconUrl: portfolio3d,
+        theme: 'btn-back-red',
+        name: '3D Interactive Portfolio',
+        description: 'An immersive 3D developer portfolio website featuring interactive island 3D models, smooth camera navigation, dark/light ambient themes, and real-time coding stats. Built with React, Three.js, React Three Fiber, Tailwind CSS, JavaScript, HTML/CSS.',
+        link: 'https://github.com/Omcs23/3d-portfolio',
     },
     {
         iconUrl: instagram,
@@ -177,12 +213,5 @@ export const projects = [
         name: 'Instagram Automation Bot (WIP)',
         description: 'An intelligent automation bot for Instagram comments and replies. Features user-configured comment triggers, automated context-aware replies, and background engagement handling.',
         link: 'https://github.com/Omcs23/instagram-automation-bot',
-    },
-    {
-        iconUrl: portfolio3d,
-        theme: 'btn-back-red',
-        name: '3D Interactive Portfolio',
-        description: 'An immersive 3D developer portfolio website built with React, Three.js, React Three Fiber, and Tailwind CSS featuring interactive island models.',
-        link: 'https://github.com/Omcs23/3d-portfolio',
     }
 ];
