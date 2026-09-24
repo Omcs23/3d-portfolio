@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-23T16:44:18.220Z",
+  "lastUpdated": "2026-09-24T04:31:09.797Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -7,13 +7,13 @@
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
       "ranking": 1532562,
       "stats": {
-        "totalSolved": 111,
+        "totalSolved": 115,
         "easySolved": 35,
-        "mediumSolved": 52,
-        "hardSolved": 24,
-        "currentStreak": 6,
-        "longestStreak": 6,
-        "totalActiveDays": 19
+        "mediumSolved": 55,
+        "hardSolved": 25,
+        "currentStreak": 7,
+        "longestStreak": 7,
+        "totalActiveDays": 20
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -34,9 +34,38 @@
         "1789776000": 2,
         "1789862400": 1,
         "1789948800": 1,
-        "1790035200": 2
+        "1790035200": 2,
+        "1790121600": 4
       },
       "recentSubmissions": [
+        {
+          "title": "Wildcard Matching",
+          "titleSlug": "wildcard-matching",
+          "timestamp": 1790194654,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Combination Sum II",
+          "titleSlug": "combination-sum-ii",
+          "timestamp": 1790194502,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Search in Rotated Sorted Array",
+          "titleSlug": "search-in-rotated-sorted-array",
+          "timestamp": 1790194365,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Minimum Operations to Reduce X to Zero",
+          "titleSlug": "minimum-operations-to-reduce-x-to-zero",
+          "timestamp": 1790194239,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Second Highest Salary",
           "titleSlug": "second-highest-salary",
@@ -76,34 +105,6 @@
           "title": "Circle and Rectangle Overlapping",
           "titleSlug": "circle-and-rectangle-overlapping",
           "timestamp": 1789837125,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Multiply Strings",
-          "titleSlug": "multiply-strings",
-          "timestamp": 1789757225,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Find the Index of the First Occurrence in a String",
-          "titleSlug": "find-the-index-of-the-first-occurrence-in-a-string",
-          "timestamp": 1789757140,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Merge Two Sorted Lists",
-          "titleSlug": "merge-two-sorted-lists",
-          "timestamp": 1789757058,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Longest Valid Parentheses",
-          "titleSlug": "longest-valid-parentheses",
-          "timestamp": 1789756966,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
