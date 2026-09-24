@@ -66,19 +66,6 @@ const Navbar = () => {
           >
             Projects
           </NavLink>
-
-          <a
-            href="/Om_Sharma_Resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`px-3.5 py-1.5 rounded-full font-bold text-sm sm:text-base transition-all duration-200 select-none outline-none focus:outline-none ${
-              isNight
-                ? "text-slate-100 hover:text-white hover:bg-slate-800/60"
-                : "text-slate-800 hover:text-blue-600 hover:bg-slate-100/80"
-            }`}
-          >
-            Resume 📄
-          </a>
         </nav>
 
         <ThemeToggle />
