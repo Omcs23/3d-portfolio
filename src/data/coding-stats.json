@@ -1,19 +1,19 @@
 {
-  "lastUpdated": "2026-09-25T04:42:25.292Z",
+  "lastUpdated": "2026-09-25T17:02:49.739Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
       "profileUrl": "https://leetcode.com/u/OmSharma152/",
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
-      "ranking": 1487523,
+      "ranking": 1434258,
       "stats": {
-        "totalSolved": 120,
+        "totalSolved": 121,
         "easySolved": 39,
         "mediumSolved": 55,
-        "hardSolved": 26,
-        "currentStreak": 8,
-        "longestStreak": 8,
-        "totalActiveDays": 21
+        "hardSolved": 27,
+        "currentStreak": 9,
+        "longestStreak": 9,
+        "totalActiveDays": 22
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -36,9 +36,17 @@
         "1789948800": 1,
         "1790035200": 2,
         "1790121600": 4,
-        "1790208000": 5
+        "1790208000": 5,
+        "1790294400": 1
       },
       "recentSubmissions": [
+        {
+          "title": "Brace Expansion II",
+          "titleSlug": "brace-expansion-ii",
+          "timestamp": 1790345304,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Sqrt(x)",
           "titleSlug": "sqrtx",
@@ -99,13 +107,6 @@
           "title": "Minimum Operations to Reduce X to Zero",
           "titleSlug": "minimum-operations-to-reduce-x-to-zero",
           "timestamp": 1790194239,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Second Highest Salary",
-          "titleSlug": "second-highest-salary",
-          "timestamp": 1790105224,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
