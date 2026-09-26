@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="shieldBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+  </defs>
+  <!-- Security Shield Container -->
+  <path d="M100 18 L165 48 V102 C165 142 136 172 100 182 C64 172 35 142 35 102 V48 Z" fill="url(#shieldBg)" stroke="#4285F4" stroke-width="4"/>
+  <!-- Google 'G' Multi-color Logo inside -->
+  <path d="M100 70 V100 H138 C136 112 127 125 100 125 C85 125 73 113 73 98 C73 83 85 71 100 71 C109 71 116 75 120 79 L132 67 C124 59 113 54 100 54 C76 54 56 74 56 98 C56 122 76 142 100 142 C125 142 142 124 142 98 C142 94 141 90 140 86 L100 86 V70 Z" fill="#4285F4"/>
+  <!-- Google G Color Accent Swashes -->
+  <path d="M100 142 C114 142 126 137 134 128 L121 118 C116 122 109 125 100 125 V142 Z" fill="#34A853"/>
+  <path d="M138 100 H100 V86 H140 C141 90 142 94 142 98 C142 108 139 118 134 128 L121 118 C126 113 138 105 138 100 Z" fill="#FBBC05"/>
+  <path d="M100 71 C110 71 117 75 121 79 L133 67 C125 59 114 54 100 54 V71 Z" fill="#EA4335"/>
+  <!-- Small Key Lock Icon at Bottom of Shield -->
+  <path d="M100 148 C97 148 95 150 95 153 C95 155 96 157 98 158 V164 H102 V158 C104 157 105 155 105 153 C105 150 103 148 100 148 Z" fill="#34A853"/>
+</svg>

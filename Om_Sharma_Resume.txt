@@ -1,0 +1,67 @@
+================================================================================
+                                OM SHARMA
+          Full-Stack Developer | B.Tech CSE @ GLA University
+                AI, DevOps & Cybersecurity Certified
+================================================================================
+
+CONTACT & PROFILES:
+- Location:     Mathura, India
+- Phone:        +91 7404420131
+- Email:        om.sharma_cs23@gla.ac.in
+- GitHub:       https://github.com/Omcs23
+- LinkedIn:     https://www.linkedin.com/in/om-sharma-88109b296
+- LeetCode:     https://leetcode.com/u/OmSharma152/
+- Codeforces:   https://codeforces.com/profile/OmSharma_cs
+- HackerRank:   https://www.hackerrank.com/profile/iOmSharma52
+
+--------------------------------------------------------------------------------
+PROFESSIONAL SUMMARY:
+Detail-oriented Full-Stack Developer with a solid foundation in Computer Science 
+principles. Proficient in MongoDB, Express.js, React, Node.js, and multi-language 
+development (Java/Python). Professionally certified by Oracle, Google, and Infosys in 
+GenAI, DevOps, and Cybersecurity. Active competitive programmer ready to contribute to high-
+impact software engineering roles.
+
+--------------------------------------------------------------------------------
+TECHNICAL SKILLS:
+- Programming Languages: Java, Python, SQL, JavaScript, Tailwind CSS
+- Web Technologies (Frontend): HTML & CSS, React.js
+- Backend: MySQL, MongoDB, Node.js, Express.js
+- Cloud Platforms: Amazon AWS, Oracle OCI
+- Developer Tools: Git, GitHub, VS Code
+- Core Computer Science: Data Structures & Algorithms (DSA), Object-Oriented 
+  Programming (OOPs), DBMS, Operating Systems (OS), Computer Networks (CN)
+
+--------------------------------------------------------------------------------
+PROJECTS:
+1. Hospital Management System
+   - Technologies Used: Node.js, Express.js, MongoDB, Mongoose, JavaScript, HTML/CSS
+   - A comprehensive healthcare management web application designed to streamline 
+     patient registrations, doctor appointment scheduling, medical records, and hospital 
+     administrative operations.
+   - Link: https://github.com/Omcs23/hospital-management-system
+
+2. 3D Interactive Portfolio
+   - Technologies Used: React, Three.js, React Three Fiber, Tailwind CSS, JavaScript, HTML/CSS
+   - An immersive 3D developer portfolio website built with React, Three.js, React 
+     Three Fiber, and Tailwind CSS, featuring interactive island models.
+   - Link: https://github.com/Omcs23/3d-portfolio
+
+--------------------------------------------------------------------------------
+EDUCATION:
+- Bachelor of Technology (B.Tech) in Computer Science & Engineering
+  GLA University, Mathura | Graduation Year: 2027
+
+--------------------------------------------------------------------------------
+CERTIFICATES:
+- OCI 2025 Certified Generative AI & DevOps Professional
+- Cybersecurity Professional Certificate By Coursera
+- Java & MERN Stack Certified by Infosys Springboard
+
+--------------------------------------------------------------------------------
+CODING PROFILES:
+- LeetCode Profile: Successfully solved over 100+ algorithmic problems across 
+  Arrays, LinkedLists, Trees, and Dynamic Programming
+- Codeforces Profile: 100+ problems solved
+- HackerRank: Earned 5 Star in Java & Python
+================================================================================
