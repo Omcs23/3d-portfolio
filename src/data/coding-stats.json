@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-25T17:02:49.739Z",
+  "lastUpdated": "2026-09-26T03:44:09.025Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -7,13 +7,13 @@
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
       "ranking": 1434258,
       "stats": {
-        "totalSolved": 121,
+        "totalSolved": 122,
         "easySolved": 39,
-        "mediumSolved": 55,
+        "mediumSolved": 56,
         "hardSolved": 27,
-        "currentStreak": 9,
-        "longestStreak": 9,
-        "totalActiveDays": 22
+        "currentStreak": 10,
+        "longestStreak": 10,
+        "totalActiveDays": 23
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -37,9 +37,17 @@
         "1790035200": 2,
         "1790121600": 4,
         "1790208000": 5,
-        "1790294400": 1
+        "1790294400": 1,
+        "1790380800": 1
       },
       "recentSubmissions": [
+        {
+          "title": "Evaluate the Bracket Pairs of a String",
+          "titleSlug": "evaluate-the-bracket-pairs-of-a-string",
+          "timestamp": 1790394211,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Brace Expansion II",
           "titleSlug": "brace-expansion-ii",
@@ -100,13 +108,6 @@
           "title": "Search in Rotated Sorted Array",
           "titleSlug": "search-in-rotated-sorted-array",
           "timestamp": 1790194365,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Minimum Operations to Reduce X to Zero",
-          "titleSlug": "minimum-operations-to-reduce-x-to-zero",
-          "timestamp": 1790194239,
           "statusDisplay": "Accepted",
           "lang": "java"
         }

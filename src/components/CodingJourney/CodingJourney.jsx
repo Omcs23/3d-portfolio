@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import ActivityHeatmap from "./ActivityHeatmap";
-import RecentProblems from "./RecentProblems";
+import ConsistencyLineGraph from "./ConsistencyLineGraph";
 import codingStatsData from "../../data/coding-stats.json";
 
 const CodingJourney = () => {
@@ -348,8 +348,11 @@ const CodingJourney = () => {
         {/* Heatmap Section */}
         <ActivityHeatmap submissionCalendar={leetcode.submissionCalendar} />
 
-        {/* Recent Problems Section */}
-        <RecentProblems submissions={leetcode.recentSubmissions} />
+        {/* Consistency Line Graph Section */}
+        <ConsistencyLineGraph
+          submissionCalendar={leetcode.submissionCalendar}
+          stats={leetcode.stats}
+        />
 
         {/* Footer Timestamp & Auto Update Badge */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-4 border-t border-slate-700/20 text-xs">

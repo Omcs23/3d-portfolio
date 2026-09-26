@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useProgress } from "@react-three/drei";
 
 const Preloader = ({ onComplete }) => {
+  const containerRef = useRef(null);
   const { progress, active, total, loaded } = useProgress();
 
   const [displayProgress, setDisplayProgress] = useState(0);
@@ -68,6 +69,27 @@ const Preloader = ({ onComplete }) => {
     }
   }, [displayProgress]);
 
+  // Auto-scroll down to "CLICK TO ENTER" button when loaded in horizontal / landscape mode
+  useEffect(() => {
+    if (isLoaded) {
+      const scrollToButton = () => {
+        const isLandscape =
+          window.matchMedia("(orientation: landscape)").matches ||
+          window.innerHeight < 600;
+
+        if (isLandscape && containerRef.current) {
+          containerRef.current.scrollTo({
+            top: containerRef.current.scrollHeight,
+            behavior: "smooth",
+          });
+        }
+      };
+
+      const timer = setTimeout(scrollToButton, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded]);
+
   // Handle exiting preloader
   const handleEnterWorld = () => {
     if (!isLoaded || isExiting) return;
@@ -98,61 +120,81 @@ const Preloader = ({ onComplete }) => {
 
   return (
     <div
+      ref={containerRef}
       data-preloader="true"
       className={`fixed top-0 left-0 right-0 bottom-0 inset-0 z-[99999] w-full h-full bg-black text-white flex flex-col justify-between px-6 sm:px-12 py-6 sm:py-10 select-none overflow-hidden box-border transition-opacity duration-500 ease-in-out ${
         isExiting ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
-      {/* Top Headline Section */}
-      <div className="w-full max-w-2xl sm:max-w-4xl mx-auto pt-2 sm:pt-4">
-        <h1 className="text-[44px] xs:text-[50px] sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.98] text-white uppercase text-left font-sans">
-          WELCOME<br />
-          TO MY<br />
-          WORLD!
-        </h1>
-      </div>
+      <style>{`
+        @media (orientation: landscape) {
+          [data-preloader="true"] {
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+          }
+        }
+        @media (max-height: 600px) {
+          [data-preloader="true"] {
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+          }
+        }
+      `}</style>
 
-      {/* Middle Bio Section (Right-Aligned like reference screenshot) */}
-      <div className="w-full max-w-2xl sm:max-w-4xl mx-auto flex flex-col items-end text-right my-auto py-2 sm:py-4">
-        <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-neutral-100 font-normal leading-snug max-w-[280px] xs:max-w-[320px] sm:max-w-md md:max-w-lg text-right">
-          I'm Om, an Interaction Designer who is enthusiastic about creating engaging and delightful digital experiences.
-        </p>
+      <div className="w-full max-w-2xl sm:max-w-4xl mx-auto min-h-full flex flex-col justify-between py-2">
+        {/* Top Headline Section */}
+        <div className="w-full pt-2 sm:pt-4 shrink-0">
+          <h1 className="text-[36px] xs:text-[44px] sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.98] text-white uppercase text-left font-sans">
+            WELCOME<br />
+            TO MY<br />
+            WORLD!
+          </h1>
+        </div>
 
-        <p className="text-xs sm:text-sm text-neutral-300 font-normal mt-4 sm:mt-6 tracking-wide text-right">
-          This website was last updated in 2026.
-        </p>
-      </div>
-
-      {/* Bottom Capsule Progress / Pill Button */}
-      <div className="w-full max-w-2xl sm:max-w-4xl mx-auto pb-2 flex flex-col items-center shrink-0">
-        <button
-          type="button"
-          disabled={!isLoaded}
-          onClick={handleEnterWorld}
-          className={`w-full h-14 sm:h-16 rounded-full relative overflow-hidden transition-all duration-300 shadow-2xl flex items-center justify-center ${
-            isLoaded
-              ? "cursor-pointer hover:scale-[1.01] active:scale-[0.99] animate-pulse"
-              : "cursor-not-allowed opacity-90"
-          }`}
-          style={{ backgroundColor: "#8187F5" }}
-        >
-          {/* White Progress Fill bar */}
-          <div
-            className="absolute top-0 left-0 bottom-0 bg-white transition-all duration-150 ease-out"
-            style={{ width: `${Math.round(displayProgress)}%` }}
-          />
-
-          {/* Bold Black Text inside pill */}
-          <span className="relative z-10 font-extrabold text-sm sm:text-base tracking-[0.2em] uppercase text-black">
-            {isLoaded ? "CLICK TO ENTER" : `LOADING... ${Math.round(displayProgress)}%`}
-          </span>
-        </button>
-
-        {isLoaded && (
-          <p className="text-center text-[10px] sm:text-xs text-neutral-400 mt-2 font-mono tracking-wider">
-            Click pill or press ENTER to start
+        {/* Middle Bio Section */}
+        <div className="w-full flex flex-col items-end text-right my-auto py-6 sm:py-8 shrink-0">
+          <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-neutral-100 font-normal leading-snug max-w-[280px] xs:max-w-[320px] sm:max-w-md md:max-w-lg text-right">
+            I'm Om, an Interaction Designer who is enthusiastic about creating engaging and delightful digital experiences.
           </p>
-        )}
+
+          <p className="text-xs sm:text-sm text-neutral-300 font-normal mt-4 sm:mt-6 tracking-wide text-right">
+            This website was last updated in 2026.
+          </p>
+        </div>
+
+        {/* Bottom Capsule Progress / Pill Button */}
+        <div className="w-full pb-2 flex flex-col items-center shrink-0">
+          <button
+            type="button"
+            disabled={!isLoaded}
+            onClick={handleEnterWorld}
+            className={`w-full h-14 sm:h-16 rounded-full relative overflow-hidden transition-all duration-300 shadow-2xl flex items-center justify-center ${
+              isLoaded
+                ? "cursor-pointer hover:scale-[1.01] active:scale-[0.99] animate-pulse"
+                : "cursor-not-allowed opacity-90"
+            }`}
+            style={{ backgroundColor: "#8187F5" }}
+          >
+            {/* White Progress Fill bar */}
+            <div
+              className="absolute top-0 left-0 bottom-0 bg-white transition-all duration-150 ease-out"
+              style={{ width: `${Math.round(displayProgress)}%` }}
+            />
+
+            {/* Bold Black Text inside pill */}
+            <span className="relative z-10 font-extrabold text-sm sm:text-base tracking-[0.2em] uppercase text-black">
+              {isLoaded ? "CLICK TO ENTER" : `LOADING... ${Math.round(displayProgress)}%`}
+            </span>
+          </button>
+
+          {isLoaded && (
+            <p className="text-center text-[10px] sm:text-xs text-neutral-400 mt-2 font-mono tracking-wider">
+              Click pill or press ENTER to start
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

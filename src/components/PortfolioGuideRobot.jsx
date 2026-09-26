@@ -2,76 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 
-// Sleek Modern Minimalist Lamp Component
-const ModernMinimalLamp = ({ isNight, isSleeping, isOpen = false }) => {
-  const isGlowing = isNight && !isSleeping && !isOpen;
-
-  return (
-    <div className="absolute -top-7 -left-3.5 w-12 h-16 pointer-events-none z-30 transition-all duration-500">
-      {/* Warm Ambient Spotlight Beam Cone (Glowing onto Emmy at Night when Awake) */}
-      {isGlowing && (
-        <div
-          className="absolute top-4 left-1.5 w-12 h-14 origin-top transform -rotate-[15deg] bg-gradient-to-b from-amber-300/60 via-amber-400/25 to-transparent blur-[2.5px] pointer-events-none animate-pulse"
-          style={{ clipPath: "polygon(35% 0%, 65% 0%, 100% 100%, 0% 100%)" }}
-        />
-      )}
-
-      {/* SVG Architectural Minimalist Curved Lamp */}
-      <svg
-        viewBox="0 0 50 65"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full filter drop-shadow-sm"
-      >
-        <defs>
-          {/* Intense Radial Lamp Glow */}
-          <radialGradient id="bulbGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="40%" stopColor="#fef08a" />
-            <stop offset="80%" stopColor="#f59e0b" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#d97706" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-
-        {/* Base Mount Plate */}
-        <ellipse cx="12" cy="58" rx="6" ry="2.2" fill={isNight ? "#334155" : "#64748b"} stroke="#1e293b" strokeWidth="1" />
-
-        {/* Sleek Modern Curved Metallic Stem */}
-        <path
-          d="M 12 58 L 12 28 Q 12 9 27 8 L 31 8"
-          stroke={isNight ? "#475569" : "#64748b"}
-          strokeWidth="2.4"
-          strokeLinecap="round"
-          fill="none"
-        />
-
-        {/* Modern Minimalist Dome Lamp Head */}
-        <path
-          d="M 23 13 C 23 7, 35 7, 35 13 Z"
-          fill={isNight ? "#1e293b" : "#475569"}
-          stroke={isGlowing ? "#fbbf24" : isNight ? "#334155" : "#64748b"}
-          strokeWidth="1.2"
-        />
-
-        {/* Light Bulb & Ray Highlights */}
-        {isGlowing ? (
-          <>
-            {/* Glowing Golden Bulb */}
-            <circle cx="29" cy="13" r="4" fill="url(#bulbGlow)" />
-            <circle cx="29" cy="13" r="1.8" fill="#ffffff" />
-            {/* Soft Warm Ray Accents */}
-            <line x1="29" y1="17" x2="29" y2="21" stroke="#f59e0b" strokeWidth="1.4" strokeLinecap="round" />
-            <line x1="24" y1="16" x2="21" y2="19" stroke="#f59e0b" strokeWidth="1.2" strokeLinecap="round" />
-            <line x1="34" y1="16" x2="37" y2="19" stroke="#f59e0b" strokeWidth="1.2" strokeLinecap="round" />
-          </>
-        ) : (
-          /* OFF State: Dark bulb when Emmy is sleeping at night, or idle metallic model during daytime */
-          <circle cx="29" cy="13" r="2.2" fill={isNight ? "#334155" : "#94a3b8"} opacity="0.8" />
-        )}
-      </svg>
-    </div>
-  );
-};
 
 // Boundary-free 3D Monkey Avatar Component (Emmy - Female Island Guide Monkey with cute flower accessory)
 const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, className = "" }) => {
@@ -1064,16 +994,8 @@ const PortfolioGuideRobot = () => {
         </div>
       )}
 
-      {/* DOCK ANCHOR CONTAINER FOR PERSISTENT LAMP AND FLOATING MONKEY AVATAR */}
+      {/* DOCK ANCHOR CONTAINER FOR FLOATING MONKEY AVATAR */}
       <div className="relative pointer-events-auto flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 shrink-0">
-        {/* Modern Minimalist Lamp - Always stays at its home location */}
-        <div
-          onClick={isOpen ? toggleOpen : undefined}
-          className={`absolute inset-0 z-20 ${isOpen ? "cursor-pointer" : "pointer-events-none"}`}
-          title={isOpen ? "Close Emmy Guide" : undefined}
-        >
-          <ModernMinimalLamp isNight={isNight} isSleeping={isSleeping} isOpen={isOpen} />
-        </div>
 
         {/* Boundary-Free 3D Floating Monkey Avatar Button (Removes when chat mode is active, comes back when closed) */}
         <button
