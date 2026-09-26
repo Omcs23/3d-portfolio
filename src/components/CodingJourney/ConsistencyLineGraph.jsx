@@ -190,15 +190,15 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
   return (
     <div className="flex flex-col gap-4 mt-2">
       {/* View Switcher Tabs */}
-      <div className="flex justify-center sm:justify-start items-center w-full overflow-x-auto pb-1">
+      <div className="w-full overflow-x-auto pb-1.5 pt-0.5 no-scrollbar">
         <div
-          className={`flex items-center gap-1.5 p-1.5 rounded-xl border shrink-0 ${
+          className={`flex items-center gap-1.5 p-1.5 rounded-xl border w-full sm:w-auto min-w-max justify-start shrink-0 ${
             isNight ? "bg-slate-950 border-slate-800" : "bg-slate-100 border-slate-200"
           }`}
         >
           <button
             onClick={() => setActiveTab("cumulative")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-center ${
               activeTab === "cumulative"
                 ? "bg-blue-500 text-white shadow-sm"
                 : isNight
@@ -210,7 +210,7 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
           </button>
           <button
             onClick={() => setActiveTab("daily")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-center ${
               activeTab === "daily"
                 ? "bg-blue-500 text-white shadow-sm"
                 : isNight
@@ -222,7 +222,7 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
           </button>
           <button
             onClick={() => setActiveTab("difficulty")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-center ${
               activeTab === "difficulty"
                 ? "bg-blue-500 text-white shadow-sm"
                 : isNight
