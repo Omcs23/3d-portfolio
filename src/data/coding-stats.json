@@ -1,15 +1,15 @@
 {
-  "lastUpdated": "2026-09-27T05:07:28.148Z",
+  "lastUpdated": "2026-09-27T16:52:19.309Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
       "profileUrl": "https://leetcode.com/u/OmSharma152/",
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
-      "ranking": 1403534,
+      "ranking": 1263330,
       "stats": {
-        "totalSolved": 137,
+        "totalSolved": 138,
         "easySolved": 42,
-        "mediumSolved": 62,
+        "mediumSolved": 63,
         "hardSolved": 33,
         "currentStreak": 11,
         "longestStreak": 11,
@@ -39,9 +39,16 @@
         "1790208000": 5,
         "1790294400": 1,
         "1790380800": 15,
-        "1790467200": 3
+        "1790467200": 4
       },
       "recentSubmissions": [
+        {
+          "title": "Reverse Substrings Between Each Pair of Parentheses",
+          "titleSlug": "reverse-substrings-between-each-pair-of-parentheses",
+          "timestamp": 1790488364,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Longest Subarray With Restricted Pair Sums",
           "titleSlug": "longest-subarray-with-restricted-pair-sums",
@@ -102,13 +109,6 @@
           "title": "Word Ladder",
           "titleSlug": "word-ladder",
           "timestamp": 1790421247,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Word Ladder II",
-          "titleSlug": "word-ladder-ii",
-          "timestamp": 1790421162,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
