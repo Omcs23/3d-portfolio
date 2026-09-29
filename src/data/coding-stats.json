@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-28T19:34:45.235Z",
+  "lastUpdated": "2026-09-29T05:32:40.620Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -7,13 +7,13 @@
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
       "ranking": 1264148,
       "stats": {
-        "totalSolved": 138,
-        "easySolved": 42,
+        "totalSolved": 141,
+        "easySolved": 43,
         "mediumSolved": 63,
-        "hardSolved": 33,
-        "currentStreak": 11,
+        "hardSolved": 35,
+        "currentStreak": 1,
         "longestStreak": 11,
-        "totalActiveDays": 24
+        "totalActiveDays": 25
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -39,9 +39,31 @@
         "1790208000": 5,
         "1790294400": 1,
         "1790380800": 15,
-        "1790467200": 4
+        "1790467200": 4,
+        "1790640000": 3
       },
       "recentSubmissions": [
+        {
+          "title": "Largest Rectangle in Histogram",
+          "titleSlug": "largest-rectangle-in-histogram",
+          "timestamp": 1790646837,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Maximum Nesting Depth of the Parentheses",
+          "titleSlug": "maximum-nesting-depth-of-the-parentheses",
+          "timestamp": 1790646709,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": " Check if There Is a Valid Parentheses String Path",
+          "titleSlug": "check-if-there-is-a-valid-parentheses-string-path",
+          "timestamp": 1790646524,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Reverse Substrings Between Each Pair of Parentheses",
           "titleSlug": "reverse-substrings-between-each-pair-of-parentheses",
@@ -88,27 +110,6 @@
           "title": "Longest Subarray Divisible by K with At Most One Negation II",
           "titleSlug": "longest-subarray-divisible-by-k-with-at-most-one-negation-ii",
           "timestamp": 1790433585,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Minimum Queen Moves to Reach Target",
-          "titleSlug": "minimum-queen-moves-to-reach-target",
-          "timestamp": 1790433378,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Plus One",
-          "titleSlug": "plus-one",
-          "timestamp": 1790421326,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Word Ladder",
-          "titleSlug": "word-ladder",
-          "timestamp": 1790421247,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
