@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-29T18:01:08.074Z",
+  "lastUpdated": "2026-09-30T05:20:55.380Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -7,13 +7,13 @@
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
       "ranking": 1239410,
       "stats": {
-        "totalSolved": 141,
+        "totalSolved": 152,
         "easySolved": 43,
-        "mediumSolved": 63,
-        "hardSolved": 35,
-        "currentStreak": 1,
+        "mediumSolved": 64,
+        "hardSolved": 45,
+        "currentStreak": 2,
         "longestStreak": 11,
-        "totalActiveDays": 25
+        "totalActiveDays": 26
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -40,76 +40,77 @@
         "1790294400": 1,
         "1790380800": 15,
         "1790467200": 4,
-        "1790640000": 3
+        "1790640000": 3,
+        "1790726400": 11
       },
       "recentSubmissions": [
         {
-          "title": "Largest Rectangle in Histogram",
-          "titleSlug": "largest-rectangle-in-histogram",
-          "timestamp": 1790646837,
+          "title": "Department Top Three Salaries",
+          "titleSlug": "department-top-three-salaries",
+          "timestamp": 1790737196,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Maximum Nesting Depth of the Parentheses",
-          "titleSlug": "maximum-nesting-depth-of-the-parentheses",
-          "timestamp": 1790646709,
+          "title": "Find Minimum in Rotated Sorted Array II",
+          "titleSlug": "find-minimum-in-rotated-sorted-array-ii",
+          "timestamp": 1790737108,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": " Check if There Is a Valid Parentheses String Path",
-          "titleSlug": "check-if-there-is-a-valid-parentheses-string-path",
-          "timestamp": 1790646524,
+          "title": "Best Time to Buy and Sell Stock IV",
+          "titleSlug": "best-time-to-buy-and-sell-stock-iv",
+          "timestamp": 1790737031,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Reverse Substrings Between Each Pair of Parentheses",
-          "titleSlug": "reverse-substrings-between-each-pair-of-parentheses",
-          "timestamp": 1790488364,
+          "title": "Dungeon Game",
+          "titleSlug": "dungeon-game",
+          "timestamp": 1790736961,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Longest Subarray With Restricted Pair Sums",
-          "titleSlug": "longest-subarray-with-restricted-pair-sums",
-          "timestamp": 1790479491,
+          "title": "Candy",
+          "titleSlug": "candy",
+          "timestamp": 1790736878,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Maximum Equal Adjacent Pairs After at Most One Replacement",
-          "titleSlug": "maximum-equal-adjacent-pairs-after-at-most-one-replacement",
-          "timestamp": 1790478373,
+          "title": "Palindrome Partitioning II",
+          "titleSlug": "palindrome-partitioning-ii",
+          "timestamp": 1790736793,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Rearrange Array by Removing Distinct Values",
-          "titleSlug": "rearrange-array-by-removing-distinct-values",
-          "timestamp": 1790477638,
+          "title": "Word Search II",
+          "titleSlug": "word-search-ii",
+          "timestamp": 1790736728,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Longest Subarray Divisible by K with At Most One Negation I",
-          "titleSlug": "longest-subarray-divisible-by-k-with-at-most-one-negation-i",
-          "timestamp": 1790433742,
+          "title": "Binary Tree Maximum Path Sum",
+          "titleSlug": "binary-tree-maximum-path-sum",
+          "timestamp": 1790736596,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Transform Array Using Pair Operations",
-          "titleSlug": "transform-array-using-pair-operations",
-          "timestamp": 1790433660,
+          "title": "Best Time to Buy and Sell Stock III",
+          "titleSlug": "best-time-to-buy-and-sell-stock-iii",
+          "timestamp": 1790736526,
           "statusDisplay": "Accepted",
           "lang": "java"
         },
         {
-          "title": "Longest Subarray Divisible by K with At Most One Negation II",
-          "titleSlug": "longest-subarray-divisible-by-k-with-at-most-one-negation-ii",
-          "timestamp": 1790433585,
+          "title": "Distinct Subsequences",
+          "titleSlug": "distinct-subsequences",
+          "timestamp": 1790736455,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
