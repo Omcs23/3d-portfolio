@@ -9,6 +9,7 @@ import Preloader from "./Preloader";
 import CodingJourney from "./CodingJourney/CodingJourney";
 import PortfolioGuideRobot from "./PortfolioGuideRobot";
 import MeteorShower from "./MeteorShower";
+import BadgeModal from "./BadgeModal";
 
 export {
     CTA,
@@ -21,5 +22,6 @@ export {
     Preloader,
     CodingJourney,
     PortfolioGuideRobot,
-    MeteorShower
+    MeteorShower,
+    BadgeModal
 }

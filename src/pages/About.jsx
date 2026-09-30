@@ -4,7 +4,7 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 
-import { CTA, Alert, CodingJourney } from "../components";
+import { CTA, Alert, CodingJourney, BadgeModal } from "../components";
 import { education, certifications, skills, socialLinks } from "../constants";
 import useAlert from "../hooks/useAlert";
 import { useTheme } from "../context/ThemeContext";
@@ -14,6 +14,7 @@ import "react-vertical-timeline-component/style.min.css";
 const About = () => {
   const { alert, showAlert, hideAlert } = useAlert();
   const [copiedType, setCopiedType] = useState(null);
+  const [selectedBadgeCert, setSelectedBadgeCert] = useState(null);
   const { isNight } = useTheme();
 
   const handleCopyResumeText = () => {
@@ -442,6 +443,72 @@ PROFILES:
                       </li>
                     ))}
                   </ul>
+
+                  {/* Badge & Credential Verification Access Point */}
+                  {item.credentialUrl || item.badgeImage ? (
+                    <div
+                      className={`mt-4 p-3 sm:p-3.5 rounded-xl border flex flex-col gap-2.5 w-full max-w-full overflow-hidden transition-all ${
+                        isNight
+                          ? "bg-slate-900/90 border-slate-700/80 hover:border-blue-500/50"
+                          : "bg-slate-50/90 border-slate-200/90 hover:border-blue-400"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 w-full min-w-0">
+                        {item.badgeImage && (
+                          <img
+                            src={item.badgeImage}
+                            alt={item.title}
+                            className="w-10 h-10 sm:w-12 sm:h-12 object-contain drop-shadow-md cursor-pointer hover:scale-105 transition-transform shrink-0"
+                            onClick={() => setSelectedBadgeCert(item)}
+                          />
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-[11px] font-bold text-emerald-500 flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block" />
+                              {item.verificationPlatform
+                                ? `${item.verificationPlatform} Verified`
+                                : "Verified Credential"}
+                            </span>
+                          </div>
+                          <p
+                            className={`text-[11px] mt-0.5 leading-tight ${
+                              isNight ? "text-slate-400" : "text-slate-500"
+                            }`}
+                          >
+                            Click badge to view official certificate & details.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 w-full pt-2 border-t border-slate-700/20">
+                        {item.badgeImage && (
+                          <button
+                            onClick={() => setSelectedBadgeCert(item)}
+                            type="button"
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all active:scale-95 flex items-center justify-center gap-1 flex-1 ${
+                              isNight
+                                ? "bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700"
+                                : "bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-sm"
+                            }`}
+                          >
+                            <span>🔍 View Badge</span>
+                          </button>
+                        )}
+
+                        {item.credentialUrl && (
+                          <a
+                            href={item.credentialUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-all active:scale-95 flex items-center justify-center gap-1 flex-1 shadow-md shadow-blue-500/20"
+                          >
+                            <span>Verify ↗</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ) : null}
                 </VerticalTimelineElement>
               ))}
             </VerticalTimeline>
@@ -452,6 +519,12 @@ PROFILES:
       <hr className={isNight ? "border-slate-800" : "border-slate-200"} />
 
       <CTA />
+
+      {/* Badge Preview Modal */}
+      <BadgeModal
+        cert={selectedBadgeCert}
+        onClose={() => setSelectedBadgeCert(null)}
+      />
     </section>
   );
 };
