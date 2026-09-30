@@ -1,4 +1,4 @@
-import { meta, shopify, starbucks, tesla } from "../assets/images";
+import { meta, shopify, starbucks, tesla, googleCybersecurityBadge, oracleGenaiBadge, oracleDevopsBadge, infosysBadge } from "../assets/images";
 import {
     car,
     codeforces,
@@ -124,7 +124,7 @@ export const certifications = [
         icon: google,
         iconBg: "#a2d2ff",
         date: "2025",
-        badgeImage: "/google_cybersecurity_badge.png",
+        badgeImage: googleCybersecurityBadge,
         credentialUrl: "https://www.credly.com/go/HXqLmQjVQrZsof6mIq5lxw",
         issuer: "Google / Coursera",
         verificationPlatform: "Credly",
@@ -144,7 +144,7 @@ export const certifications = [
         date: "August 25, 2025",
         validUntil: "August 25, 2027",
         certId: "102425908OCI25GAIOCP",
-        badgeImage: "/oracle_genai_badge.png",
+        badgeImage: oracleGenaiBadge,
         credentialUrl: "https://catalog-education.oracle.com/pls/certview/sharebadge?id=AB51D3589B8A730D89D01BFA838465213AE3D1A34EBC19179BCB8B410729E76F",
         issuer: "Oracle University",
         verificationPlatform: "Oracle CertView",
@@ -164,7 +164,7 @@ export const certifications = [
         date: "September 02, 2025",
         validUntil: "September 02, 2027",
         certId: "102393118OCI25DOPOCP",
-        badgeImage: "/oracle_devops_badge.png",
+        badgeImage: oracleDevopsBadge,
         credentialUrl: "https://catalog-education.oracle.com/pls/certview/sharebadge?id=77239BE2EFA74EE53515E3048EC02DA80E14C537C456DD125D01128AD2F00FB3",
         issuer: "Oracle University",
         verificationPlatform: "Oracle CertView",
@@ -182,7 +182,7 @@ export const certifications = [
         icon: infosys,
         iconBg: "#b7e4c7",
         date: "2024 - 2025",
-        badgeImage: "/infosys_badge.svg",
+        badgeImage: infosysBadge,
         credentialUrl: "https://verify.onwingspan.com",
         issuer: "Infosys Springboard",
         verificationPlatform: "Infosys Wingspan",
