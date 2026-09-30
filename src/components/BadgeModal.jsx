@@ -1,8 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 
 const BadgeModal = ({ cert, onClose }) => {
   const { isNight } = useTheme();
+  const [activeTab, setActiveTab] = useState(0);
+
+  useEffect(() => {
+    if (cert && typeof cert.activeBadgeIndex === "number") {
+      setActiveTab(cert.activeBadgeIndex);
+    } else {
+      setActiveTab(0);
+    }
+  }, [cert]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -13,6 +22,16 @@ const BadgeModal = ({ cert, onClose }) => {
   }, [onClose]);
 
   if (!cert) return null;
+
+  const hasMultipleBadges = cert.badges && cert.badges.length > 0;
+  const currentBadge = hasMultipleBadges ? cert.badges[activeTab] || cert.badges[0] : cert;
+
+  const displayBadgeImage = currentBadge.badgeImage || cert.badgeImage;
+  const displayTitle = currentBadge.title || cert.title;
+  const displayIssuer = currentBadge.issuer || cert.issuer || cert.company_name;
+  const displayDate = currentBadge.date || cert.date;
+  const displayPlatform = currentBadge.verificationPlatform || cert.verificationPlatform || "Official";
+  const displaySkills = currentBadge.skills || cert.skills;
 
   return (
     <div
@@ -50,10 +69,10 @@ const BadgeModal = ({ cert, onClose }) => {
             )}
             <div className="min-w-0">
               <span className="text-[10px] font-bold tracking-wider uppercase text-blue-500 block">
-                Verified Credential
+                {hasMultipleBadges ? `Verified Credential (${activeTab + 1}/${cert.badges.length})` : "Verified Credential"}
               </span>
               <h3 className="text-base sm:text-lg font-bold font-poppins leading-tight truncate">
-                {cert.title}
+                {displayTitle}
               </h3>
             </div>
           </div>
@@ -72,26 +91,55 @@ const BadgeModal = ({ cert, onClose }) => {
           </button>
         </div>
 
+        {/* Multi-Badge Tab Switcher */}
+        {hasMultipleBadges && (
+          <div
+            className={`px-4 sm:px-6 py-2.5 border-b flex items-center gap-1.5 overflow-x-auto custom-scrollbar ${
+              isNight ? "bg-slate-950/50 border-slate-800" : "bg-slate-50 border-slate-100"
+            }`}
+          >
+            {cert.badges.map((b, index) => {
+              const isActive = index === activeTab;
+              return (
+                <button
+                  key={b.id || index}
+                  type="button"
+                  onClick={() => setActiveTab(index)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 border ${
+                    isActive
+                      ? "bg-blue-600 text-white border-blue-500 shadow-sm"
+                      : isNight
+                      ? "bg-slate-800/60 text-slate-300 border-slate-700 hover:bg-slate-700"
+                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
+                  }`}
+                >
+                  <span>{b.title.includes("MERN") ? "💻 MERN Stack" : b.title.includes("DSA") ? "⚡ DSA (Java)" : "☕ Java Foundation"}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* Scrollable Modal Content */}
         <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar space-y-4 sm:space-y-5">
           {/* Badge Image Showcase */}
-          {cert.badgeImage && (
+          {displayBadgeImage && (
             <div className="flex flex-col items-center justify-center">
               <div
-                className={`group relative p-4 sm:p-5 rounded-2xl border flex items-center justify-center transition-all w-full max-w-[260px] ${
+                className={`group relative p-4 sm:p-5 rounded-2xl border flex items-center justify-center transition-all w-full max-w-[280px] ${
                   isNight
                     ? "bg-slate-950/60 border-slate-800 shadow-inner"
                     : "bg-slate-50 border-slate-200/80"
                 }`}
               >
                 <img
-                  src={cert.badgeImage}
-                  alt={`${cert.title} Badge`}
-                  className="w-44 h-44 sm:w-52 sm:h-52 object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-105"
+                  src={displayBadgeImage}
+                  alt={`${displayTitle} Badge`}
+                  className="w-48 h-48 sm:w-56 sm:h-56 object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  {cert.verificationPlatform || "Official"} Verified
+                  {displayPlatform} Verified
                 </div>
               </div>
             </div>
@@ -107,14 +155,14 @@ const BadgeModal = ({ cert, onClose }) => {
               <span className={isNight ? "text-slate-400" : "text-slate-500"}>
                 Issuing Body:
               </span>
-              <span className="font-semibold text-right">{cert.issuer || cert.company_name}</span>
+              <span className="font-semibold text-right">{displayIssuer}</span>
             </div>
-            {cert.date && (
+            {displayDate && (
               <div className="flex justify-between items-center gap-2">
                 <span className={isNight ? "text-slate-400" : "text-slate-500"}>
-                  Issue Date:
+                  Completion Date:
                 </span>
-                <span className="font-semibold text-right">{cert.date}</span>
+                <span className="font-semibold text-right">{displayDate}</span>
               </div>
             )}
             {cert.validUntil && (
@@ -135,20 +183,20 @@ const BadgeModal = ({ cert, onClose }) => {
                 </span>
               </div>
             )}
-            {cert.verificationPlatform && (
+            {displayPlatform && (
               <div className="flex justify-between items-center gap-2">
                 <span className={isNight ? "text-slate-400" : "text-slate-500"}>
                   Platform:
                 </span>
                 <span className="font-semibold text-sky-500 flex items-center gap-1 text-right">
-                  🛡️ {cert.verificationPlatform}
+                  🛡️ {displayPlatform}
                 </span>
               </div>
             )}
           </div>
 
           {/* Skills Tags */}
-          {cert.skills && cert.skills.length > 0 && (
+          {displaySkills && displaySkills.length > 0 && (
             <div>
               <h4
                 className={`text-[11px] font-semibold uppercase tracking-wider mb-2 ${
@@ -158,7 +206,7 @@ const BadgeModal = ({ cert, onClose }) => {
                 Validated Technical Skills
               </h4>
               <div className="flex flex-wrap gap-1.5">
-                {cert.skills.map((skill) => (
+                {displaySkills.map((skill) => (
                   <span
                     key={skill}
                     className={`px-2.5 py-1 rounded-lg text-xs font-medium border ${
@@ -188,7 +236,7 @@ const BadgeModal = ({ cert, onClose }) => {
               rel="noopener noreferrer"
               className="w-full sm:flex-1 py-2.5 px-4 rounded-xl font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-95 transition-all"
             >
-              <span>Verify on {cert.verificationPlatform || "Official Site"}</span>
+              <span>Verify on {displayPlatform}</span>
               <span className="text-sm">↗</span>
             </a>
           )}

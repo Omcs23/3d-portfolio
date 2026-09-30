@@ -1,4 +1,4 @@
-import { meta, shopify, starbucks, tesla, googleCybersecurityBadge, oracleGenaiBadge, oracleDevopsBadge, infosysBadge } from "../assets/images";
+import { meta, shopify, starbucks, tesla, googleCybersecurityBadge, oracleGenaiBadge, oracleDevopsBadge, infosysBadge, infosysMernBadge, infosysDsaBadge, infosysJavaBadge } from "../assets/images";
 import {
     car,
     codeforces,
@@ -183,6 +183,35 @@ export const certifications = [
         iconBg: "#b7e4c7",
         date: "2024 - 2025",
         badgeImage: infosysBadge,
+        badges: [
+            {
+                id: "infosys-mern",
+                title: "MERN Stack Training & Practice",
+                issuer: "Infosys Springboard",
+                date: "July 9, 2025",
+                badgeImage: infosysMernBadge,
+                verificationPlatform: "Infosys Springboard",
+                skills: ["MongoDB", "Express.js", "React.js", "Node.js"]
+            },
+            {
+                id: "infosys-dsa",
+                title: "Data Structures & Algorithms using Java",
+                issuer: "Infosys Springboard",
+                date: "July 9, 2025",
+                badgeImage: infosysDsaBadge,
+                verificationPlatform: "Infosys Springboard",
+                skills: ["Java", "Data Structures", "Algorithms", "Problem Solving"]
+            },
+            {
+                id: "infosys-java",
+                title: "Java Foundation Certification",
+                issuer: "Infosys Springboard",
+                date: "July 9, 2025",
+                badgeImage: infosysJavaBadge,
+                verificationPlatform: "Infosys Springboard",
+                skills: ["Java Language", "Object-Oriented Programming", "JVM Fundamentals"]
+            },
+        ],
         credentialUrl: "https://verify.onwingspan.com",
         issuer: "Infosys Springboard",
         verificationPlatform: "Infosys Wingspan",

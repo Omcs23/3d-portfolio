@@ -445,7 +445,7 @@ PROFILES:
                   </ul>
 
                   {/* Badge & Credential Verification Access Point */}
-                  {item.credentialUrl || item.badgeImage ? (
+                  {item.credentialUrl || item.badgeImage || item.badges ? (
                     <div
                       className={`mt-4 p-3 sm:p-3.5 rounded-xl border flex flex-col gap-2.5 w-full max-w-full overflow-hidden transition-all ${
                         isNight
@@ -453,36 +453,86 @@ PROFILES:
                           : "bg-slate-50/90 border-slate-200/90 hover:border-blue-400"
                       }`}
                     >
-                      <div className="flex items-center gap-3 w-full min-w-0">
-                        {item.badgeImage && (
-                          <img
-                            src={item.badgeImage}
-                            alt={item.title}
-                            className="w-10 h-10 sm:w-12 sm:h-12 object-contain drop-shadow-md cursor-pointer hover:scale-105 transition-transform shrink-0"
-                            onClick={() => setSelectedBadgeCert(item)}
-                          />
-                        )}
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1.5 flex-wrap">
+                      {/* Multi-badge showcase layout (e.g., Infosys Springboard) */}
+                      {item.badges && item.badges.length > 0 ? (
+                        <div className="space-y-2.5 w-full">
+                          <div className="flex items-center justify-between gap-2">
                             <span className="text-[11px] font-bold text-emerald-500 flex items-center gap-1">
                               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block" />
-                              {item.verificationPlatform
-                                ? `${item.verificationPlatform} Verified`
-                                : "Verified Credential"}
+                              {item.verificationPlatform || "Official"} Verified ({item.badges.length} Badges)
+                            </span>
+                            <span className={`text-[10px] ${isNight ? "text-slate-400" : "text-slate-500"}`}>
+                              Click badge to expand
                             </span>
                           </div>
-                          <p
-                            className={`text-[11px] mt-0.5 leading-tight ${
-                              isNight ? "text-slate-400" : "text-slate-500"
-                            }`}
-                          >
-                            Click badge to view official certificate & details.
-                          </p>
+
+                          <div className="grid grid-cols-3 gap-2 w-full">
+                            {item.badges.map((b, idx) => (
+                              <button
+                                key={b.id || idx}
+                                type="button"
+                                onClick={() => setSelectedBadgeCert({ ...item, activeBadgeIndex: idx })}
+                                className={`group p-2 rounded-xl border flex flex-col items-center justify-between text-center transition-all cursor-pointer active:scale-95 ${
+                                  isNight
+                                    ? "bg-slate-950/60 border-slate-800 hover:border-blue-500/60 hover:bg-slate-800/40"
+                                    : "bg-white border-slate-200/80 hover:border-blue-400 hover:bg-blue-50/30 shadow-sm"
+                                }`}
+                              >
+                                <div className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center p-1">
+                                  <img
+                                    src={b.badgeImage}
+                                    alt={b.title}
+                                    className="w-full h-full object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                                  />
+                                </div>
+                                <span
+                                  className={`text-[10px] sm:text-[11px] font-semibold mt-1 leading-tight line-clamp-2 ${
+                                    isNight ? "text-slate-200" : "text-slate-700"
+                                  }`}
+                                >
+                                  {b.title.includes("MERN")
+                                    ? "MERN Stack"
+                                    : b.title.includes("DSA")
+                                    ? "Java & DSA"
+                                    : "Java Foundation"}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        /* Single-badge standard layout */
+                        <div className="flex items-center gap-3 w-full min-w-0">
+                          {item.badgeImage && (
+                            <img
+                              src={item.badgeImage}
+                              alt={item.title}
+                              className="w-10 h-10 sm:w-12 sm:h-12 object-contain drop-shadow-md cursor-pointer hover:scale-105 transition-transform shrink-0"
+                              onClick={() => setSelectedBadgeCert(item)}
+                            />
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="text-[11px] font-bold text-emerald-500 flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block" />
+                                {item.verificationPlatform
+                                  ? `${item.verificationPlatform} Verified`
+                                  : "Verified Credential"}
+                              </span>
+                            </div>
+                            <p
+                              className={`text-[11px] mt-0.5 leading-tight ${
+                                isNight ? "text-slate-400" : "text-slate-500"
+                              }`}
+                            >
+                              Click badge to view official certificate & details.
+                            </p>
+                          </div>
+                        </div>
+                      )}
 
                       <div className="flex flex-wrap items-center gap-2 w-full pt-2 border-t border-slate-700/20">
-                        {item.badgeImage && (
+                        {(item.badgeImage || item.badges) && (
                           <button
                             onClick={() => setSelectedBadgeCert(item)}
                             type="button"
@@ -492,7 +542,7 @@ PROFILES:
                                 : "bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-sm"
                             }`}
                           >
-                            <span>🔍 View Badge</span>
+                            <span>🔍 {item.badges ? `View All Badges (${item.badges.length})` : "View Badge"}</span>
                           </button>
                         )}
 

@@ -8,6 +8,9 @@ import googleCybersecurityBadge from './google_cybersecurity_badge.png'
 import oracleGenaiBadge from './oracle_genai_badge.png'
 import oracleDevopsBadge from './oracle_devops_badge.png'
 import infosysBadge from './infosys_badge.svg'
+import infosysMernBadge from './infosys_mern_badge.png'
+import infosysDsaBadge from './infosys_dsa_badge.png'
+import infosysJavaBadge from './infosys_java_badge.png'
 
 export {
     meta,
@@ -19,5 +22,8 @@ export {
     googleCybersecurityBadge,
     oracleGenaiBadge,
     oracleDevopsBadge,
-    infosysBadge
+    infosysBadge,
+    infosysMernBadge,
+    infosysDsaBadge,
+    infosysJavaBadge
 }
