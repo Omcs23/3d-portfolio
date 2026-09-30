@@ -126,7 +126,7 @@ const BadgeModal = ({ cert, onClose }) => {
           {displayBadgeImage && (
             <div className="flex flex-col items-center justify-center">
               <div
-                className={`group relative p-4 sm:p-5 rounded-2xl border flex items-center justify-center transition-all w-full max-w-[280px] ${
+                className={`group relative p-3 sm:p-4 rounded-2xl border flex items-center justify-center transition-all w-full max-w-[200px] ${
                   isNight
                     ? "bg-slate-950/60 border-slate-800 shadow-inner"
                     : "bg-slate-50 border-slate-200/80"
@@ -135,7 +135,7 @@ const BadgeModal = ({ cert, onClose }) => {
                 <img
                   src={displayBadgeImage}
                   alt={`${displayTitle} Badge`}
-                  className="w-48 h-48 sm:w-56 sm:h-56 object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-105"
+                  className="w-28 h-28 sm:w-32 sm:h-32 object-contain aspect-square drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />

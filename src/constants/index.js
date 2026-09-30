@@ -188,7 +188,7 @@ export const certifications = [
                 id: "infosys-mern",
                 title: "MERN Stack Training & Practice",
                 issuer: "Infosys Springboard",
-                date: "July 9, 2025",
+                date: "June 21, 2026",
                 badgeImage: infosysMernBadge,
                 verificationPlatform: "Infosys Springboard",
                 skills: ["MongoDB", "Express.js", "React.js", "Node.js"]

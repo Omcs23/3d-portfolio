@@ -478,11 +478,11 @@ PROFILES:
                                     : "bg-white border-slate-200/80 hover:border-blue-400 hover:bg-blue-50/30 shadow-sm"
                                 }`}
                               >
-                                <div className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center p-1">
+                                <div className="w-10 h-10 flex items-center justify-center p-0.5">
                                   <img
                                     src={b.badgeImage}
                                     alt={b.title}
-                                    className="w-full h-full object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                                    className="w-10 h-10 object-contain aspect-square drop-shadow-md group-hover:scale-110 transition-transform duration-300"
                                   />
                                 </div>
                                 <span
@@ -507,7 +507,7 @@ PROFILES:
                             <img
                               src={item.badgeImage}
                               alt={item.title}
-                              className="w-10 h-10 sm:w-12 sm:h-12 object-contain drop-shadow-md cursor-pointer hover:scale-105 transition-transform shrink-0"
+                              className="w-10 h-10 object-contain aspect-square drop-shadow-md cursor-pointer hover:scale-105 transition-transform shrink-0"
                               onClick={() => setSelectedBadgeCert(item)}
                             />
                           )}
