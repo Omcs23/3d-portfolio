@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-30T17:57:17.704Z",
+  "lastUpdated": "2026-10-01T05:35:46.730Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -11,9 +11,9 @@
         "easySolved": 43,
         "mediumSolved": 64,
         "hardSolved": 45,
-        "currentStreak": 2,
+        "currentStreak": 3,
         "longestStreak": 11,
-        "totalActiveDays": 26
+        "totalActiveDays": 27
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -41,9 +41,17 @@
         "1790380800": 15,
         "1790467200": 4,
         "1790640000": 3,
-        "1790726400": 11
+        "1790726400": 11,
+        "1790812800": 1
       },
       "recentSubmissions": [
+        {
+          "title": "Valid Parentheses",
+          "titleSlug": "valid-parentheses",
+          "timestamp": 1790830586,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Department Top Three Salaries",
           "titleSlug": "department-top-three-salaries",
@@ -104,13 +112,6 @@
           "title": "Best Time to Buy and Sell Stock III",
           "titleSlug": "best-time-to-buy-and-sell-stock-iii",
           "timestamp": 1790736526,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Distinct Subsequences",
-          "titleSlug": "distinct-subsequences",
-          "timestamp": 1790736455,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
