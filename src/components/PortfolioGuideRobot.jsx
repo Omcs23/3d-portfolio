@@ -803,7 +803,7 @@ const PortfolioGuideRobot = () => {
   return (
     <aside
       aria-label="Emmy Island Guide"
-      className={`fixed bottom-4 sm:bottom-6 left-0 right-0 w-full max-w-5xl mx-auto px-4 sm:px-16 z-[99] flex flex-col items-end pointer-events-none transition-all duration-1000 ${
+      className={`fixed bottom-4 sm:bottom-6 left-0 right-0 w-full max-w-5xl mx-auto px-4 sm:px-16 z-[99] flex flex-col items-start pointer-events-none transition-all duration-1000 ${
         isInitialFloating && !isOpen ? "animate-monkey-entry-wave" : ""
       }`}
     >
@@ -812,7 +812,7 @@ const PortfolioGuideRobot = () => {
         <div
           onTouchStart={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
-          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[340px] max-h-[68vh] sm:max-h-[500px] h-[68vh] sm:h-[480px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-right overscroll-contain ${
+          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[340px] max-h-[68vh] sm:max-h-[500px] h-[68vh] sm:h-[480px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-left overscroll-contain ${
             isNight
               ? "bg-slate-900/95 backdrop-blur-md border-slate-700/80 text-slate-100 shadow-slate-950/80"
               : "bg-white/95 backdrop-blur-md border-slate-200 text-slate-800 shadow-xl"

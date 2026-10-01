@@ -95,56 +95,18 @@ PROFILES:
         }`}
       >
         <p>
-          B.Tech Computer Science & Engineering student at{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            GLA University
-          </strong>
-          .
+          I'm someone who enjoys turning ideas into things people can actually
+          experience. I love exploring technology, solving problems, and creating
+          digital experiences that feel simple, useful, and engaging.
         </p>
         <p>
-          I am a creative full-stack developer and problem solver driven by turning
-          complex ideas into functional, intuitive digital solutions. With hands-on
-          experience in the{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            MERN stack
-          </strong>
-          ,{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            Java
-          </strong>
-          , and{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            Python
-          </strong>
-          , I build scalable web applications, automation bots, and interactive 3D web
-          experiences.
+          From building web experiences to experimenting with new ideas, I'm
+          always curious about what I can create next. My journey so far has
+          been about learning, experimenting, and constantly pushing myself to
+          build something better.
         </p>
-        <p>
-          Alongside my degree, I hold professional certifications in{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            Cybersecurity (Coursera / Google)
-          </strong>
-          ,{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            Generative AI & DevOps (Oracle OCI 2025)
-          </strong>
-          , and{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            Java & MERN Stack (Infosys Springboard)
-          </strong>
-          . I am also an active competitive programmer on{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            LeetCode
-          </strong>
-          ,{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            Codeforces
-          </strong>
-          , and{" "}
-          <strong className={isNight ? "text-white" : "text-slate-900"}>
-            HackerRank
-          </strong>
-          .
+        <p className={`font-medium ${isNight ? "text-slate-200" : "text-slate-800"}`}>
+          Still learning. Still creating. Still exploring. 🚀
         </p>
       </div>
 
@@ -444,6 +406,24 @@ PROFILES:
                     ))}
                   </ul>
 
+                  {/* Skill tags */}
+                  {item.skills && item.skills.length > 0 && (
+                    <div className="my-3 flex flex-wrap gap-1.5">
+                      {item.skills.map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${
+                            isNight
+                              ? "bg-slate-800 text-blue-300 border border-slate-700"
+                              : "bg-blue-50 text-blue-700 border border-blue-100"
+                          }`}
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
                   {/* Badge & Credential Verification Access Point */}
                   {item.credentialUrl || item.badgeImage || item.badges ? (
                     <div
@@ -500,17 +480,15 @@ PROFILES:
                             ))}
                           </div>
                         </div>
-                      ) : (
+                      ) : item.badgeImage ? (
                         /* Single-badge standard layout */
                         <div className="flex items-center gap-3 w-full min-w-0">
-                          {item.badgeImage && (
-                            <img
-                              src={item.badgeImage}
-                              alt={item.title}
-                              className="w-10 h-10 object-contain aspect-square drop-shadow-md cursor-pointer hover:scale-105 transition-transform shrink-0"
-                              onClick={() => setSelectedBadgeCert(item)}
-                            />
-                          )}
+                          <img
+                            src={item.badgeImage}
+                            alt={item.title}
+                            className="w-10 h-10 object-contain aspect-square drop-shadow-md cursor-pointer hover:scale-105 transition-transform shrink-0"
+                            onClick={() => setSelectedBadgeCert(item)}
+                          />
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-1.5 flex-wrap">
                               <span className="text-[11px] font-bold text-emerald-500 flex items-center gap-1">
@@ -527,6 +505,18 @@ PROFILES:
                             >
                               Click badge to view official certificate & details.
                             </p>
+                          </div>
+                        </div>
+                      ) : (
+                        /* Clean card layout without badge image */
+                        <div className="flex items-center justify-between gap-3 w-full">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[11px] font-bold text-emerald-500 flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block" />
+                              {item.verificationPlatform
+                                ? `${item.verificationPlatform} Verified`
+                                : "Verified Credential"}
+                            </span>
                           </div>
                         </div>
                       )}
@@ -553,7 +543,7 @@ PROFILES:
                             rel="noopener noreferrer"
                             className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-all active:scale-95 flex items-center justify-center gap-1 flex-1 shadow-md shadow-blue-500/20"
                           >
-                            <span>Verify ↗</span>
+                            <span>Verify Credential ↗</span>
                           </a>
                         )}
                       </div>

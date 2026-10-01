@@ -182,36 +182,6 @@ export const certifications = [
         icon: infosys,
         iconBg: "#b7e4c7",
         date: "2024 - 2025",
-        badgeImage: infosysBadge,
-        badges: [
-            {
-                id: "infosys-mern",
-                title: "MERN Stack Training & Practice",
-                issuer: "Infosys Springboard",
-                date: "June 21, 2026",
-                badgeImage: infosysMernBadge,
-                verificationPlatform: "Infosys Springboard",
-                skills: ["MongoDB", "Express.js", "React.js", "Node.js"]
-            },
-            {
-                id: "infosys-dsa",
-                title: "Data Structures & Algorithms using Java",
-                issuer: "Infosys Springboard",
-                date: "July 9, 2025",
-                badgeImage: infosysDsaBadge,
-                verificationPlatform: "Infosys Springboard",
-                skills: ["Java", "Data Structures", "Algorithms", "Problem Solving"]
-            },
-            {
-                id: "infosys-java",
-                title: "Java Foundation Certification",
-                issuer: "Infosys Springboard",
-                date: "July 9, 2025",
-                badgeImage: infosysJavaBadge,
-                verificationPlatform: "Infosys Springboard",
-                skills: ["Java Language", "Object-Oriented Programming", "JVM Fundamentals"]
-            },
-        ],
         credentialUrl: "https://verify.onwingspan.com",
         issuer: "Infosys Springboard",
         verificationPlatform: "Infosys Wingspan",
