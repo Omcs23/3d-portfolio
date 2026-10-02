@@ -76,82 +76,112 @@ const Contact = () => {
   };
 
   return (
-    <section className="relative flex lg:flex-row flex-col max-container">
+    <section className="relative flex lg:flex-row flex-col gap-10 max-container">
       {alert.show && <Alert {...alert} />}
 
-      <div className="flex-1 min-w-[50%] flex flex-col">
-        <h1 className="head-text">Get in Touch</h1>
+      <div className="flex-1 min-w-[50%] flex flex-col justify-center">
 
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="w-full flex flex-col gap-7 mt-14"
+        <div className="flex flex-col items-start">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold font-space uppercase tracking-wider bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 mb-3">
+            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+            Let's Build Together
+          </div>
+
+          <h1 className="head-text">
+            Get in{" "}
+            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-500 dark:from-sky-400 dark:via-indigo-300 dark:to-purple-300 bg-clip-text text-transparent drop-shadow-sm">
+              Touch
+            </span>
+          </h1>
+        </div>
+
+        <p className={`mt-3 text-base sm:text-lg leading-relaxed ${isNight ? "text-slate-300" : "text-slate-600"}`}>
+          Have a question, job proposal, or project idea? Drop a message below and I'll get back to you promptly!
+        </p>
+
+        <div
+          className={`mt-8 p-6 sm:p-8 rounded-3xl border shadow-xl transition-all ${
+            isNight
+              ? "bg-slate-900/90 border-slate-800 shadow-slate-950/50"
+              : "bg-white border-slate-200/80 shadow-blue-500/10"
+          }`}
         >
-          <label className={`font-semibold ${isNight ? "text-slate-200" : "text-slate-700"}`}>
-            Name
-            <input
-              type="text"
-              name="name"
-              className={`input ${
-                isNight
-                  ? "bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:ring-blue-400"
-                  : ""
-              }`}
-              placeholder="John"
-              required
-              value={form.name}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-            />
-          </label>
-          <label className={`font-semibold ${isNight ? "text-slate-200" : "text-slate-700"}`}>
-            Email
-            <input
-              type="email"
-              name="email"
-              className={`input ${
-                isNight
-                  ? "bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:ring-blue-400"
-                  : ""
-              }`}
-              placeholder="John@gmail.com"
-              required
-              value={form.email}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-            />
-          </label>
-          <label className={`font-semibold ${isNight ? "text-slate-200" : "text-slate-700"}`}>
-            Your Message
-            <textarea
-              name="message"
-              rows="4"
-              className={`textarea ${
-                isNight
-                  ? "bg-slate-900 border-slate-700 text-slate-100 placeholder-slate-500 focus:ring-blue-400"
-                  : ""
-              }`}
-              placeholder="Write your thoughts here..."
-              value={form.message}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-            />
-          </label>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn font-semibold"
-            onFocus={handleFocus}
-            onBlur={handleBlur}
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="w-full flex flex-col gap-6"
           >
-            {loading ? "Sending..." : "Submit"}
-          </button>
-        </form>
+            <label className={`font-semibold font-outfit text-sm ${isNight ? "text-slate-200" : "text-slate-700"}`}>
+              Your Name
+              <input
+                type="text"
+                name="name"
+                className={`input mt-1.5 ${
+                  isNight
+                    ? "bg-slate-950 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-indigo-500/30"
+                    : "bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
+                }`}
+                placeholder="e.g. Alex Morgan"
+                required
+                value={form.name}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+              />
+            </label>
+
+            <label className={`font-semibold font-outfit text-sm ${isNight ? "text-slate-200" : "text-slate-700"}`}>
+              Email Address
+              <input
+                type="email"
+                name="email"
+                className={`input mt-1.5 ${
+                  isNight
+                    ? "bg-slate-950 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-indigo-500/30"
+                    : "bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
+                }`}
+                placeholder="alex@example.com"
+                required
+                value={form.email}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+              />
+            </label>
+
+            <label className={`font-semibold font-outfit text-sm ${isNight ? "text-slate-200" : "text-slate-700"}`}>
+              Your Message
+              <textarea
+                name="message"
+                rows="4"
+                className={`textarea mt-1.5 ${
+                  isNight
+                    ? "bg-slate-950 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-indigo-500/30"
+                    : "bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring-blue-500/20"
+                }`}
+                placeholder="Share project details, opportunities, or feedback..."
+                required
+                value={form.message}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+              />
+            </label>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn font-outfit font-bold text-base py-3.5 mt-2 flex items-center justify-center gap-2 group"
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            >
+              <span>{loading ? "Sending Message..." : "Send Message"}</span>
+              <span className="group-hover:translate-x-1 transition-transform">✉️</span>
+            </button>
+          </form>
+        </div>
       </div>
+
 
       <div className="lg:w-1/2 w-full lg:h-auto md:h-[550px] h-[350px]">
         <Canvas

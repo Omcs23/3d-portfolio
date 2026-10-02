@@ -155,14 +155,16 @@ const Preloader = ({ onComplete }) => {
 
         {/* Middle Bio Section */}
         <div className="w-full flex flex-col items-end text-right my-auto py-6 sm:py-8 shrink-0">
-          <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-neutral-100 font-normal leading-snug max-w-[280px] xs:max-w-[320px] sm:max-w-md md:max-w-lg text-right">
-            I'm Om, an Interaction Designer who is enthusiastic about creating engaging and delightful digital experiences.
+          <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-neutral-100 font-outfit font-medium leading-relaxed max-w-[300px] xs:max-w-[340px] sm:max-w-md md:max-w-lg text-right">
+            I'm Om Sharma, a Full-Stack Developer & AI Explorer passionate about building interactive web applications & 3D experiences.
           </p>
 
-          <p className="text-xs sm:text-sm text-neutral-300 font-normal mt-4 sm:mt-6 tracking-wide text-right">
-            This website was last updated in 2026.
+          <p className="text-xs sm:text-sm text-neutral-400 font-mono mt-4 sm:mt-6 tracking-wide text-right">
+            Interactive 3D Portfolio • 2026
           </p>
+
         </div>
+
 
         {/* Bottom Capsule Progress / Pill Button */}
         <div className="w-full pb-2 flex flex-col items-center shrink-0">

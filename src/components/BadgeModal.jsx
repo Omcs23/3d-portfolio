@@ -48,12 +48,13 @@ const BadgeModal = ({ cert, onClose }) => {
       >
         {/* Sticky Header with Title & Close Button */}
         <div
-          className={`sticky top-0 z-20 px-5 sm:px-6 py-4 border-b flex items-center justify-between gap-3 ${
+          className={`sticky top-0 z-20 px-5 sm:px-6 py-4 border-b flex items-center justify-between gap-3 font-outfit ${
             isNight
               ? "bg-slate-900/95 border-slate-800 text-white backdrop-blur-md"
               : "bg-white/95 border-slate-100 text-slate-900 backdrop-blur-md"
           }`}
         >
+
           <div className="flex items-center gap-3 pr-2 min-w-0">
             {cert.icon && (
               <div

@@ -10,40 +10,49 @@ const Navbar = () => {
   return (
     <header
       className={`${
-        isHome ? "fixed top-0" : "absolute top-0"
-      } flex justify-between items-center sm:px-16 px-4 py-4 max-w-5xl mx-auto z-40 right-0 left-0 w-full pointer-events-auto`}
+        isHome ? "fixed top-0" : "sticky top-0"
+      } flex justify-between items-center sm:px-12 px-3 py-3 sm:py-4 max-w-5xl mx-auto z-40 right-0 left-0 w-full pointer-events-auto transition-all duration-300`}
     >
+      {/* Home Brand Button */}
       <NavLink
         to="/"
         aria-label="Home"
         title="Go to Home"
-        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 shadow-md shrink-0 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 select-none ${
+        className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 shadow-md sm:shadow-lg shrink-0 outline-none select-none group relative overflow-hidden ${
           isNight
-            ? "bg-slate-900 text-indigo-400 border border-slate-700/80 hover:bg-slate-800"
-            : "bg-white text-blue-600 border border-slate-200/80 hover:bg-slate-50"
+            ? "bg-slate-900/90 text-indigo-400 border border-slate-700/80 hover:border-indigo-500/50 hover:bg-slate-800 shadow-indigo-950/40"
+            : "bg-white/90 text-blue-600 border border-slate-200/90 hover:border-blue-300 hover:bg-slate-50 shadow-blue-500/10"
         }`}
       >
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 transition-opacity duration-300" />
         <svg
-          className="w-5 h-5 fill-current transition-transform duration-300 hover:scale-110"
+          className="w-4 h-4 sm:w-5 sm:h-5 fill-current transition-transform duration-300 group-hover:scale-110 relative z-10"
           viewBox="0 0 24 24"
         >
           <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
         </svg>
       </NavLink>
 
-      <div className="flex items-center gap-2.5 sm:gap-6">
-        <nav className="flex text-sm sm:text-base md:text-lg gap-2 sm:gap-4 font-bold items-center">
+      {/* Navigation & Theme Toggle */}
+      <div
+        className={`flex items-center gap-1.5 sm:gap-4 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border shadow-md sm:shadow-lg transition-all duration-300 shrink-0 ${
+          isNight
+            ? "bg-slate-950/80 border-slate-800/80 backdrop-blur-xl shadow-slate-950/50"
+            : "bg-white/80 border-slate-200/80 backdrop-blur-xl shadow-slate-200/50"
+        }`}
+      >
+        <nav className="flex text-xs sm:text-base font-outfit gap-1 sm:gap-2 font-bold items-center">
           <NavLink
             to="/about"
             className={({ isActive }) =>
-              `px-3.5 py-1.5 rounded-full font-bold text-sm sm:text-base transition-all duration-200 select-none outline-none focus:outline-none ${
+              `px-3 sm:px-4 py-1 sm:py-1.5 rounded-full font-bold text-xs sm:text-base transition-all duration-300 select-none outline-none ${
                 isActive
                   ? isNight
-                    ? "bg-indigo-600 text-white font-extrabold shadow-md shadow-indigo-950/60"
-                    : "bg-blue-600 text-white font-extrabold shadow-md shadow-blue-500/20"
+                    ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-extrabold shadow-md shadow-indigo-950/70"
+                    : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold shadow-md shadow-blue-500/25"
                   : isNight
-                  ? "text-slate-100 hover:text-white hover:bg-slate-800/60"
-                  : "text-slate-800 hover:text-blue-600 hover:bg-slate-100/80"
+                  ? "text-slate-300 hover:text-white hover:bg-slate-800/80"
+                  : "text-slate-700 hover:text-blue-600 hover:bg-slate-100"
               }`
             }
           >
@@ -53,20 +62,40 @@ const Navbar = () => {
           <NavLink
             to="/projects"
             className={({ isActive }) =>
-              `px-3.5 py-1.5 rounded-full font-bold text-sm sm:text-base transition-all duration-200 select-none outline-none focus:outline-none ${
+              `px-3 sm:px-4 py-1 sm:py-1.5 rounded-full font-bold text-xs sm:text-base transition-all duration-300 select-none outline-none ${
                 isActive
                   ? isNight
-                    ? "bg-indigo-600 text-white font-extrabold shadow-md shadow-indigo-950/60"
-                    : "bg-blue-600 text-white font-extrabold shadow-md shadow-blue-500/20"
+                    ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-extrabold shadow-md shadow-indigo-950/70"
+                    : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold shadow-md shadow-blue-500/25"
                   : isNight
-                  ? "text-slate-100 hover:text-white hover:bg-slate-800/60"
-                  : "text-slate-800 hover:text-blue-600 hover:bg-slate-100/80"
+                  ? "text-slate-300 hover:text-white hover:bg-slate-800/80"
+                  : "text-slate-700 hover:text-blue-600 hover:bg-slate-100"
               }`
             }
           >
             Projects
           </NavLink>
+
+          {/* Contact - Laptop / Desktop Only */}
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `hidden md:inline-block px-4 py-1.5 rounded-full font-bold text-sm sm:text-base transition-all duration-300 select-none outline-none ${
+                isActive
+                  ? isNight
+                    ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-extrabold shadow-md shadow-indigo-950/70"
+                    : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold shadow-md shadow-blue-500/25"
+                  : isNight
+                  ? "text-slate-300 hover:text-white hover:bg-slate-800/80"
+                  : "text-slate-700 hover:text-blue-600 hover:bg-slate-100"
+              }`
+            }
+          >
+            Contact
+          </NavLink>
         </nav>
+
+        <div className="h-4 sm:h-5 w-[1px] bg-slate-300 dark:bg-slate-700 mx-0.5" />
 
         <ThemeToggle />
       </div>
@@ -75,3 +104,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+

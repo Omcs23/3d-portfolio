@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { useGLTF, Stars } from "@react-three/drei";
+import { useGLTF, Stars, Sparkles } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -32,22 +32,43 @@ export function Sky({ isRotating, isNight }) {
 
   return (
     <group>
-      {/* 3D Realistic Twinkling Starfield in Night Mode */}
-      {isNight && (
-        <Stars
-          radius={120}
-          depth={60}
-          count={8000}
-          factor={4}
-          saturation={0}
-          fade
-          speed={1.5}
+      {/* 3D Floating Particles & Atmospheric Sparkles */}
+      {isNight ? (
+        <>
+          <Stars
+            radius={120}
+            depth={60}
+            count={8000}
+            factor={4}
+            saturation={0}
+            fade
+            speed={1.5}
+          />
+          <Sparkles
+            count={90}
+            scale={50}
+            size={4}
+            speed={0.5}
+            opacity={0.7}
+            color="#818cf8"
+          />
+        </>
+      ) : (
+        <Sparkles
+          count={50}
+          scale={40}
+          size={3}
+          speed={0.3}
+          opacity={0.5}
+          color="#38bdf8"
         />
       )}
+
       <mesh ref={skyRef} visible={!isNight}>
         <primitive object={sky.scene} />
       </mesh>
     </group>
   );
 }
+
 

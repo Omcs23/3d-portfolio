@@ -81,34 +81,37 @@ PROFILES:
     <section className="max-container">
       {alert.show && <Alert {...alert} />}
 
-      <h1 className="head-text">
-        Hello, I'm{" "}
-        <span className="blue-gradient_text font-semibold drop-shadow">
-          Om Sharma
-        </span>{" "}
-        👋
-      </h1>
+      <div className="flex flex-col items-start">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold font-space uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 mb-3">
+          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+          Full-Stack Developer & AI Explorer
+        </div>
+        
+        <h1 className="head-text">
+          Hello, I'm{" "}
+          <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 dark:from-sky-400 dark:via-indigo-300 dark:to-cyan-300 bg-clip-text text-transparent drop-shadow-sm font-extrabold">
+            Om Sharma
+          </span>{" "}
+          👋
+        </h1>
+      </div>
 
       <div
-        className={`mt-5 flex flex-col gap-3 leading-relaxed ${
+        className={`mt-5 flex flex-col gap-3.5 leading-relaxed text-base sm:text-lg ${
           isNight ? "text-slate-300" : "text-slate-600"
         }`}
       >
         <p>
-          I'm someone who enjoys turning ideas into things people can actually
-          experience. I love exploring technology, solving problems, and creating
-          digital experiences that feel simple, useful, and engaging.
+          I'm a passionate software developer who loves turning ideas into smooth, intuitive, and visually captivating digital experiences. I specialize in full-stack web development, competitive programming, and 3D web interfaces.
         </p>
         <p>
-          From building web experiences to experimenting with new ideas, I'm
-          always curious about what I can create next. My journey so far has
-          been about learning, experimenting, and constantly pushing myself to
-          build something better.
+          Currently pursuing my B.Tech in Computer Science & Engineering at GLA University, I am certified in Generative AI, DevOps, and Cybersecurity by Oracle & Google.
         </p>
-        <p className={`font-medium ${isNight ? "text-slate-200" : "text-slate-800"}`}>
-          Still learning. Still creating. Still exploring. 🚀
+        <p className={`font-semibold font-outfit text-lg ${isNight ? "text-slate-100" : "text-slate-900"}`}>
+          Still learning. Still creating. Still building what's next 🚀
         </p>
       </div>
+
 
       {/* Modern Resume Feature Container */}
       <div
@@ -185,12 +188,13 @@ PROFILES:
         </div>
       </div>
 
-      {/* Profiles & Links Section */}
-      <div className="py-8 flex flex-col">
+      {/* Profiles & Links Section - Desktop / Laptop Only */}
+      <div className="hidden md:flex flex-col py-8">
         <h3 className="subhead-text">Coding & Social Profiles</h3>
         <p className={`mt-2 text-sm ${isNight ? "text-slate-400" : "text-slate-500"}`}>
           Connect with me across competitive programming platforms and social networks:
         </p>
+
 
         <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {socialLinks
@@ -229,23 +233,44 @@ PROFILES:
 
       {/* Skills Section */}
       <div className="py-10 flex flex-col w-full">
-        <h3 className="subhead-text">My Skills</h3>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+          <div>
+            <h3 className="subhead-text">Skills & Technologies</h3>
+            <p className={`mt-1.5 text-sm ${isNight ? "text-slate-400" : "text-slate-500"}`}>
+              Languages, frameworks, database systems, and developer tools I work with:
+            </p>
+          </div>
+        </div>
 
-        <div className="mt-8 sm:mt-12 w-full flex flex-wrap gap-5 sm:gap-10 justify-center items-center">
+        <div className="mt-8 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 sm:gap-6">
           {skills.map((skill) => (
-            <div className="block-container w-16 h-16 sm:w-20 sm:h-20" key={skill.name}>
-              <div className="btn-back rounded-xl" />
-              <div className="btn-front rounded-xl flex justify-center items-center">
+            <div
+              key={skill.name}
+              className={`p-4 rounded-2xl border flex flex-col items-center justify-center gap-2.5 transition-all duration-300 transform hover:-translate-y-1.5 hover:shadow-xl group select-none ${
+                isNight
+                  ? "bg-slate-900/90 border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/90 shadow-slate-950/40"
+                  : "bg-white border-slate-200/80 hover:border-blue-400 hover:shadow-blue-500/10"
+              }`}
+            >
+              <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center relative">
                 <img
                   src={skill.imageUrl}
                   alt={skill.name}
-                  className="w-1/2 h-1/2 object-contain"
+                  className="w-full h-full object-contain filter group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
+              <span
+                className={`text-xs sm:text-sm font-semibold font-outfit text-center ${
+                  isNight ? "text-slate-200 group-hover:text-white" : "text-slate-800 group-hover:text-blue-600"
+                }`}
+              >
+                {skill.name}
+              </span>
             </div>
           ))}
         </div>
       </div>
+
 
       {/* Education & Certifications Timeline */}
       <div className="py-16">

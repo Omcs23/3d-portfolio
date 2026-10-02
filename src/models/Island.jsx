@@ -179,7 +179,7 @@ export function Island({
       onRotationChange(normalizedRotation);
     }
 
-    // Set the current stage based on the island's orientation
+    // Set the current stage precisely based on the island's landmark locations
     switch (true) {
       case normalizedRotation >= 5.45 && normalizedRotation <= 5.85:
         setCurrentStage(4);
@@ -197,6 +197,8 @@ export function Island({
         setCurrentStage(null);
     }
   });
+
+
 
   return (
     <a.group ref={islandRef} {...props}>

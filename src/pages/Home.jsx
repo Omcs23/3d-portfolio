@@ -85,9 +85,14 @@ const Home = ({ hasPreloaded = false }) => {
         </div>
       )}
 
-      <div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center">
-        {currentStage && <HomeInfo currentStage={currentStage} />}
+      <div className="absolute top-16 sm:top-20 left-0 right-0 z-10 flex items-center justify-center px-4 pointer-events-none">
+        {currentStage && (
+          <div className="pointer-events-auto">
+            <HomeInfo currentStage={currentStage} />
+          </div>
+        )}
       </div>
+
 
       <Canvas
         className={`w-full h-screen h-[100dvh] bg-transparent touch-none ${

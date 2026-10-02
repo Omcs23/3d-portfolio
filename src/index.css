@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -14,7 +14,8 @@
 }
 
 body {
-  font-family: "Work Sans", sans-serif;
+  font-family: "Plus Jakarta Sans", "Work Sans", sans-serif;
+  letter-spacing: -0.011em;
 }
 
 body:has(.card[data-color="blue"]:hover) {
@@ -27,31 +28,52 @@ body:has(.card[data-color="green"]:hover) {
 
 @layer utilities {
   .max-container {
-    @apply max-w-5xl mx-auto sm:p-16 pb-12 !pt-[110px] sm:!pt-[126px] px-4 sm:px-8 min-h-[calc(100vh-80px)] w-full;
+    @apply max-w-5xl mx-auto sm:p-16 pb-12 !pt-[72px] sm:!pt-[126px] px-4 sm:px-8 min-h-[calc(100vh-80px)] w-full;
   }
 
+
   .head-text {
-    @apply sm:text-5xl text-3xl font-semibold sm:leading-snug font-poppins;
+    @apply text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-snug sm:leading-tight font-outfit;
   }
 
   .subhead-text {
-    @apply font-semibold sm:text-3xl text-xl relative font-poppins;
+    @apply font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight font-outfit relative;
   }
 
   .blue-gradient_text {
-    @apply bg-gradient-to-r from-[#00c6ff] to-[#0072ff] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 bg-clip-text text-transparent;
+  }
+
+  .cyan-gradient_text {
+    @apply bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 bg-clip-text text-transparent;
+  }
+
+  .purple-gradient_text {
+    @apply bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 bg-clip-text text-transparent;
+  }
+
+  .emerald-gradient_text {
+    @apply bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 bg-clip-text text-transparent;
+  }
+
+  .hero-gradient_text {
+    @apply bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-sky-400 dark:via-indigo-300 dark:to-purple-300 bg-clip-text text-transparent;
   }
 
   .input {
-    @apply bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-2.5 font-normal shadow-card;
+    @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 text-sm rounded-xl focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 block w-full p-3.5 mt-2 font-normal shadow-sm transition-all duration-200 outline-none;
   }
 
   .textarea {
-    @apply block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 mt-2.5 font-normal shadow-card;
+    @apply block p-3.5 w-full text-sm text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 mt-2 font-normal shadow-sm transition-all duration-200 outline-none;
   }
 
   .btn {
-    @apply text-white bg-gradient-to-r from-[#00c6ff] to-[#0072ff] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center;
+    @apply text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-xl text-sm w-full sm:w-auto px-6 py-3 text-center shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 active:scale-[0.98] transition-all duration-200;
+  }
+
+  .btn-secondary {
+    @apply text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200/80 dark:border-slate-700/80 font-semibold rounded-xl text-sm w-full sm:w-auto px-5 py-3 text-center shadow-sm active:scale-[0.98] transition-all duration-200;
   }
 
   .header {
@@ -72,29 +94,39 @@ body:has(.card[data-color="green"]:hover) {
   }
 
   .info-box {
-    @apply mx-5 relative flex text-white flex-col gap-3 max-w-2xl neo-brutalism-blue pt-4 pb-12 px-8;
+    @apply mx-5 relative flex text-white flex-col gap-3 max-w-2xl neo-brutalism-blue pt-5 pb-12 px-8 shadow-xl rounded-2xl border border-white/20;
   }
 
   .neo-btn {
-    @apply py-3 px-6 rounded-lg text-blue-500 text-center font-semibold sm:w-1/2 w-[90%] -bottom-5 absolute mx-auto right-0 left-0 flex justify-center items-center gap-3;
+    @apply py-3 px-6 rounded-xl text-blue-600 bg-white shadow-lg shadow-blue-900/20 text-center font-bold sm:w-1/2 w-[90%] -bottom-5 absolute mx-auto right-0 left-0 flex justify-center items-center gap-3 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-50 active:scale-[0.98];
   }
 
   .cta {
-    @apply w-full flex items-center md:flex-row flex-col sm:mt-16 mt-8 gap-7;
+    @apply w-full flex items-center md:flex-row flex-col sm:mt-16 mt-8 gap-7 p-8 rounded-3xl border transition-all;
   }
 
   .cta-text {
-    @apply text-black-500 font-extrabold flex-1 text-3xl max-md:text-center;
+    @apply font-extrabold flex-1 text-2xl sm:text-3xl max-md:text-center font-outfit;
   }
+
 }
 
 .glassmorphism {
-  background: rgba(8, 116, 239, 0.07);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
+
+.dark .glassmorphism {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 
 .logo {
   border-radius: 8.889px;
