@@ -1,19 +1,19 @@
 {
-  "lastUpdated": "2026-10-02T05:22:44.563Z",
+  "lastUpdated": "2026-10-02T17:47:46.894Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
       "profileUrl": "https://leetcode.com/u/OmSharma152/",
       "avatarUrl": "https://assets.leetcode.com/users/OmSharma152/avatar_1761318309.png",
-      "ranking": 1152495,
+      "ranking": 1153055,
       "stats": {
-        "totalSolved": 152,
+        "totalSolved": 154,
         "easySolved": 43,
-        "mediumSolved": 64,
+        "mediumSolved": 66,
         "hardSolved": 45,
-        "currentStreak": 3,
+        "currentStreak": 4,
         "longestStreak": 11,
-        "totalActiveDays": 27
+        "totalActiveDays": 28
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -42,9 +42,31 @@
         "1790467200": 4,
         "1790640000": 3,
         "1790726400": 11,
-        "1790812800": 1
+        "1790812800": 1,
+        "1790899200": 3
       },
       "recentSubmissions": [
+        {
+          "title": "Subsets",
+          "titleSlug": "subsets",
+          "timestamp": 1790953743,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Simplify Path",
+          "titleSlug": "simplify-path",
+          "timestamp": 1790953639,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
+        {
+          "title": "Generate Parentheses",
+          "titleSlug": "generate-parentheses",
+          "timestamp": 1790953480,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Valid Parentheses",
           "titleSlug": "valid-parentheses",
@@ -91,27 +113,6 @@
           "title": "Palindrome Partitioning II",
           "titleSlug": "palindrome-partitioning-ii",
           "timestamp": 1790736793,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Word Search II",
-          "titleSlug": "word-search-ii",
-          "timestamp": 1790736728,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Binary Tree Maximum Path Sum",
-          "titleSlug": "binary-tree-maximum-path-sum",
-          "timestamp": 1790736596,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Best Time to Buy and Sell Stock III",
-          "titleSlug": "best-time-to-buy-and-sell-stock-iii",
-          "timestamp": 1790736526,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
