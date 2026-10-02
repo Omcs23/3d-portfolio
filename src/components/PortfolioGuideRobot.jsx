@@ -312,8 +312,55 @@ const PortfolioGuideRobot = () => {
     }
   }, [chatHistory, isTyping, isOpen, isSleeping]);
 
+  // Asynchronous Gemini AI API caller (100% Client-side & Serverless)
+  const fetchGeminiAiResponse = async (userQuery) => {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || window.GEMINI_API_KEY;
+    if (!apiKey) return null;
+
+    try {
+      const systemPrompt = `You are Emmy, an energetic 3D island guide monkey assistant on Om Sharma's portfolio website. 
+Answer questions enthusiastically, concisely (2-3 sentences max), and accurately using markdown formatting. 
+Om Sharma is a B.Tech Computer Science student at GLA University (2023-2027), Full-Stack MERN Developer, active competitive programmer (LeetCode, Codeforces, HackerRank), and certified in Oracle Generative AI, Oracle DevOps, and Google Cybersecurity.
+If asked about contact or projects, suggest navigating to the Projects page or Contact page.`;
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [
+              {
+                role: "user",
+                parts: [{ text: `${systemPrompt}\n\nUser Question: ${userQuery}` }],
+              },
+            ],
+            generationConfig: {
+              maxOutputTokens: 250,
+              temperature: 0.7,
+            },
+          }),
+        }
+      );
+
+      if (!response.ok) return null;
+      const data = await response.json();
+      const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (aiText) {
+        return {
+          text: aiText.trim(),
+          action: null,
+        };
+      }
+    } catch (err) {
+      console.log("Gemini API call deferred to offline processor:", err);
+    }
+    return null;
+  };
+
   // Jokes pool
   const JOKES = [
+
     "Why do programmers prefer dark mode? Because light attracts bugs! 🐛😄",
     "Why did the Java developer wear glasses? Because she couldn't C#! 👓💻",
     "What is Emmy's favorite key on the keyboard? The Banana Space-bar! 🍌⌨️",
@@ -749,13 +796,13 @@ const PortfolioGuideRobot = () => {
 
     setIsTyping(true);
 
-    setTimeout(() => {
-      const botResponse = processTypedQuery(query);
+    fetchGeminiAiResponse(query).then((aiResult) => {
+      const botResponse = aiResult || processTypedQuery(query);
       setChatHistory((prev) => [...prev, botResponse]);
       setIsTyping(false);
 
       startInactivityTimer();
-    }, 450);
+    });
   };
 
   const handleActionClick = (action) => {
@@ -829,9 +876,13 @@ const PortfolioGuideRobot = () => {
             <div className="flex items-center gap-2">
               <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} />
               <div>
-                <h3 className="font-bold text-xs sm:text-sm font-poppins leading-tight flex items-center gap-1">
+                <h3 className="font-bold text-xs sm:text-sm font-outfit leading-tight flex items-center gap-1">
                   <span>Emmy</span> 🐒✨
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold font-mono bg-gradient-to-r from-blue-600 to-indigo-600 text-white uppercase tracking-wider ml-1">
+                    AI Powered
+                  </span>
                 </h3>
+
                 {isSleeping ? (
                   <span className="text-[10px] text-indigo-400 dark:text-indigo-300 font-medium flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping" />
