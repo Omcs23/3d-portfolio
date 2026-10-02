@@ -85,7 +85,7 @@ const Home = ({ hasPreloaded = false }) => {
         </div>
       )}
 
-      <div className="absolute top-16 sm:top-20 left-0 right-0 z-10 flex items-center justify-center px-4 pointer-events-none">
+      <div className="absolute top-[76px] sm:top-24 left-0 right-0 z-10 flex items-center justify-center px-4 pointer-events-none">
         {currentStage && (
           <div className="pointer-events-auto">
             <HomeInfo currentStage={currentStage} />

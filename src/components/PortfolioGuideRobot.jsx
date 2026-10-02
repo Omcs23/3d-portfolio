@@ -859,7 +859,7 @@ If asked about contact or projects, suggest navigating to the Projects page or C
         <div
           onTouchStart={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
-          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[340px] max-h-[68vh] sm:max-h-[500px] h-[68vh] sm:h-[480px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-left overscroll-contain ${
+          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[320px] sm:max-w-[360px] max-h-[50vh] sm:max-h-[480px] h-[50vh] sm:h-[480px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-left overscroll-contain ${
             isNight
               ? "bg-slate-900/95 backdrop-blur-md border-slate-700/80 text-slate-100 shadow-slate-950/80"
               : "bg-white/95 backdrop-blur-md border-slate-200 text-slate-800 shadow-xl"
@@ -1008,6 +1008,7 @@ If asked about contact or projects, suggest navigating to the Projects page or C
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Ask Emmy anything about Om..."
+              enterKeyHint="send"
               className={`flex-1 px-3 py-1.5 rounded-xl text-xs sm:text-sm border outline-none transition-colors ${
                 isNight
                   ? "bg-slate-800/90 border-slate-700 text-slate-100 placeholder-slate-400 focus:border-indigo-500"
