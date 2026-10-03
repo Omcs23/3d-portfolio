@@ -1,5 +1,6 @@
 import emailjs from "@emailjs/browser";
 import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Float, ContactShadows, Sparkles } from "@react-three/drei";
 import { Suspense, useRef, useState } from "react";
 
 import { Fox } from "../models";
@@ -23,57 +24,93 @@ const Contact = () => {
   const handleFocus = () => setCurrentAnimation("walk");
   const handleBlur = () => setCurrentAnimation("idle");
 
-  const handleSubmit = (e) => {
+  const handleFoxClick = () => {
+    const animations = ["hit", "walk"];
+    const randomAnim = animations[Math.floor(Math.random() * animations.length)];
+    setCurrentAnimation(randomAnim);
+
+    setTimeout(() => {
+      setCurrentAnimation("idle");
+    }, 2500);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const message = form.message.trim();
+
+    if (!name || !email || !message) {
+      showAlert({
+        show: true,
+        text: "Please fill in all required fields.",
+        type: "danger",
+      });
+      return;
+    }
+
     setLoading(true);
     setCurrentAnimation("hit");
 
-    emailjs
-      .send(
-        import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
+    const serviceId = import.meta.env.VITE_APP_EMAILJS_SERVICE_ID || "service_8ulq6wf";
+    const templateId = import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID || "template_1orop68";
+    const publicKey = import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY || "ZP77WUa0Wh4q5VEX9";
+
+    try {
+      if (emailjs.init) {
+        emailjs.init(publicKey);
+      }
+
+      await emailjs.send(
+        serviceId,
+        templateId,
         {
-          from_name: form.name,
+          from_name: name,
           to_name: "Om Sharma",
-          from_email: form.email,
-          user_name: form.name,
-          user_email: form.email,
-          reply_to: form.email,
-          message: form.message,
+          from_email: email,
+          user_name: name,
+          user_email: email,
+          reply_to: email,
+          message: message,
         },
-        import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          setLoading(false);
-          showAlert({
-            show: true,
-            text: "Thank you for your message 😃",
-            type: "success",
-          });
-
-          setTimeout(() => {
-            hideAlert(false);
-            setCurrentAnimation("idle");
-            setForm({
-              name: "",
-              email: "",
-              message: "",
-            });
-          }, 3000);
-        },
-        (error) => {
-          setLoading(false);
-          console.error("EmailJS Error:", error);
-          setCurrentAnimation("idle");
-
-          showAlert({
-            show: true,
-            text: error?.text ? `EmailJS Error: ${error.text}` : "I didn't receive your message 😢",
-            type: "danger",
-          });
-        }
+        publicKey
       );
+
+      showAlert({
+        show: true,
+        text: "Thank you for your message! 😃",
+        type: "success",
+      });
+
+      setForm({
+        name: "",
+        email: "",
+        message: "",
+      });
+
+      setTimeout(() => {
+        hideAlert(false);
+        setCurrentAnimation("idle");
+      }, 3000);
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      const errorMsg =
+        typeof error?.text === "string"
+          ? `EmailJS Error: ${error.text}`
+          : typeof error?.message === "string"
+          ? error.message
+          : "I didn't receive your message 😢";
+
+      showAlert({
+        show: true,
+        text: errorMsg,
+        type: "danger",
+      });
+      setCurrentAnimation("idle");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -186,7 +223,13 @@ const Contact = () => {
         </div>
 
         {/* Right Column: Interactive 3D Fox Canvas */}
-        <div className="lg:w-1/2 w-full lg:h-auto md:h-[550px] h-[350px]">
+        <div className="lg:w-1/2 w-full lg:h-auto md:h-[550px] h-[350px] relative rounded-3xl overflow-hidden border border-slate-700/20 bg-gradient-to-b from-indigo-500/5 to-purple-500/5 shadow-2xl">
+          {/* Interactive Control Hint Badge */}
+          <div className="absolute top-4 right-4 z-10 pointer-events-none flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold bg-slate-900/70 text-indigo-300 border border-indigo-500/30 backdrop-blur-md shadow-lg">
+            <span className="w-2 h-2 rounded-full bg-indigo-400 animate-ping" />
+            <span>✨ Drag to Rotate • Click 3D Model</span>
+          </div>
+
           <Canvas
             camera={{
               position: [0, 0, 5],
@@ -213,13 +256,42 @@ const Contact = () => {
               intensity={isNight ? 1 : 2}
             />
 
+            <OrbitControls
+              enableZoom={false}
+              enablePan={false}
+              maxPolarAngle={Math.PI / 1.7}
+              minPolarAngle={Math.PI / 3}
+              rotateSpeed={0.5}
+            />
+
+            <Sparkles
+              count={30}
+              scale={5}
+              size={3}
+              speed={0.4}
+              opacity={isNight ? 0.8 : 0.4}
+              color={isNight ? "#a5b4fc" : "#60a5fa"}
+            />
+
+            <ContactShadows
+              position={[0, -1.2, 0]}
+              opacity={0.6}
+              scale={8}
+              blur={2}
+              far={4}
+              color={isNight ? "#818cf8" : "#000000"}
+            />
+
             <Suspense fallback={<Loader />}>
-              <Fox
-                currentAnimation={currentAnimation}
-                position={[0.5, 0.35, 0]}
-                rotation={[12.629, -0.6, 0]}
-                scale={[0.5, 0.5, 0.5]}
-              />
+              <Float speed={2.5} rotationIntensity={0.3} floatIntensity={0.5}>
+                <Fox
+                  currentAnimation={currentAnimation}
+                  onClick={handleFoxClick}
+                  position={[0.5, 0.35, 0]}
+                  rotation={[12.629, -0.6, 0]}
+                  scale={[0.5, 0.5, 0.5]}
+                />
+              </Float>
             </Suspense>
           </Canvas>
         </div>

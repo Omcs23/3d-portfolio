@@ -1,26 +1,27 @@
-/**
- * IMPORTANT: Loading glTF models into a Three.js scene is a lot of work.
- * Before we can configure or animate our model’s meshes, we need to iterate through
- * each part of our model’s meshes and save them separately.
- *
- * But luckily there is an app that turns gltf or glb files into jsx components
- * For this model, visit https://gltf.pmnd.rs/
- * And get the code. And then add the rest of the things.
- * YOU DON'T HAVE TO WRITE EVERYTHING FROM SCRATCH
- */
-
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 
 import scene from "../assets/3d/fox.glb";
 
 // 3D Model from: https://sketchfab.com/3d-models/fox-f372c04de44640fbb6a4f9e4e5845c78
-export function Fox({ currentAnimation, ...props }) {
+export function Fox({ currentAnimation, onClick, ...props }) {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(scene);
   const { actions } = useAnimations(animations, group);
+  const [hovered, setHovered] = useState(false);
 
-  // This effect will run whenever the currentAnimation prop changes
+  const initialPos = useRef(props.position || [0.5, 0.35, 0]);
+  const initialRot = useRef(props.rotation || [12.629, -0.6, 0]);
+
+  // Update initial positions if props change dynamically
+  useEffect(() => {
+    if (props.position) initialPos.current = props.position;
+    if (props.rotation) initialRot.current = props.rotation;
+  }, [props.position, props.rotation]);
+
+  // Play current animation track
   useEffect(() => {
     Object.values(actions).forEach((action) => action.stop());
 
@@ -29,8 +30,49 @@ export function Fox({ currentAnimation, ...props }) {
     }
   }, [actions, currentAnimation]);
 
+  // Dynamic movement effect: smooth floating levitation & mouse look-at tracking
+  useFrame((state) => {
+    if (!group.current) return;
+    const t = state.clock.getElapsedTime();
+
+    // Natural floating bob up and down
+    group.current.position.y = initialPos.current[1] + Math.sin(t * 1.8) * 0.08;
+    group.current.position.z = initialPos.current[2] + Math.cos(t * 1.2) * 0.03;
+
+    // Interactive mouse cursor tracking (Fox turns body towards user's pointer)
+    const targetY = initialRot.current[1] + state.pointer.x * 0.4;
+    const targetX = initialRot.current[0] - state.pointer.y * 0.2;
+
+    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, targetY, 0.06);
+    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, targetX, 0.06);
+
+    // Subtle breathing roll when hovered
+    if (hovered) {
+      group.current.rotation.z = Math.sin(t * 4) * 0.05;
+    } else {
+      group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, 0, 0.05);
+    }
+  });
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group
+      ref={group}
+      {...props}
+      dispose={null}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+        document.body.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        setHovered(false);
+        document.body.style.cursor = "auto";
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (onClick) onClick();
+      }}
+    >
       <group name='Sketchfab_Scene'>
         <primitive object={nodes.GLTF_created_0_rootJoint} />
         <skinnedMesh
