@@ -238,79 +238,95 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
-      {/* Terminal Window Frame */}
-      <div className="w-full max-w-3xl h-[85vh] sm:h-[580px] bg-slate-950 rounded-2xl border border-cyan-500/30 shadow-2xl shadow-cyan-950/50 flex flex-col overflow-hidden font-mono text-xs sm:text-sm text-slate-100 select-text">
-        {/* VS Code / MacOS Style Title Bar */}
-        <div className="px-4 py-3 bg-slate-900 border-b border-slate-800 flex items-center justify-between shrink-0 select-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/65 backdrop-blur-sm animate-in fade-in duration-200">
+      {/* Compact Spotlight Terminal Window Frame */}
+      <div className="w-full max-w-xl h-[65vh] sm:h-[430px] bg-slate-950/95 backdrop-blur-xl rounded-xl border border-cyan-500/30 shadow-2xl shadow-cyan-950/60 flex flex-col overflow-hidden font-mono text-xs select-text">
+        {/* Sleek Title Bar */}
+        <div className="px-3.5 py-2 bg-slate-900/90 border-b border-slate-800/80 flex items-center justify-between shrink-0 select-none">
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              title="Close Terminal"
-              className="w-3 h-3 rounded-full bg-rose-500 hover:bg-rose-600 transition-colors flex items-center justify-center text-[8px] font-bold text-slate-950"
+              title="Close Terminal (ESC)"
+              className="w-2.5 h-2.5 rounded-full bg-rose-500 hover:bg-rose-600 transition-colors flex items-center justify-center text-[7px] font-bold text-slate-950"
             >
               ✕
             </button>
-            <div className="w-3 h-3 rounded-full bg-amber-500" />
-            <div className="w-3 h-3 rounded-full bg-emerald-500" />
-            <span className="ml-2 text-xs font-bold text-slate-400 font-mono flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              om@sharma-3d-cli v1.0.0
+            <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+            <span className="ml-1.5 text-[11px] font-bold text-slate-400 font-mono flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              om@sharma-cli
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="hidden sm:inline-block text-[11px] text-slate-500 font-mono">
-              [Ctrl + K] to toggle
+          <div className="flex items-center gap-2">
+            <span className="hidden sm:inline-block text-[10px] text-slate-500 font-mono bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-700/50">
+              Ctrl + K
             </span>
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white px-2 py-0.5 rounded hover:bg-slate-800 transition-colors font-bold"
+              className="text-slate-400 hover:text-white px-1.5 py-0.5 rounded text-xs hover:bg-slate-800 transition-colors font-bold"
             >
               ✕
             </button>
           </div>
         </div>
 
+        {/* Minimal Quick Action Suggestion Bar */}
+        <div className="px-3 py-1.5 bg-slate-900/60 border-b border-slate-800/60 flex items-center gap-1 overflow-x-auto no-scrollbar shrink-0 select-none">
+          <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider shrink-0 mr-1">
+            Quick:
+          </span>
+          {["help", "about", "skills", "projects", "leetcode", "socials", "resume", "clear"].map((cmd) => (
+            <button
+              key={cmd}
+              onClick={() => executeCommand(cmd)}
+              className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-slate-800/80 text-slate-300 border border-slate-700/50 hover:bg-cyan-500/20 hover:text-cyan-300 hover:border-cyan-500/40 transition-all shrink-0 active:scale-95"
+            >
+              {cmd}
+            </button>
+          ))}
+        </div>
+
         {/* Output Console Container */}
-        <div className="flex-1 p-4 sm:p-5 overflow-y-auto custom-scrollbar space-y-3 font-mono leading-relaxed bg-slate-950/95">
+        <div className="flex-1 p-3.5 sm:p-4 overflow-y-auto custom-scrollbar space-y-2.5 font-mono leading-relaxed bg-slate-950/90 text-[11px] sm:text-xs">
           {history.map((item, idx) => (
             <div key={idx} className="space-y-1">
               {item.type === "user" && (
-                <div className="flex items-center gap-2 text-cyan-400 font-bold">
+                <div className="flex items-center gap-1.5 text-cyan-400 font-bold">
                   <span className="text-emerald-400">om@sharma:~$</span>
                   <span>{item.content}</span>
                 </div>
               )}
 
               {item.type === "system" && (
-                <div className="text-emerald-400 whitespace-pre-wrap">
+                <div className="text-emerald-400 whitespace-pre-wrap text-[11px]">
                   {item.content}
                 </div>
               )}
 
               {item.type === "text" && (
-                <div className="text-slate-300 whitespace-pre-wrap pl-3 border-l-2 border-slate-700">
+                <div className="text-slate-300 whitespace-pre-wrap pl-2.5 border-l-2 border-slate-700 text-[11px]">
                   {item.content}
                 </div>
               )}
 
               {item.type === "error" && (
-                <div className="text-rose-400 pl-3 border-l-2 border-rose-500">
+                <div className="text-rose-400 pl-2.5 border-l-2 border-rose-500 text-[11px]">
                   ❌ {item.content}
                 </div>
               )}
 
               {item.type === "help" && (
-                <div className="pl-3 space-y-1 border-l-2 border-cyan-500/40 my-2">
-                  <div className="text-cyan-300 font-bold mb-1">Available Portfolio Commands:</div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
+                <div className="pl-2.5 space-y-1 border-l-2 border-cyan-500/40 my-1.5">
+                  <div className="text-cyan-300 font-bold text-[11px] mb-1">Available Commands:</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px]">
                     {item.content.map((h, i) => (
-                      <div key={i} className="flex items-baseline gap-2">
-                        <span className="text-emerald-400 font-bold font-mono min-w-[70px]">
+                      <div key={i} className="flex items-baseline gap-1.5">
+                        <span className="text-emerald-400 font-bold font-mono min-w-[62px]">
                           {h.cmd}
                         </span>
-                        <span className="text-slate-400">{h.desc}</span>
+                        <span className="text-slate-400 text-[10px]">{h.desc}</span>
                       </div>
                     ))}
                   </div>
@@ -318,7 +334,7 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
               )}
 
               {item.type === "skills" && (
-                <div className="pl-3 space-y-2 border-l-2 border-indigo-500/40 my-2 text-xs">
+                <div className="pl-2.5 space-y-1 border-l-2 border-indigo-500/40 my-1.5 text-[11px]">
                   <div>
                     <span className="text-amber-400 font-bold">Languages: </span>
                     <span className="text-slate-200">{item.content.languages.join(", ")}</span>
@@ -339,51 +355,51 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
               )}
 
               {item.type === "projects" && (
-                <div className="pl-3 space-y-2.5 border-l-2 border-blue-500/40 my-2 text-xs">
+                <div className="pl-2.5 space-y-2 border-l-2 border-blue-500/40 my-1.5 text-[11px]">
                   {item.content.map((p, i) => (
                     <div key={i} className="space-y-0.5">
                       <div className="flex items-center gap-2">
-                        <span className="text-cyan-400 font-bold text-sm">✦ {p.name}</span>
+                        <span className="text-cyan-400 font-bold text-xs">✦ {p.name}</span>
                         <a
                           href={p.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-400 underline hover:text-cyan-300 font-mono text-[11px]"
+                          className="text-blue-400 underline hover:text-cyan-300 font-mono text-[10px]"
                         >
-                          [GitHub Repo ↗]
+                          [GitHub ↗]
                         </a>
                       </div>
-                      <div className="text-slate-400 text-[11px]">{p.desc}</div>
-                      <div className="text-amber-400 text-[10px] font-mono">Tech: {p.tech}</div>
+                      <div className="text-slate-400 text-[10px]">{p.desc}</div>
+                      <div className="text-amber-400 text-[9.5px] font-mono">Tech: {p.tech}</div>
                     </div>
                   ))}
                 </div>
               )}
 
               {item.type === "leetcode" && (
-                <div className="pl-3 space-y-1.5 border-l-2 border-amber-500/40 my-2 text-xs">
-                  <div className="text-amber-400 font-bold">⚡ LeetCode Real-Time Stats (@{item.content.username}):</div>
-                  <div className="flex flex-wrap gap-3 font-mono">
-                    <span className="text-cyan-400 font-bold">Total Solved: {item.content.totalSolved}</span>
+                <div className="pl-2.5 space-y-1 border-l-2 border-amber-500/40 my-1.5 text-[11px]">
+                  <div className="text-amber-400 font-bold text-[11px]">⚡ LeetCode Real-Time Stats (@{item.content.username}):</div>
+                  <div className="flex flex-wrap gap-2.5 font-mono text-[11px]">
+                    <span className="text-cyan-400 font-bold">Total: {item.content.totalSolved}</span>
                     <span className="text-emerald-400">Easy: {item.content.easy}</span>
-                    <span className="text-amber-400">Medium: {item.content.medium}</span>
+                    <span className="text-amber-400">Med: {item.content.medium}</span>
                     <span className="text-rose-400">Hard: {item.content.hard}</span>
                   </div>
-                  <div className="text-slate-400 text-[11px]">
-                    Target Progress: <span className="text-cyan-300 font-bold">{item.content.targetPct}</span> • Streak: <span className="text-amber-300 font-bold">{item.content.streak}</span>
+                  <div className="text-slate-400 text-[10px]">
+                    Target: <span className="text-cyan-300 font-bold">{item.content.targetPct}</span> • Streak: <span className="text-amber-300 font-bold">{item.content.streak}</span>
                   </div>
                 </div>
               )}
 
               {item.type === "socials" && (
-                <div className="pl-3 grid grid-cols-1 sm:grid-cols-2 gap-2 border-l-2 border-emerald-500/40 my-2 text-xs">
+                <div className="pl-2.5 grid grid-cols-1 sm:grid-cols-2 gap-1.5 border-l-2 border-emerald-500/40 my-1.5 text-[11px]">
                   {item.content.map((s, i) => (
                     <a
                       key={i}
                       href={s.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 p-1.5 rounded bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800 transition-all text-slate-200"
+                      className="flex items-center gap-1.5 p-1 rounded bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800 transition-all text-slate-200 text-[10px]"
                     >
                       <span className="text-cyan-400 font-bold">➜ {s.name}:</span>
                       <span className="text-emerald-400 font-mono underline truncate">{s.handle}</span>
@@ -397,28 +413,12 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
           <div ref={terminalEndRef} />
         </div>
 
-        {/* Quick Action Suggestion Pills */}
-        <div className="px-4 py-2 bg-slate-900/90 border-t border-slate-800 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0 select-none">
-          <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider shrink-0 mr-1">
-            Quick Run:
-          </span>
-          {["help", "about", "skills", "projects", "leetcode", "socials", "resume", "clear"].map((cmd) => (
-            <button
-              key={cmd}
-              onClick={() => executeCommand(cmd)}
-              className="px-2.5 py-1 rounded-md text-[11px] font-bold font-mono bg-slate-800 text-slate-300 border border-slate-700/70 hover:bg-cyan-500/20 hover:text-cyan-300 hover:border-cyan-500/40 transition-all shrink-0 active:scale-95"
-            >
-              {cmd}
-            </button>
-          ))}
-        </div>
-
-        {/* Interactive Typing Pad Input Form */}
+        {/* Minimal Input Form */}
         <form
           onSubmit={handleFormSubmit}
-          className="px-4 py-3 bg-slate-950 border-t border-slate-800 flex items-center gap-2 shrink-0"
+          className="px-3.5 py-2 bg-slate-950 border-t border-slate-800/80 flex items-center gap-2 shrink-0"
         >
-          <span className="text-emerald-400 font-bold font-mono text-sm shrink-0">
+          <span className="text-emerald-400 font-bold font-mono text-xs shrink-0">
             om@sharma:~$
           </span>
           <input
@@ -427,12 +427,12 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
             onKeyDown={handleKeyDownInput}
-            placeholder="type command (e.g. 'help', 'projects', 'skills')..."
-            className="flex-1 bg-transparent text-slate-100 font-mono text-xs sm:text-sm focus:outline-none placeholder:text-slate-600"
+            placeholder="type command ('help', 'projects', 'skills')..."
+            className="flex-1 bg-transparent text-slate-100 font-mono text-xs focus:outline-none placeholder:text-slate-600"
           />
           <button
             type="submit"
-            className="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold font-mono text-xs transition-colors shrink-0 active:scale-95"
+            className="px-2.5 py-1 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-bold font-mono text-[11px] transition-all shrink-0 active:scale-95"
           >
             EXEC ↵
           </button>
