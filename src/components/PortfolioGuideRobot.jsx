@@ -208,10 +208,71 @@ const PortfolioGuideRobot = () => {
   ]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState(
+    typeof window !== "undefined" && window.visualViewport
+      ? window.visualViewport.height
+      : typeof window !== "undefined"
+      ? window.innerHeight
+      : 600
+  );
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const chatContainerRef = useRef(null);
   const optionsContainerRef = useRef(null);
   const inactivityTimerRef = useRef(null);
+
+  // Keep window at top scroll position (0,0) when typing keyboard opens on mobile
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleViewportChange = () => {
+      if (window.visualViewport) {
+        setViewportHeight(window.visualViewport.height);
+      }
+      if (window.scrollY > 0 || window.scrollX > 0) {
+        window.scrollTo(0, 0);
+      }
+    };
+
+    const handleWindowScroll = () => {
+      if (isOpen || isInputFocused) {
+        if (window.scrollY > 0 || window.scrollX > 0) {
+          window.scrollTo(0, 0);
+        }
+      }
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleViewportChange);
+      window.visualViewport.addEventListener("scroll", handleViewportChange);
+    }
+    window.addEventListener("scroll", handleWindowScroll, { passive: true });
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleViewportChange);
+        window.visualViewport.removeEventListener("scroll", handleViewportChange);
+      }
+      window.removeEventListener("scroll", handleWindowScroll);
+    };
+  }, [isOpen, isInputFocused]);
+
+  const handleInputFocus = () => {
+    setIsInputFocused(true);
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+
+    requestAnimationFrame(() => window.scrollTo(0, 0));
+    setTimeout(() => window.scrollTo(0, 0), 100);
+    setTimeout(() => window.scrollTo(0, 0), 300);
+  };
+
+  const handleInputBlur = () => {
+    setIsInputFocused(false);
+    setTimeout(() => window.scrollTo(0, 0), 100);
+  };
+
 
   // Initial floating entry motion timer: float across screen for 6s then dock to corner
   useEffect(() => {
@@ -847,6 +908,12 @@ If asked about contact or projects, suggest navigating to the Projects page or C
     return null;
   }
 
+  // Calculate max chat popup height based on current visual viewport (above soft keyboard)
+  const calculatedMaxHeight = Math.min(
+    Math.max(viewportHeight - 110, 220),
+    480
+  );
+
   return (
     <aside
       aria-label="Emmy Island Guide"
@@ -859,7 +926,11 @@ If asked about contact or projects, suggest navigating to the Projects page or C
         <div
           onTouchStart={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
-          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[320px] sm:max-w-[360px] max-h-[50vh] sm:max-h-[480px] h-[50vh] sm:h-[480px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-left overscroll-contain ${
+          style={{
+            maxHeight: `${calculatedMaxHeight}px`,
+            height: `${calculatedMaxHeight}px`,
+          }}
+          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[320px] sm:max-w-[360px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-left overscroll-contain ${
             isNight
               ? "bg-slate-900/95 backdrop-blur-md border-slate-700/80 text-slate-100 shadow-slate-950/80"
               : "bg-white/95 backdrop-blur-md border-slate-200 text-slate-800 shadow-xl"
@@ -1007,6 +1078,8 @@ If asked about contact or projects, suggest navigating to the Projects page or C
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
               placeholder="Ask Emmy anything about Om..."
               enterKeyHint="send"
               className={`flex-1 px-3 py-1.5 rounded-xl text-xs sm:text-sm border outline-none transition-colors ${
