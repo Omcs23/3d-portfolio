@@ -1,43 +1,124 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useTheme } from "../context/ThemeContext";
+import { portfolioData } from "../constants";
 
 const DevTerminal = ({ isOpen, onClose }) => {
   const { isNight, toggleTheme } = useTheme();
   const [inputVal, setInputVal] = useState("");
-  const [history, setHistory] = useState([
-    {
-      type: "system",
-      content: `⚡ Om Sharma Interactive Portfolio CLI [v1.0.0]
-Type 'help' to view available commands, or click quick action buttons below.
-Press [ESC] or click '✕' to close terminal.`,
-    },
-  ]);
+  const [history, setHistory] = useState([]);
+  const [isBooting, setIsBooting] = useState(false);
   const [cmdHistory, setCmdHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
 
   const inputRef = useRef(null);
   const terminalEndRef = useRef(null);
+  const terminalOutputRef = useRef(null);
 
-  // Lock body scroll when terminal modal is open
+  // Lock body scroll & guard console output container when terminal modal is open
   useEffect(() => {
     if (!isOpen) return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    const el = terminalOutputRef.current;
+    let cleanupGuard = () => {};
+
+    if (el) {
+      let startY = 0;
+
+      const handleWheel = (e) => {
+        const delta = e.deltaY;
+        const isAtTop = el.scrollTop <= 0 && delta < 0;
+        const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1 && delta > 0;
+
+        if (isAtTop || isAtBottom) {
+          if (e.cancelable) e.preventDefault();
+        }
+        e.stopPropagation();
+      };
+
+      const handleTouchStart = (e) => {
+        if (e.touches.length === 1) {
+          startY = e.touches[0].clientY;
+        }
+      };
+
+      const handleTouchMove = (e) => {
+        if (e.touches.length !== 1) return;
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - startY;
+
+        const isAtTop = el.scrollTop <= 0 && deltaY > 0;
+        const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1 && deltaY < 0;
+
+        if (isAtTop || isAtBottom) {
+          if (e.cancelable) e.preventDefault();
+        }
+        e.stopPropagation();
+      };
+
+      el.addEventListener("wheel", handleWheel, { passive: false });
+      el.addEventListener("touchstart", handleTouchStart, { passive: true });
+      el.addEventListener("touchmove", handleTouchMove, { passive: false });
+
+      cleanupGuard = () => {
+        el.removeEventListener("wheel", handleWheel);
+        el.removeEventListener("touchstart", handleTouchStart);
+        el.removeEventListener("touchmove", handleTouchMove);
+      };
+    }
+
     return () => {
+      cleanupGuard();
       document.body.style.overflow = originalOverflow;
     };
   }, [isOpen]);
 
-  // Auto-focus input when terminal opens
+  // Real-time progressive startup loading animation when terminal opens
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) {
+      setIsBooting(false);
+      return;
+    }
+
+    setHistory([]);
+    setIsBooting(true);
+
+    const startupSteps = [
+      { delay: 0, content: "INITIALIZING OM.SHELL..." },
+      { delay: 140, content: "Loading portfolio..." },
+      { delay: 280, content: "Loading projects..." },
+      { delay: 420, content: "Loading skills..." },
+      { delay: 560, content: "Loading AI..." },
+      { delay: 740, content: "████████████████████ 100%" },
+      { delay: 900, content: "Welcome to OmShell.\n\nType 'help' to begin." },
+    ];
+
+    const timers = [];
+
+    startupSteps.forEach((step) => {
+      const timer = setTimeout(() => {
+        setHistory((prev) => [
+          ...prev,
+          { type: "system", content: step.content },
+        ]);
+      }, step.delay);
+      timers.push(timer);
+    });
+
+    const completionTimer = setTimeout(() => {
+      setIsBooting(false);
       setTimeout(() => {
         inputRef.current?.focus();
-      }, 100);
-    }
+      }, 50);
+    }, 950);
+    timers.push(completionTimer);
+
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+    };
   }, [isOpen]);
 
   // Auto-scroll to bottom of terminal output
@@ -45,7 +126,7 @@ Press [ESC] or click '✕' to close terminal.`,
     if (isOpen) {
       terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [history, isOpen]);
+  }, [history, isBooting, isOpen]);
 
   // Global ESC key listener to close modal
   useEffect(() => {
@@ -78,29 +159,82 @@ Press [ESC] or click '✕' to close terminal.`,
       case "help":
       case "?":
         responseObj = {
-          type: "help",
-          content: [
-            { cmd: "about", desc: "View Om Sharma's bio, degree, & certifications" },
-            { cmd: "skills", desc: "List technical skills, frameworks, & tools" },
-            { cmd: "projects", desc: "View top 3D projects & GitHub repositories" },
-            { cmd: "leetcode", desc: "Show live LeetCode stats & problem count" },
-            { cmd: "socials", desc: "Display GitHub, LinkedIn, LeetCode, & profiles" },
-            { cmd: "resume", desc: "Get verified resume summary & download links" },
-            { cmd: "theme", desc: "Toggle between Dark and Light portfolio mode" },
-            { cmd: "clear", desc: "Clear terminal screen output" },
-          ],
+          type: "text",
+          content: `Available commands:
+
+  about        About Om
+  projects     Explore projects
+  skills       View technical skills
+  certs        View certifications
+  education    Education
+  experience   Experience
+  stack        Technology stack
+  github       GitHub profile
+  leetcode     Coding profile
+  resume       Open resume
+  contact      Contact information
+  whoami       Developer identity
+  neofetch     Portfolio system information
+  clear        Clear terminal
+
+Type a command to continue.`,
+        };
+        break;
+
+      case "whoami":
+        responseObj = {
+          type: "text",
+          content: `${portfolioData.developer.name}
+
+${portfolioData.developer.degree}
+${portfolioData.developer.role}
+
+${portfolioData.developer.tagline.split(", ").join("\n")}`,
         };
         break;
 
       case "about":
-      case "whoami":
         responseObj = {
           type: "text",
-          content: `👨‍💻 Om Sharma | Full-Stack Developer & AI Explorer
-📍 Location: Mathura, India
-🎓 Degree: B.Tech Computer Science & Engineering @ GLA University (2023 - 2027)
-📜 Certifications: Oracle OCI GenAI Professional, Oracle DevOps Professional, Google Cybersecurity Professional
-🚀 Summary: Detail-oriented developer specializing in MongoDB, Express, React, Node.js, Java, Python, 3D Web, & AI integrations.`,
+          content: `${portfolioData.developer.name}
+
+${portfolioData.developer.fullDegree} @ ${portfolioData.developer.university} (${portfolioData.developer.years})
+${portfolioData.developer.role}
+
+Certified in Oracle OCI Generative AI, Oracle OCI DevOps, and Google Cybersecurity.
+Specializing in MERN stack, Java, Python, 3D Web, and AI integrations.`,
+        };
+        break;
+
+      case "stack":
+        responseObj = {
+          type: "text",
+          content: `FRONTEND
+${portfolioData.stack.frontend.join("\n")}
+
+BACKEND
+${portfolioData.stack.backend.join("\n")}
+
+LANGUAGES
+${portfolioData.stack.languages.join("\n")}
+
+AI
+${portfolioData.stack.ai.join("\n")}`,
+        };
+        break;
+
+      case "neofetch":
+        responseObj = {
+          type: "text",
+          content: `        OM SHARMA
+---------------------------
+OS        OmShell
+Frontend  React
+3D Engine Three.js
+AI        Gemini
+Status    Online
+World     3D Portfolio
+---------------------------`,
         };
         break;
 
@@ -108,38 +242,68 @@ Press [ESC] or click '✕' to close terminal.`,
         responseObj = {
           type: "skills",
           content: {
-            languages: ["Java", "Python", "JavaScript (ES6+)", "HTML5", "CSS3", "SQL"],
-            frameworks: ["React.js", "Node.js", "Express.js", "TailwindCSS", "Three.js", "Vite"],
-            databases: ["MongoDB", "MySQL"],
-            tools: ["Git & GitHub", "Oracle OCI", "Google Cloud", "VS Code", "Postman", "Linux"],
+            languages: portfolioData.stack.languages,
+            frameworks: portfolioData.stack.frontend.concat(portfolioData.stack.backend),
+            databases: ["MongoDB"],
+            tools: portfolioData.stack.tools,
           },
         };
         break;
 
       case "projects":
+      case "proj":
       case "ls projects":
         responseObj = {
           type: "projects",
-          content: [
-            {
-              name: "3D Interactive Island Portfolio",
-              tech: "React, Three.js, React Three Fiber, TailwindCSS",
-              desc: "Immersive 3D interactive portfolio featuring a navigable island, animated plane, guide robot, & live stats.",
-              link: "https://github.com/Omcs23/3d-portfolio",
-            },
-            {
-              name: "Summiz - AI Article Summarizer",
-              tech: "React.js, OpenAI GPT-4 API, RapidAPI, Tailwind",
-              desc: "Open-source article summarizer that converts lengthy web articles into crisp, digestible bullet summaries.",
-              link: "https://github.com/Omcs23",
-            },
-            {
-              name: "Pricewise - E-Commerce Price Tracker",
-              tech: "Next.js 13, TypeScript, Web Scraping, MongoDB",
-              desc: "Smart web scraper that tracks product prices across e-commerce sites and alerts users when prices drop.",
-              link: "https://github.com/Omcs23",
-            },
-          ],
+          content: portfolioData.projects.map((p) => ({
+            name: p.name,
+            tech: p.description.split("Built with ")[1] || "React, Three.js, Node.js",
+            desc: p.description,
+            link: p.link,
+          })),
+        };
+        break;
+
+      case "certs":
+      case "certifications":
+        responseObj = {
+          type: "text",
+          content: `CERTIFICATIONS
+
+${portfolioData.certifications.map((c) => `• ${c.title} (${c.company_name})`).join("\n")}`,
+        };
+        break;
+
+      case "education":
+        responseObj = {
+          type: "text",
+          content: `EDUCATION
+
+Degree:     ${portfolioData.education[0].title}
+University: ${portfolioData.education[0].company_name}
+Period:     ${portfolioData.education[0].date}
+Details:    ${portfolioData.education[0].points[1]}`,
+        };
+        break;
+
+      case "experience":
+        responseObj = {
+          type: "text",
+          content: `EXPERIENCE & BACKGROUND
+
+• Full-Stack Web Application Development (MERN Stack)
+• Competitive Programming (100+ LeetCode, 100+ Codeforces, 5-Star HackerRank)
+• Cloud & AI Certification Track (Oracle OCI GenAI & DevOps, Google Cybersecurity)`,
+        };
+        break;
+
+      case "github":
+        responseObj = {
+          type: "text",
+          content: `GITHUB PROFILE
+
+User: Omcs23
+URL:  ${portfolioData.links.github}`,
         };
         break;
 
@@ -148,40 +312,42 @@ Press [ESC] or click '✕' to close terminal.`,
         responseObj = {
           type: "leetcode",
           content: {
-            username: "OmSharma152",
-            totalSolved: 154,
-            easy: 43,
-            medium: 66,
-            hard: 45,
+            username: portfolioData.codingProfiles.leetcode.username,
+            totalSolved: portfolioData.codingProfiles.leetcode.solved,
+            easy: portfolioData.codingProfiles.leetcode.easy,
+            medium: portfolioData.codingProfiles.leetcode.medium,
+            hard: portfolioData.codingProfiles.leetcode.hard,
             targetPct: "51%",
-            streak: "4 days active",
-            link: "https://leetcode.com/u/OmSharma152/",
+            streak: `${portfolioData.codingProfiles.leetcode.streak} days active`,
+            link: portfolioData.codingProfiles.leetcode.url,
           },
         };
         break;
 
-      case "socials":
       case "contact":
+      case "socials":
         responseObj = {
           type: "socials",
           content: [
-            { name: "GitHub", url: "https://github.com/Omcs23", handle: "@Omcs23" },
-            { name: "LinkedIn", url: "https://www.linkedin.com/in/om-sharma-88109b296", handle: "om-sharma" },
-            { name: "LeetCode", url: "https://leetcode.com/u/OmSharma152/", handle: "@OmSharma152" },
-            { name: "Codeforces", url: "https://codeforces.com/profile/OmSharma_cs", handle: "@OmSharma_cs" },
-            { name: "HackerRank", url: "https://www.hackerrank.com/profile/iOmSharma52", handle: "@iOmSharma52" },
-            { name: "Email", url: "mailto:om.sharma_cs23@gla.ac.in", handle: "om.sharma_cs23@gla.ac.in" },
+            { name: "GitHub", url: portfolioData.contact.github, handle: "@Omcs23" },
+            { name: "LinkedIn", url: portfolioData.contact.linkedin, handle: "om-sharma" },
+            { name: "LeetCode", url: portfolioData.contact.leetcode, handle: "@OmSharma152" },
+            { name: "Codeforces", url: portfolioData.contact.codeforces, handle: "@OmSharma_cs" },
+            { name: "HackerRank", url: portfolioData.contact.hackerrank, handle: "@iOmSharma52" },
+            { name: "Email", url: `mailto:${portfolioData.contact.email}`, handle: portfolioData.contact.email },
           ],
         };
         break;
 
       case "resume":
       case "cv":
+        window.open(portfolioData.links.resume, "_blank", "noopener,noreferrer");
         responseObj = {
           type: "text",
-          content: `📄 Om Sharma - Official Resume & Credentials
-Download PDF: ${window.location.origin}/Om_Sharma_Resume.pdf
-Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
+          content: `RESUME CREDENTIALS
+
+PDF: ${portfolioData.links.resume}
+Opening resume document in a new tab...`,
         };
         break;
 
@@ -189,7 +355,7 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
         toggleTheme();
         responseObj = {
           type: "system",
-          content: `🎨 Theme toggled successfully to ${!isNight ? "Night / Dark Mode 🌙" : "Day / Light Mode ☀️"}!`,
+          content: `Theme toggled to ${!isNight ? "Night / Dark Mode 🌙" : "Day / Light Mode ☀️"}`,
         };
         break;
 
@@ -199,19 +365,12 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
         setInputVal("");
         return;
 
-      case "sudo":
-      case "matrix":
-        responseObj = {
-          type: "system",
-          content: `🔑 Permission granted. Entering Matrix developer mode... 
-"There is no spoon." — Everything built with React & Three.js 🚀`,
-        };
-        break;
-
       default:
         responseObj = {
           type: "error",
-          content: `command not found: '${trimmed}'. Type 'help' to see list of valid commands.`,
+          content: `Command not found: ${trimmed}
+
+Type 'help' to see available commands.`,
         };
         break;
     }
@@ -268,7 +427,7 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
             <span className="ml-1.5 text-[11px] font-bold text-slate-400 font-mono flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              om@sharma-cli
+              om@portfolio
             </span>
           </div>
 
@@ -290,11 +449,12 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
           <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider shrink-0 mr-1">
             Quick:
           </span>
-          {["help", "about", "skills", "projects", "leetcode", "socials", "resume", "clear"].map((cmd) => (
+          {["help", "about", "projects", "skills", "certs", "education", "experience", "stack", "github", "leetcode", "resume", "contact", "whoami", "neofetch", "clear"].map((cmd) => (
             <button
               key={cmd}
+              disabled={isBooting}
               onClick={() => executeCommand(cmd)}
-              className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-slate-800/80 text-slate-300 border border-slate-700/50 hover:bg-cyan-500/20 hover:text-cyan-300 hover:border-cyan-500/40 transition-all shrink-0 active:scale-95"
+              className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-slate-800/80 text-slate-300 border border-slate-700/50 hover:bg-cyan-500/20 hover:text-cyan-300 hover:border-cyan-500/40 transition-all shrink-0 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {cmd}
             </button>
@@ -302,12 +462,15 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
         </div>
 
         {/* Output Console Container */}
-        <div className="flex-1 p-3.5 sm:p-4 overflow-y-auto custom-scrollbar space-y-2.5 font-mono leading-relaxed bg-slate-950/90 text-[11px] sm:text-xs">
+        <div
+          ref={terminalOutputRef}
+          className="flex-1 p-3.5 sm:p-4 overflow-y-auto overscroll-contain custom-scrollbar space-y-2.5 font-mono leading-relaxed bg-slate-950/90 text-[11px] sm:text-xs"
+        >
           {history.map((item, idx) => (
             <div key={idx} className="space-y-1">
               {item.type === "user" && (
                 <div className="flex items-center gap-1.5 text-cyan-400 font-bold">
-                  <span className="text-emerald-400">om@sharma:~$</span>
+                  <span className="text-emerald-400">om@portfolio:~$</span>
                   <span>{item.content}</span>
                 </div>
               )}
@@ -423,6 +586,13 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
             </div>
           ))}
 
+          {isBooting && (
+            <div className="flex items-center gap-2 text-cyan-400 font-mono text-[11px] animate-pulse py-1">
+              <span className="w-2 h-3.5 bg-emerald-400 inline-block animate-ping" />
+              <span className="text-slate-500 italic">kernel loading modules...</span>
+            </div>
+          )}
+
           <div ref={terminalEndRef} />
         </div>
 
@@ -432,20 +602,22 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
           className="px-3.5 py-2 bg-slate-950 border-t border-slate-800/80 flex items-center gap-2 shrink-0"
         >
           <span className="text-emerald-400 font-bold font-mono text-xs shrink-0">
-            om@sharma:~$
+            om@portfolio:~$
           </span>
           <input
             ref={inputRef}
             type="text"
+            disabled={isBooting}
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
             onKeyDown={handleKeyDownInput}
-            placeholder="type command ('help', 'projects', 'skills')..."
-            className="flex-1 bg-transparent text-slate-100 font-mono text-xs focus:outline-none placeholder:text-slate-600"
+            placeholder={isBooting ? "initializing om.shell..." : "type command ('help', 'projects', 'skills')..."}
+            className="flex-1 bg-transparent text-slate-100 font-mono text-xs focus:outline-none placeholder:text-slate-600 disabled:opacity-50"
           />
           <button
             type="submit"
-            className="px-2.5 py-1 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-bold font-mono text-[11px] transition-all shrink-0 active:scale-95"
+            disabled={isBooting || !inputVal.trim()}
+            className="px-2.5 py-1 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-bold font-mono text-[11px] transition-all shrink-0 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             EXEC ↵
           </button>

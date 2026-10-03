@@ -118,10 +118,10 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
       </div>
 
       <div
-        className={`p-3.5 sm:p-4 rounded-xl border transition-all overflow-x-auto relative backdrop-blur-md ${
+        className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 overflow-x-auto relative backdrop-blur-xl shadow-xl ${
           isNight
-            ? "bg-slate-950/80 border-slate-800/90 shadow-md"
-            : "bg-slate-50 border-slate-200 shadow-sm"
+            ? "bg-gradient-to-b from-slate-950/90 to-slate-900/90 border-slate-800/90 shadow-slate-950/60"
+            : "bg-gradient-to-b from-white to-slate-50 border-slate-200/90 shadow-slate-200/50"
         }`}
       >
         <div className="min-w-[650px] flex flex-col gap-1.5 select-none">

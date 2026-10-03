@@ -244,10 +244,10 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
 
       {/* Minimal Graph Card Container */}
       <div
-        className={`p-3.5 sm:p-4 rounded-xl border relative overflow-hidden transition-all backdrop-blur-md ${
+        className={`p-4 sm:p-5 rounded-2xl border relative overflow-hidden transition-all duration-300 shadow-xl backdrop-blur-xl ${
           isNight
-            ? "bg-slate-950/80 border-slate-800/90 shadow-lg"
-            : "bg-slate-50/90 border-slate-200 shadow-sm"
+            ? "bg-gradient-to-b from-slate-950/90 to-slate-900/90 border-slate-800/90 shadow-slate-950/60"
+            : "bg-gradient-to-b from-white to-slate-50 border-slate-200/90 shadow-slate-200/50"
         }`}
       >
         {/* Line Chart SVG */}

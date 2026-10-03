@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { portfolioData } from "../constants";
 
 
 // Boundary-free 3D Monkey Avatar Component (Emmy - Female Island Guide Monkey with cute flower accessory)
@@ -171,19 +172,26 @@ const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, classN
   );
 };
 
-// Initial options list
+// Full options list including 3D home, social media & coding profiles
 const INITIAL_OPTIONS = [
+  { id: "home", label: "🏠 3D World", icon: "🏠" },
   { id: "about", label: "👨‍💻 About Om", icon: "👨‍💻" },
   { id: "skills", label: "🛠️ Skills", icon: "🛠️" },
   { id: "projects", label: "🚀 Projects", icon: "🚀" },
   { id: "certifications", label: "📜 Certifications", icon: "📜" },
   { id: "coding", label: "💻 Coding Journey", icon: "💻" },
   { id: "education", label: "🎓 Education", icon: "🎓" },
+  { id: "github", label: "🐙 GitHub", icon: "🐙" },
+  { id: "leetcode", label: "⚡ LeetCode", icon: "⚡" },
+  { id: "codeforces", label: "🏆 Codeforces", icon: "🏆" },
+  { id: "hackerrank", label: "⭐ HackerRank", icon: "⭐" },
+  { id: "instagram", label: "📸 Instagram", icon: "📸" },
   { id: "resume", label: "📄 Resume", icon: "📄" },
   { id: "contact", label: "💬 Let's Talk", icon: "💬" },
+  { id: "ask", label: "Ask Emmy 💬", icon: "💬" },
 ];
 
-// Energetic Wake Up Messages in 100% English
+// Wake Up Messages
 const WAKE_UP_MESSAGES = [
   "Whoa! 🐒 Emmy was having the sweetest banana-smoothie dream!",
   "Hey friend! 🌴 You just woke up Emmy from her palm-tree lounge!",
@@ -203,7 +211,12 @@ const PortfolioGuideRobot = () => {
   const [chatHistory, setChatHistory] = useState([
     {
       sender: "robot",
-      text: "Hey there! ✨ I'm Emmy 🐒 — Om's energetic 3D island guide monkey! What awesome topic would you like to explore today?",
+      text: "Hey! 👋 I'm Emmy, your little AI guide around Om's digital world.",
+      action: null,
+    },
+    {
+      sender: "robot",
+      text: "I can tell you about Om, his projects, skills, certifications, coding journey, and even help you find your way around this world.\n\nWant to explore something? ✨",
       action: null,
     },
   ]);
@@ -220,7 +233,9 @@ const PortfolioGuideRobot = () => {
 
   const chatContainerRef = useRef(null);
   const optionsContainerRef = useRef(null);
+  const textInputRef = useRef(null);
   const inactivityTimerRef = useRef(null);
+
 
   // Handle mobile visual viewport height changes when virtual keyboard opens/closes
   useEffect(() => {
@@ -266,14 +281,25 @@ const PortfolioGuideRobot = () => {
     return () => clearTimeout(motionTimer);
   }, []);
 
-  // Prevent touch overscroll / scroll chaining to parent window on mobile devices
+  // Prevent scroll chaining / background webpage scrolling while inside Emmy Chat
   useEffect(() => {
     if (!isOpen) return;
 
-    const attachTouchGuard = (el) => {
+    const attachScrollGuard = (el) => {
       if (!el) return () => {};
 
       let startY = 0;
+
+      const handleWheel = (e) => {
+        const delta = e.deltaY;
+        const isAtTop = el.scrollTop <= 0 && delta < 0;
+        const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1 && delta > 0;
+
+        if (isAtTop || isAtBottom) {
+          if (e.cancelable) e.preventDefault();
+        }
+        e.stopPropagation();
+      };
 
       const handleTouchStart = (e) => {
         if (e.touches.length === 1) {
@@ -286,28 +312,28 @@ const PortfolioGuideRobot = () => {
         const currentY = e.touches[0].clientY;
         const deltaY = currentY - startY;
 
-        const isAtTop = el.scrollTop <= 0;
-        const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+        const isAtTop = el.scrollTop <= 0 && deltaY > 0;
+        const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1 && deltaY < 0;
 
-        if ((isAtTop && deltaY > 0) || (isAtBottom && deltaY < 0)) {
-          if (e.cancelable) {
-            e.preventDefault();
-          }
+        if (isAtTop || isAtBottom) {
+          if (e.cancelable) e.preventDefault();
         }
         e.stopPropagation();
       };
 
+      el.addEventListener("wheel", handleWheel, { passive: false });
       el.addEventListener("touchstart", handleTouchStart, { passive: true });
       el.addEventListener("touchmove", handleTouchMove, { passive: false });
 
       return () => {
+        el.removeEventListener("wheel", handleWheel);
         el.removeEventListener("touchstart", handleTouchStart);
         el.removeEventListener("touchmove", handleTouchMove);
       };
     };
 
-    const cleanupChat = attachTouchGuard(chatContainerRef.current);
-    const cleanupOpts = attachTouchGuard(optionsContainerRef.current);
+    const cleanupChat = attachScrollGuard(chatContainerRef.current);
+    const cleanupOpts = attachScrollGuard(optionsContainerRef.current);
 
     return () => {
       cleanupChat();
@@ -362,10 +388,19 @@ const PortfolioGuideRobot = () => {
     if (!apiKey) return null;
 
     try {
-      const systemPrompt = `You are Emmy, an energetic 3D island guide monkey assistant on Om Sharma's portfolio website. 
-Answer questions enthusiastically, concisely (2-3 sentences max), and accurately using markdown formatting. 
-Om Sharma is a B.Tech Computer Science student at GLA University (2023-2027), Full-Stack MERN Developer, active competitive programmer (LeetCode, Codeforces, HackerRank), and certified in Oracle Generative AI, Oracle DevOps, and Google Cybersecurity.
-If asked about contact or projects, suggest navigating to the Projects page or Contact page.`;
+      const systemPrompt = `You are Emmy, a friendly, warm, curious, and helpful 3D island guide monkey companion living inside Om Sharma's portfolio website.
+Your role: Welcome visitors, explain Om's portfolio, guide them around, and discuss Om's work.
+Personality: Human-like, warm, playful, concise (1-3 short sentences), occasional natural emojis.
+Strict rules:
+1. Answer using ONLY actual portfolio data:
+- Om Sharma: B.Tech CSE student at GLA University (2023-2027).
+- Projects: Hospital Management System (Node.js, Express, MongoDB), 3D Interactive Portfolio (React, Three.js, React Three Fiber, Tailwind), Instagram Automation Bot (Node.js, Python).
+- Skills: Java, Python, JavaScript, HTML5, CSS3, Tailwind CSS, React.js, Node.js, Express.js, MongoDB, Git, GitHub, Three.js.
+- Certifications: Oracle OCI 2025 Certified Generative AI Professional, Oracle OCI 2025 Certified DevOps Professional, Google Cybersecurity Professional Certificate, Infosys Java & MERN.
+- Coding: LeetCode (OmSharma152 - 150+ solved), Codeforces (OmSharma_cs), HackerRank (iOmSharma52 - 5-star Java/Python).
+2. NEVER invent fake projects, certs, jobs, companies, or stats.
+3. If asked about unrelated topics (weather, coding homework, general trivia), politely redirect: "I'm mainly here to show you around Om's world 😄 Ask me about his projects, skills, certifications, or portfolio."
+4. If information is unavailable, say: "I'm not seeing that information in Om's portfolio yet. You can check the Projects section or ask me about something else. 🙂"`;
 
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
@@ -402,221 +437,185 @@ If asked about contact or projects, suggest navigating to the Projects page or C
     return null;
   };
 
-  // Jokes pool
-  const JOKES = [
-
-    "Why do programmers prefer dark mode? Because light attracts bugs! 🐛😄",
-    "Why did the Java developer wear glasses? Because she couldn't C#! 👓💻",
-    "What is Emmy's favorite key on the keyboard? The Banana Space-bar! 🍌⌨️",
-    "There are 10 types of people in the world: those who understand binary, and those who don't! 🤖",
-    "Why are monkeys so good at web design? Because we're masters of HTML5: High-Tree Monkey Language! 🌴🐒",
-  ];
-
-  // Quotes pool
-  const QUOTES = [
-    "“First, solve the problem. Then, write the code.” — John Johnson 💡",
-    "“Code is like humor. When you have to explain it, it’s bad.” — Cory House 🚀",
-    "“Simplicity is the soul of efficiency.” — Austin Freeman ✨",
-    "“Make it work, make it right, make it fast.” — Kent Beck ⚡",
-  ];
-
-  // Helper to process user typed queries dynamically in 100% English & high energy
+  // Helper to process user typed queries dynamically based on portfolioData
   const processTypedQuery = (query) => {
     const q = query.toLowerCase().trim();
 
-    // How are you / How r u / How you doing
+    // Natural human touches & reactions
+    const humanReactions = [
+      "Nice choice 👀 ",
+      "Ah, checking out Om's work! 🚀 ",
+      "Going into developer territory, huh? 😄 ",
+      "Hope you're enjoying the little world! ✨ "
+    ];
+    const randomReaction = humanReactions[Math.floor(Math.random() * humanReactions.length)];
+
+    // Navigation requests: Where are the projects / Show me projects
     if (
-      q.includes("how are you") ||
-      q.includes("how r u") ||
-      q.includes("how u doing") ||
-      q.includes("how are u") ||
-      q.includes("wbu") ||
-      q.includes("how do you do")
+      q.includes("where are the projects") ||
+      q.includes("where are projects") ||
+      q.includes("where is projects") ||
+      q.includes("find projects") ||
+      q.includes("show projects") ||
+      q.includes("take me to projects")
     ) {
       return {
-        text: "Emmy is feeling 100% supercharged! ⚡ Swinging high on the palm trees with a ripe golden banana! 🍌 How are you doing today, explorer?",
-        action: null,
+        text: "Head over to the Projects section 🚀\nIf you'd like, I can also give you a quick overview here.",
+        action: { type: "navigate", target: "/projects", label: "Go to Projects Section →" },
       };
     }
 
-    // Who are you / What are you / Who r u
+    // Navigation requests: How do I contact Om / Where is contact
     if (
-      q.includes("who are you") ||
-      q.includes("who r u") ||
-      q.includes("what are you") ||
-      q.includes("your name") ||
-      q.includes("who is emmy") ||
-      q.includes("who is bhola")
+      q.includes("how do i contact") ||
+      q.includes("how to contact") ||
+      q.includes("where is contact") ||
+      q.includes("contact page") ||
+      q.includes("find contact") ||
+      q.includes("reach om")
     ) {
       return {
-        text: "I'm Emmy! 🐒✨ Om's energetic 3D island guide monkey! I'm here to show you Om's tech skills, awesome projects, certifications, resume, and coding stats!",
-        action: { type: "navigate", target: "/about", label: "Learn About Om →" },
+        text: "You can use the Contact section. If you'd like, I can guide you there.",
+        action: { type: "navigate", target: "/contact", label: "Go to Contact Section →" },
       };
     }
 
-    // Joke / Tell me a joke / Funny
-    if (
-      q.includes("joke") ||
-      q.includes("funny") ||
-      q.includes("laugh")
-    ) {
-      const randomJoke = JOKES[Math.floor(Math.random() * JOKES.length)];
-      return {
-        text: `Here's a fresh monkey bite of humor for you! 🐒😄\n\n${randomJoke}`,
-        action: null,
-      };
-    }
-
-    // Quote / Thought / Motivation
-    if (
-      q.includes("quote") ||
-      q.includes("thought") ||
-      q.includes("motivation") ||
-      q.includes("inspire")
-    ) {
-      const randomQuote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-      return {
-        text: `Here is a daily thought from Emmy! 🌴✨\n\n${randomQuote}`,
-        action: null,
-      };
-    }
-
-    // Banana / Monkey smalltalk
-    if (q.includes("banana") || q.includes("monkey") || q.includes("tree")) {
-      return {
-        text: "YUMMM! Did somebody say BANANA?! 🍌 *Emmy does a joyful backflip through the palm trees* 🐒✨",
-        action: null,
-      };
-    }
-
-    // Thanks / Thank you
-    if (
-      q.includes("thank") ||
-      q.includes("thanks") ||
-      q.includes("ty")
-    ) {
-      return {
-        text: "You're so welcome! ✨ Emmy is always happy to help! Ask me anything else about Om's work anytime!",
-        action: null,
-      };
-    }
-
-    // Bye / Goodbye / See ya
-    if (
-      q.includes("bye") ||
-      q.includes("goodbye") ||
-      q.includes("see ya")
-    ) {
-      return {
-        text: "Bye bye! 👋 Have a banana-tastic day ahead! Come back anytime to chat with Emmy!",
-        action: null,
-      };
-    }
-
-    // About / Who is Om / Bio / Background
-    if (
-      q.includes("about") ||
-      q.includes("who") ||
-      q.includes("bio") ||
-      q.includes("om") ||
-      q.includes("intro") ||
-      q.includes("developer")
-    ) {
-      return {
-        text: "Om Sharma is an enthusiastic B.Tech Computer Science student at GLA University (2023 - 2027), specializing in Full-Stack Web Development (MERN), Java, Python, and AI automation! ✨",
-        action: { type: "navigate", target: "/about", label: "Explore Full Bio →" },
-      };
-    }
-
-    // Skills / Tech / Stack / Programming
-    if (
-      q.includes("skill") ||
-      q.includes("tech") ||
-      q.includes("stack") ||
-      q.includes("react") ||
-      q.includes("java") ||
-      q.includes("python") ||
-      q.includes("node") ||
-      q.includes("mongo") ||
-      q.includes("cloud") ||
-      q.includes("code") ||
-      q.includes("programming")
-    ) {
-      return {
-        text: "Om's key tech stack includes:\n• MERN (MongoDB, Express, React, Node.js)\n• Java & Object-Oriented Software Design\n• Python & Web Automation\n• Cloud & AI (Oracle OCI GenAI Certified)",
-        action: { type: "navigate", target: "/about", label: "View All Skills →" },
-      };
-    }
-
-    // Projects / Work / Apps / Built
+    // Projects: What projects has Om built?
     if (
       q.includes("project") ||
-      q.includes("work") ||
       q.includes("built") ||
-      q.includes("app") ||
+      q.includes("work") ||
+      q.includes("created") ||
       q.includes("hospital") ||
-      q.includes("bot") ||
-      q.includes("3d")
+      q.includes("3d") ||
+      q.includes("bot")
     ) {
       return {
-        text: "Om has created several key projects:\n1. 🏥 Hospital Management System\n2. 🤖 Instagram Automation Bot\n3. 🌐 3D Interactive Portfolio",
+        text: `${randomReaction}Om has built several projects, including his Hospital Management System, 3D Interactive Portfolio, and Instagram Automation Bot. Want me to walk you through the interesting ones? 🚀`,
         action: { type: "navigate", target: "/projects", label: "Explore Projects →" },
       };
     }
 
-    // Certifications / Certificate / Oracle / Google / Infosys
+    // Technologies / Skills: What technologies does he know?
+    if (
+      q.includes("technology") ||
+      q.includes("technologies") ||
+      q.includes("skill") ||
+      q.includes("know") ||
+      q.includes("stack") ||
+      q.includes("framework")
+    ) {
+      // Specific Java query check
+      if (q.includes("java")) {
+        return {
+          text: "Om is proficient in Java! He uses it for Data Structures & Algorithms, competitive programming (100+ problems solved), and holds Java certifications from Infosys Springboard. ☕",
+          action: { type: "navigate", target: "/about", label: "View Certifications →" },
+        };
+      }
+
+      return {
+        text: "Om knows Java, JavaScript, Python, HTML5, CSS3, Tailwind CSS, React.js, Node.js, Express.js, MongoDB, Git, and Three.js! ✨",
+        action: { type: "navigate", target: "/about", label: "View All Skills →" },
+      };
+    }
+
+    // Specific Java query fallback
+    if (q.includes("java")) {
+      return {
+        text: "Om is proficient in Java! He uses it for Data Structures & Algorithms, competitive programming (100+ problems solved), and holds Java certifications from Infosys Springboard. ☕",
+        action: { type: "navigate", target: "/about", label: "View Certifications →" },
+      };
+    }
+
+    // Certifications: Tell me about his certifications
     if (
       q.includes("certif") ||
       q.includes("oracle") ||
       q.includes("google") ||
       q.includes("infosys") ||
-      q.includes("oci")
+      q.includes("oci") ||
+      q.includes("credential")
     ) {
       return {
-        text: "Om holds verified professional certifications:\n• Oracle OCI 2025 Certified Generative AI Professional\n• Oracle OCI 2025 Certified DevOps Professional\n• Google Cybersecurity Professional Certificate\n• Infosys MERN & Java Certifications",
+        text: "Om holds verified professional certifications:\n• Oracle OCI 2025 Certified Generative AI Professional\n• Oracle OCI 2025 Certified DevOps Professional\n• Google Cybersecurity Professional Certificate\n• Infosys Java & MERN Stack Certifications 📜",
         action: { type: "navigate", target: "/about", label: "View Certifications →" },
       };
     }
 
-    // Coding / LeetCode / HackerRank / DSA
+    // Website: What is this website built with?
+    if (
+      q.includes("this website") ||
+      q.includes("this portfolio") ||
+      q.includes("built with") ||
+      q.includes("how was this made") ||
+      q.includes("three.js") ||
+      q.includes("3d world")
+    ) {
+      return {
+        text: "This website is Om's 3D developer portfolio built with React.js, Three.js, React Three Fiber, and Tailwind CSS! I'm Emmy, your AI guide living inside it. 🌴",
+        action: null,
+      };
+    }
+
+    // Contact: Can I contact Om?
+    if (
+      q.includes("can i contact") ||
+      q.includes("contact om") ||
+      q.includes("email") ||
+      q.includes("message") ||
+      q.includes("hire") ||
+      q.includes("talk")
+    ) {
+      return {
+        text: "You can use the Contact section. If you'd like, I can guide you there. 💬",
+        action: { type: "navigate", target: "/contact", label: "Go to Contact Section →" },
+      };
+    }
+
+    // GitHub: Show me his GitHub
+    if (q.includes("github") || q.includes("repo") || q.includes("code")) {
+      return {
+        text: "You can check out Om's GitHub profile at github.com/Omcs23 to view his repositories and open-source projects! 🚀",
+        action: {
+          type: "download",
+          target: "https://github.com/Omcs23",
+          label: "Open GitHub Profile ↗",
+        },
+      };
+    }
+
+    // LeetCode / Coding stats
     if (
       q.includes("leetcode") ||
       q.includes("hackerrank") ||
-      q.includes("dsa") ||
       q.includes("codeforces") ||
-      q.includes("problem") ||
-      q.includes("algo")
+      q.includes("dsa") ||
+      q.includes("coding")
     ) {
       return {
-        text: "Om actively practices Data Structures & Algorithms on LeetCode, Codeforces, and HackerRank with hundreds of problems solved!",
+        text: `Om is an active competitive programmer on LeetCode (@${portfolioData.codingProfiles.leetcode.username} - 150+ solved), Codeforces, and HackerRank! 💻`,
         action: { type: "navigate", target: "/about", label: "View Coding Stats →" },
       };
     }
 
-    // Education / College / University / GLA / Study
+    // Education / About
     if (
       q.includes("education") ||
       q.includes("college") ||
       q.includes("gla") ||
       q.includes("university") ||
-      q.includes("study") ||
       q.includes("degree") ||
-      q.includes("btech") ||
-      q.includes("school")
+      q.includes("about") ||
+      q.includes("who is om")
     ) {
       return {
-        text: "🎓 B.Tech in Computer Science & Engineering\n📍 GLA University (2023 - 2027)\nFocusing on Data Structures, Algorithms, Software Engineering, and Web Systems.",
-        action: { type: "navigate", target: "/about", label: "View Education Timeline →" },
+        text: "Om Sharma is a B.Tech Computer Science & Engineering student at GLA University, Mathura (2023 - 2027), focusing on Web Development, AI, and Software Engineering! 🎓",
+        action: { type: "navigate", target: "/about", label: "Learn About Om →" },
       };
     }
 
-    // Resume / CV / PDF / Download
-    if (
-      q.includes("resume") ||
-      q.includes("cv") ||
-      q.includes("pdf") ||
-      q.includes("download")
-    ) {
+    // Resume
+    if (q.includes("resume") || q.includes("cv") || q.includes("pdf")) {
       return {
         text: "You can view or download Om's official Resume PDF directly:",
         action: {
@@ -627,24 +626,7 @@ If asked about contact or projects, suggest navigating to the Projects page or C
       };
     }
 
-    // Contact / Email / Talk / Hire / Reach / Social
-    if (
-      q.includes("contact") ||
-      q.includes("email") ||
-      q.includes("hire") ||
-      q.includes("reach") ||
-      q.includes("talk") ||
-      q.includes("message") ||
-      q.includes("touch") ||
-      q.includes("social")
-    ) {
-      return {
-        text: "Looking for a talented developer or want to get in touch? Om is open for internships, opportunities, and projects!",
-        action: { type: "navigate", target: "/contact", label: "💬 Open Contact Form →" },
-      };
-    }
-
-    // Greetings: Hi, Hello, Hey, Yo
+    // Greetings: Hi / Hello / Hey
     if (
       q.includes("hi") ||
       q.includes("hello") ||
@@ -653,31 +635,47 @@ If asked about contact or projects, suggest navigating to the Projects page or C
       q.includes("sup")
     ) {
       return {
-        text: "Hey there! 🐒✨ I'm Emmy, super excited to guide you! I can show you Om's skills, projects, certifications, education, resume, or contact details!",
+        text: "Hey there! 👋 I'm Emmy! Ask me about Om's projects, skills, certifications, or portfolio!",
         action: null,
       };
     }
 
-    // Energetic, friendly English fallback
+    // Unrelated questions redirect (weather, math, general AI trivia)
+    if (
+      q.includes("weather") ||
+      q.includes("temperature") ||
+      q.includes("math") ||
+      q.includes("solve") ||
+      q.includes("write code") ||
+      q.includes("python script") ||
+      q.includes("capital") ||
+      q.includes("president") ||
+      q.includes("news")
+    ) {
+      return {
+        text: "I'm mainly here to show you around Om's world 😄 Ask me about his projects, skills, certifications, or portfolio.",
+        action: null,
+      };
+    }
+
+    // Honest missing information fallback
     return {
-      text: "Emmy is swinging high on Om's 3D island! 🌴 I'm specialized in guiding you around Om's portfolio. Feel free to ask me anything about Om's work, or tap one of the quick options!",
+      text: "I'm not seeing that information in Om's portfolio yet. You can check the Projects section or ask me about something else. 🙂",
       action: null,
     };
   };
 
-  // Predefined answers dictionary
+  // Predefined options handler
   const handleOptionClick = (option) => {
     const wasSleeping = isSleeping;
     if (isSleeping) {
       setIsSleeping(false);
     }
 
-    // Reset inactivity timer on interaction
     startInactivityTimer();
 
     const userMessage = { sender: "user", text: option.label };
 
-    // If Emmy was sleeping, add funny wake-up message first
     if (wasSleeping) {
       const randomWakeUp =
         WAKE_UP_MESSAGES[Math.floor(Math.random() * WAKE_UP_MESSAGES.length)];
@@ -697,6 +695,18 @@ If asked about contact or projects, suggest navigating to the Projects page or C
       let botResponse = { sender: "robot", text: "", action: null };
 
       switch (option.id) {
+        case "home":
+          botResponse = {
+            sender: "robot",
+            text: "Welcome to Om's 3D Island Home! 🌴 Drag horizontally across the screen to rotate the 3D island, navigate around, or ask me about Om's work anytime! ✨",
+            action: {
+              type: "navigate",
+              target: "/",
+              label: "🏠 Explore 3D World",
+            },
+          };
+          break;
+
         case "about":
           botResponse = {
             sender: "robot",
@@ -712,7 +722,7 @@ If asked about contact or projects, suggest navigating to the Projects page or C
         case "skills":
           botResponse = {
             sender: "robot",
-            text: "Om's primary tech stack includes:\n• MERN (MongoDB, Express, React, Node.js)\n• Java & Object-Oriented Software Design\n• Python & Web Automation\n• Cloud & AI (Oracle OCI GenAI Certified)",
+            text: "Om's key tech stack includes:\n• MERN (MongoDB, Express, React, Node.js)\n• Java & Object-Oriented Software Design\n• Python & Web Automation\n• Cloud & AI (Oracle OCI GenAI Certified)",
             action: {
               type: "navigate",
               target: "/about",
@@ -724,7 +734,7 @@ If asked about contact or projects, suggest navigating to the Projects page or C
         case "projects":
           botResponse = {
             sender: "robot",
-            text: "Om has built impressive web & software projects:\n1. 🏥 Hospital Management System\n2. 🤖 Instagram Automation Bot\n3. 🌐 3D Interactive Portfolio",
+            text: "Om has built several projects, including his 3D developer portfolio. Want me to walk you through the interesting ones? 🚀",
             action: {
               type: "navigate",
               target: "/projects",
@@ -748,7 +758,7 @@ If asked about contact or projects, suggest navigating to the Projects page or C
         case "coding":
           botResponse = {
             sender: "robot",
-            text: "Om is an active competitive programmer on LeetCode, Codeforces, and HackerRank with hundreds of algorithms solved!",
+            text: "Om actively practices Data Structures & Algorithms on LeetCode (@OmSharma152 - 150+ solved), Codeforces, and HackerRank (5-Star in Java & Python)! 💻",
             action: {
               type: "navigate",
               target: "/about",
@@ -769,13 +779,73 @@ If asked about contact or projects, suggest navigating to the Projects page or C
           };
           break;
 
+        case "github":
+          botResponse = {
+            sender: "robot",
+            text: "Check out Om's open-source projects, repositories, and contributions on GitHub! 🐙",
+            action: {
+              type: "download",
+              target: portfolioData.links.github,
+              label: "Open GitHub Profile ↗",
+            },
+          };
+          break;
+
+        case "leetcode":
+          botResponse = {
+            sender: "robot",
+            text: "Om actively solves Data Structures & Algorithms on LeetCode (@OmSharma152) with 150+ problems solved! ⚡",
+            action: {
+              type: "download",
+              target: portfolioData.codingProfiles.leetcode.url,
+              label: "Open LeetCode Profile ↗",
+            },
+          };
+          break;
+
+        case "codeforces":
+          botResponse = {
+            sender: "robot",
+            text: "Check out Om's competitive programming profile on Codeforces (@OmSharma_cs)! 🏆",
+            action: {
+              type: "download",
+              target: portfolioData.codingProfiles.codeforces.url,
+              label: "Open Codeforces Profile ↗",
+            },
+          };
+          break;
+
+        case "hackerrank":
+          botResponse = {
+            sender: "robot",
+            text: "Om holds 5-Star Badges in Java & Python on HackerRank (@iOmSharma52)! ⭐",
+            action: {
+              type: "download",
+              target: portfolioData.codingProfiles.hackerrank.url,
+              label: "Open HackerRank Profile ↗",
+            },
+          };
+          break;
+
+        case "instagram":
+          botResponse = {
+            sender: "robot",
+            text: "Connect with Om or check out his Instagram automation work on Instagram! 📸",
+            action: {
+              type: "download",
+              target: portfolioData.contact.instagram || "https://www.instagram.com/om.chaturvedi52?stkn=MTN4dDhjdm4xNGJtZg==",
+              label: "Open Instagram Profile ↗",
+            },
+          };
+          break;
+
         case "resume":
           botResponse = {
             sender: "robot",
             text: "You can view or download Om's official Resume PDF directly:",
             action: {
               type: "download",
-              target: "/Om_Sharma_Resume.pdf",
+              target: portfolioData.links.resume,
               label: "📄 Open Resume PDF",
             },
           };
@@ -793,10 +863,21 @@ If asked about contact or projects, suggest navigating to the Projects page or C
           };
           break;
 
+        case "ask":
+          botResponse = {
+            sender: "robot",
+            text: "Ask me anything! For example: 'What projects has Om built?' or 'What technologies does he know?' 😄",
+            action: null,
+          };
+          setTimeout(() => {
+            textInputRef.current?.focus();
+          }, 100);
+          break;
+
         default:
           botResponse = {
             sender: "robot",
-            text: "Emmy is right here! 🐒✨ How else can I assist you today?",
+            text: "Emmy is right here! 🐒✨ Ask me anything about Om's projects or skills!",
             action: null,
           };
       }
@@ -804,9 +885,8 @@ If asked about contact or projects, suggest navigating to the Projects page or C
       setChatHistory((prev) => [...prev, botResponse]);
       setIsTyping(false);
 
-      // Re-arm inactivity timer after answering
       startInactivityTimer();
-    }, 450);
+    }, 400);
   };
 
   // Handle custom user typed message submission
@@ -901,7 +981,7 @@ If asked about contact or projects, suggest navigating to the Projects page or C
     <aside
       aria-label="Emmy Island Guide"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
-      className={`fixed bottom-6 sm:bottom-8 left-4 sm:left-12 z-[900] flex flex-col items-start pointer-events-none transition-all duration-1000 ${
+      className={`fixed bottom-6 sm:bottom-8 left-4 sm:left-12 lg:left-[calc(50vw-29rem)] z-[900] flex flex-col items-start pointer-events-none transition-all duration-1000 ${
         isInitialFloating && !isOpen ? "animate-monkey-entry-wave" : ""
       }`}
     >
@@ -1059,6 +1139,7 @@ If asked about contact or projects, suggest navigating to the Projects page or C
             }`}
           >
             <input
+              ref={textInputRef}
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}

@@ -188,46 +188,6 @@ PROFILES:
         </div>
       </div>
 
-      {/* Profiles & Links Section - Desktop / Laptop Only */}
-      <div className="hidden md:flex flex-col py-8">
-        <h3 className="subhead-text">Coding & Social Profiles</h3>
-        <p className={`mt-2 text-sm ${isNight ? "text-slate-400" : "text-slate-500"}`}>
-          Connect with me across competitive programming platforms and social networks:
-        </p>
-
-
-        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-          {socialLinks
-            .filter((s) => s.name !== "Contact")
-            .map((profile) => (
-              <a
-                key={profile.name}
-                href={profile.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`p-3.5 sm:p-4 rounded-xl border flex flex-col items-center justify-center gap-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${
-                  isNight
-                    ? "bg-slate-900/80 border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/80"
-                    : "bg-white border-slate-200/80 hover:border-blue-400 hover:shadow-blue-500/10"
-                }`}
-              >
-                <img
-                  src={profile.iconUrl}
-                  alt={profile.name}
-                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain"
-                />
-                <span
-                  className={`text-xs font-semibold font-poppins ${
-                    isNight ? "text-slate-200" : "text-slate-700"
-                  }`}
-                >
-                  {profile.name}
-                </span>
-              </a>
-            ))}
-        </div>
-      </div>
-
       {/* Coding Journey & Statistics Section */}
       <CodingJourney />
 

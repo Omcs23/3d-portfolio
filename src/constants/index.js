@@ -258,3 +258,65 @@ export const projects = [
         link: 'https://github.com/Omcs23/instagram-automation-bot',
     }
 ];
+
+export const portfolioData = {
+    developer: {
+        name: "Om Sharma",
+        role: "Full-Stack Developer & AI Explorer",
+        degree: "B.Tech CSE",
+        fullDegree: "Bachelor of Technology (B.Tech) - CSE",
+        university: "GLA University, Mathura",
+        graduationYear: "2027",
+        years: "2023 - 2027",
+        location: "Mathura, India",
+        tagline: "Building web experiences, exploring AI, solving problems.",
+        bio: "Om Sharma is a B.Tech Computer Science student at GLA University (2023 - 2027), specializing in Full-Stack Web Development (MERN), Java, Python, and AI automation.",
+    },
+    skills,
+    education,
+    certifications,
+    experiences,
+    projects,
+    socialLinks,
+    codingProfiles: {
+        leetcode: {
+            username: "OmSharma152",
+            solved: 154,
+            easy: 43,
+            medium: 66,
+            hard: 45,
+            streak: 4,
+            url: "https://leetcode.com/u/OmSharma152/",
+        },
+        codeforces: {
+            username: "OmSharma_cs",
+            url: "https://codeforces.com/profile/OmSharma_cs",
+        },
+        hackerrank: {
+            username: "iOmSharma52",
+            stars: 5,
+            url: "https://www.hackerrank.com/profile/iOmSharma52",
+        },
+    },
+    contact: {
+        email: "om.sharma_cs23@gla.ac.in",
+        github: "https://github.com/Omcs23",
+        linkedin: "https://www.linkedin.com/in/om-sharma-88109b296",
+        leetcode: "https://leetcode.com/u/OmSharma152/",
+        codeforces: "https://codeforces.com/profile/OmSharma_cs",
+        hackerrank: "https://www.hackerrank.com/profile/iOmSharma52",
+    },
+    links: {
+        resume: "/Om_Sharma_Resume.pdf",
+        github: "https://github.com/Omcs23",
+        linkedin: "https://www.linkedin.com/in/om-sharma-88109b296",
+    },
+    stack: {
+        frontend: ["React.js", "Three.js", "React Three Fiber", "Tailwind CSS"],
+        backend: ["Node.js", "Express.js", "MongoDB"],
+        languages: ["Java", "JavaScript", "Python"],
+        ai: ["Gemini"],
+        tools: ["Git", "GitHub", "Vite", "Linux"],
+    },
+};
+

@@ -109,6 +109,17 @@ body:has(.card[data-color="green"]:hover) {
     @apply font-extrabold flex-1 text-2xl sm:text-3xl max-md:text-center font-outfit;
   }
 
+  .icon-hover-animate {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.35s ease;
+  }
+
+  .group:hover .icon-hover-animate,
+  a:hover .icon-hover-animate,
+  button:hover .icon-hover-animate,
+  .icon-hover-animate:hover {
+    transform: translateY(-7px) scale(1.25) rotate(8deg);
+    filter: drop-shadow(0 8px 16px rgba(56, 189, 248, 0.6));
+  }
 }
 
 .glassmorphism {

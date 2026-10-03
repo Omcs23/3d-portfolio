@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import ThemeToggle from "./ThemeToggle";
@@ -5,13 +6,47 @@ import ThemeToggle from "./ThemeToggle";
 const Navbar = ({ onOpenTerminal }) => {
   const { isNight } = useTheme();
   const location = useLocation();
-  const isHome = location.pathname === "/";
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+
+          if (currentScrollY <= 15) {
+            // Near top of page -> Header always visible
+            setIsVisible(true);
+          } else if (currentScrollY < lastScrollY.current - 4) {
+            // Scrolling UP -> Reveal header immediately
+            setIsVisible(true);
+          } else if (currentScrollY > lastScrollY.current + 4 && currentScrollY > 60) {
+            // Scrolling DOWN -> Hide header smoothly
+            setIsVisible(false);
+          }
+
+          lastScrollY.current = currentScrollY;
+          ticking = false;
+        });
+
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header
-      className={`${
-        isHome ? "fixed top-0" : "sticky top-0"
-      } flex justify-between items-center sm:px-12 px-3 py-3 sm:py-4 max-w-5xl mx-auto z-50 right-0 left-0 w-full pointer-events-auto transition-all duration-300`}
+      className={`fixed top-0 right-0 left-0 w-full max-w-5xl mx-auto flex justify-between items-center sm:px-12 px-3 py-3 sm:py-4 z-50 pointer-events-auto transition-all duration-500 transform ${
+        isVisible
+          ? "translate-y-0 opacity-100"
+          : "-translate-y-full opacity-0 pointer-events-none"
+      }`}
     >
       {/* Home Brand Button */}
       <NavLink
