@@ -333,7 +333,7 @@ const PortfolioGuideRobot = () => {
   }, [isOpen]);
 
 
-  // 12-second inactivity sleep timer logic (both initial site load AND during chat)
+  // 60-second inactivity sleep timer logic (both initial site load AND during chat)
   const startInactivityTimer = () => {
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
@@ -351,7 +351,7 @@ const PortfolioGuideRobot = () => {
           },
         ]);
       }
-    }, 12000); // 12 seconds of no interaction -> sleep!
+    }, 60000); // 60 seconds of no interaction -> sleep!
   };
 
   useEffect(() => {
