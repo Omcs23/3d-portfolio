@@ -2,7 +2,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import ThemeToggle from "./ThemeToggle";
 
-const Navbar = () => {
+const Navbar = ({ onOpenTerminal }) => {
   const { isNight } = useTheme();
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -33,9 +33,9 @@ const Navbar = () => {
         </svg>
       </NavLink>
 
-      {/* Navigation & Theme Toggle */}
+      {/* Navigation & Action Buttons */}
       <div
-        className={`flex items-center gap-1.5 sm:gap-4 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border shadow-md sm:shadow-lg transition-all duration-300 shrink-0 ${
+        className={`flex items-center gap-1.5 sm:gap-3 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border shadow-md sm:shadow-lg transition-all duration-300 shrink-0 ${
           isNight
             ? "bg-slate-950/80 border-slate-800/80 backdrop-blur-xl shadow-slate-950/50"
             : "bg-white/80 border-slate-200/80 backdrop-blur-xl shadow-slate-200/50"
@@ -45,7 +45,7 @@ const Navbar = () => {
           <NavLink
             to="/about"
             className={({ isActive }) =>
-              `px-3 sm:px-4 py-1 sm:py-1.5 rounded-full font-bold text-xs sm:text-base transition-all duration-300 select-none outline-none ${
+              `px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full font-bold text-xs sm:text-base transition-all duration-300 select-none outline-none ${
                 isActive
                   ? isNight
                     ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-extrabold shadow-md shadow-indigo-950/70"
@@ -62,7 +62,7 @@ const Navbar = () => {
           <NavLink
             to="/projects"
             className={({ isActive }) =>
-              `px-3 sm:px-4 py-1 sm:py-1.5 rounded-full font-bold text-xs sm:text-base transition-all duration-300 select-none outline-none ${
+              `px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full font-bold text-xs sm:text-base transition-all duration-300 select-none outline-none ${
                 isActive
                   ? isNight
                     ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-extrabold shadow-md shadow-indigo-950/70"
@@ -97,6 +97,21 @@ const Navbar = () => {
 
         <div className="h-4 sm:h-5 w-[1px] bg-slate-300 dark:bg-slate-700 mx-0.5" />
 
+        {/* Developer Terminal Trigger Button */}
+        <button
+          onClick={onOpenTerminal}
+          type="button"
+          title="Open Developer Terminal (Ctrl+K)"
+          className={`px-2.5 py-1 rounded-full font-mono font-bold text-xs flex items-center gap-1.5 transition-all duration-300 select-none outline-none active:scale-95 ${
+            isNight
+              ? "bg-slate-900 text-cyan-400 border border-cyan-500/30 hover:border-cyan-400 hover:bg-slate-800 shadow-sm"
+              : "bg-slate-100 text-cyan-700 border border-cyan-500/40 hover:border-cyan-600 hover:bg-white shadow-sm"
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          <span>&gt;_ CLI</span>
+        </button>
+
         <ThemeToggle />
       </div>
     </header>
@@ -104,5 +119,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-

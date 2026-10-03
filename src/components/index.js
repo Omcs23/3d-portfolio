@@ -10,6 +10,7 @@ import CodingJourney from "./CodingJourney/CodingJourney";
 import PortfolioGuideRobot from "./PortfolioGuideRobot";
 import MeteorShower from "./MeteorShower";
 import BadgeModal from "./BadgeModal";
+import DevTerminal from "./DevTerminal";
 
 export {
     CTA,
@@ -23,5 +24,6 @@ export {
     CodingJourney,
     PortfolioGuideRobot,
     MeteorShower,
-    BadgeModal
+    BadgeModal,
+    DevTerminal
 }
