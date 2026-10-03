@@ -1,15 +1,17 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import { useTheme } from "../../context/ThemeContext";
 
 const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
   const { isNight } = useTheme();
   const [activeTab, setActiveTab] = useState("cumulative"); // "cumulative" | "daily" | "difficulty"
   const [hoveredPoint, setHoveredPoint] = useState(null);
+  const [mouseX, setMouseX] = useState(null);
+  const svgRef = useRef(null);
 
-  const totalSolved = stats?.totalSolved || 115;
-  const easySolved = stats?.easySolved || 35;
-  const mediumSolved = stats?.mediumSolved || 55;
-  const hardSolved = stats?.hardSolved || 25;
+  const totalSolved = stats?.totalSolved || 78;
+  const easySolved = stats?.easySolved || 30;
+  const mediumSolved = stats?.mediumSolved || 34;
+  const hardSolved = stats?.hardSolved || 14;
 
   // Process submission calendar to generate sorted time series data points
   const graphData = useMemo(() => {
@@ -26,7 +28,6 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
     rawEntries.sort((a, b) => a.ts - b.ts);
 
     if (rawEntries.length === 0) {
-      // Fallback data if no submissions exist
       const now = Date.now();
       const oneDay = 86400 * 1000;
       const fake = [
@@ -40,7 +41,6 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
       rawEntries.push(...fake);
     }
 
-    // Compute cumulative solved up to totalSolved
     const totalRawCount = rawEntries.reduce((acc, curr) => acc + curr.count, 0);
     const scalingFactor = totalRawCount > 0 ? totalSolved / totalRawCount : 1;
 
@@ -58,12 +58,10 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
       });
 
       runningSum += Math.round(item.count * scalingFactor);
-      // Ensure last point hits exact totalSolved
       const cumulative = idx === rawEntries.length - 1 ? totalSolved : Math.min(runningSum, totalSolved);
 
-      // Estimate difficulty split progress based on ratios
-      const easy = Math.round(cumulative * (easySolved / totalSolved));
-      const medium = Math.round(cumulative * (mediumSolved / totalSolved));
+      const easy = Math.round(cumulative * (easySolved / (totalSolved || 1)));
+      const medium = Math.round(cumulative * (mediumSolved / (totalSolved || 1)));
       const hard = Math.max(0, cumulative - easy - medium);
 
       return {
@@ -83,43 +81,35 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
 
   // SVG dimensions
   const svgWidth = 800;
-  const svgHeight = 240;
-  const padding = { top: 30, right: 30, bottom: 40, left: 45 };
+  const svgHeight = 250;
+  const padding = { top: 30, right: 30, bottom: 45, left: 45 };
   const graphW = svgWidth - padding.left - padding.right;
   const graphH = svgHeight - padding.top - padding.bottom;
 
-  // Determine Max Y values based on active tab
+  // Max Y values
   const maxY = useMemo(() => {
     if (activeTab === "cumulative") {
       const maxVal = Math.max(...graphData.map((d) => d.cumulative), totalSolved);
-      return Math.ceil(maxVal * 1.1);
+      return Math.ceil(maxVal * 1.12);
     } else if (activeTab === "daily") {
       const maxVal = Math.max(...graphData.map((d) => d.daily), 10);
       return Math.ceil(maxVal * 1.25);
     } else {
-      // difficulty
       const maxVal = Math.max(...graphData.map((d) => d.medium), mediumSolved);
       return Math.ceil(maxVal * 1.2);
     }
   }, [activeTab, graphData, totalSolved, mediumSolved]);
 
-  // Map data coordinates to SVG space
+  // Map coordinates
   const coords = useMemo(() => {
     const len = graphData.length;
     return graphData.map((d, i) => {
-      const x =
-        padding.left + (len > 1 ? (i / (len - 1)) * graphW : graphW / 2);
-
-      const yCum =
-        padding.top + graphH - (d.cumulative / maxY) * graphH;
-      const yDaily =
-        padding.top + graphH - (d.daily / maxY) * graphH;
-      const yEasy =
-        padding.top + graphH - (d.easy / maxY) * graphH;
-      const yMed =
-        padding.top + graphH - (d.medium / maxY) * graphH;
-      const yHard =
-        padding.top + graphH - (d.hard / maxY) * graphH;
+      const x = padding.left + (len > 1 ? (i / (len - 1)) * graphW : graphW / 2);
+      const yCum = padding.top + graphH - (d.cumulative / maxY) * graphH;
+      const yDaily = padding.top + graphH - (d.daily / maxY) * graphH;
+      const yEasy = padding.top + graphH - (d.easy / maxY) * graphH;
+      const yMed = padding.top + graphH - (d.medium / maxY) * graphH;
+      const yHard = padding.top + graphH - (d.hard / maxY) * graphH;
 
       return {
         ...d,
@@ -133,7 +123,7 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
     });
   }, [graphData, graphW, graphH, maxY, padding.left, padding.top]);
 
-  // Cubic Bezier curve path generator
+  // Cubic Bezier path generator
   const createSmoothPath = (pts, keyY) => {
     if (!pts || pts.length === 0) return "";
     if (pts.length === 1) return `M ${pts[0].x} ${pts[0][keyY]}`;
@@ -147,19 +137,15 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
 
       const cp1x = p1.x + (p2.x - p0.x) / 6;
       const cp1y = p1[keyY] + (p2[keyY] - p0[keyY]) / 6;
-
       const cp2x = p2.x - (p3.x - p1.x) / 6;
       const cp2y = p2[keyY] - (p3[keyY] - p1[keyY]) / 6;
 
-      d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(
-        1
-      )} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2[keyY].toFixed(1)}`;
+      d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2[keyY].toFixed(1)}`;
     }
     return d;
   };
 
-  // Area under path generator
-  const createAreaPath = (linePath, pts, keyY) => {
+  const createAreaPath = (linePath, pts) => {
     if (!pts || pts.length === 0) return "";
     const firstX = pts[0].x.toFixed(1);
     const lastX = pts[pts.length - 1].x.toFixed(1);
@@ -169,173 +155,232 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
   };
 
   const cumulativeLine = createSmoothPath(coords, "yCum");
-  const cumulativeArea = createAreaPath(cumulativeLine, coords, "yCum");
+  const cumulativeArea = createAreaPath(cumulativeLine, coords);
 
   const dailyLine = createSmoothPath(coords, "yDaily");
-  const dailyArea = createAreaPath(dailyLine, coords, "yDaily");
+  const dailyArea = createAreaPath(dailyLine, coords);
 
   const easyLine = createSmoothPath(coords, "yEasy");
   const medLine = createSmoothPath(coords, "yMed");
   const hardLine = createSmoothPath(coords, "yHard");
 
-  // Y-axis grid ticks
   const gridTicks = [0, 0.25, 0.5, 0.75, 1].map((pct) => ({
     val: Math.round(maxY * pct),
     y: padding.top + graphH - pct * graphH,
   }));
 
-  // Peak daily solved
   const peakDaily = Math.max(...graphData.map((d) => d.daily), 0);
 
+  // Handle Mouse Move over SVG for Crosshair Tracking
+  const handleMouseMove = (e) => {
+    if (!svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const clientX = e.clientX - rect.left;
+    const scaleX = svgWidth / rect.width;
+    const svgX = clientX * scaleX;
+
+    setMouseX(svgX);
+
+    // Find closest data point
+    let closest = coords[0];
+    let minDistance = Infinity;
+
+    coords.forEach((pt) => {
+      const dist = Math.abs(pt.x - svgX);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closest = pt;
+      }
+    });
+
+    if (closest) {
+      setHoveredPoint(closest);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredPoint(null);
+    setMouseX(null);
+  };
+
   return (
-    <div className="flex flex-col gap-4 mt-2">
+    <div className="flex flex-col gap-4 mt-3">
       {/* View Switcher Tabs */}
-      <div className="w-full overflow-x-auto pb-1.5 pt-0.5 no-scrollbar">
-        <div
-          className={`flex items-center gap-1.5 p-1.5 rounded-xl border w-full sm:w-auto min-w-max justify-start shrink-0 ${
-            isNight ? "bg-slate-950 border-slate-800" : "bg-slate-100 border-slate-200"
-          }`}
-        >
-          <button
-            onClick={() => setActiveTab("cumulative")}
-            className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-center ${
-              activeTab === "cumulative"
-                ? "bg-blue-500 text-white shadow-sm"
-                : isNight
-                ? "text-slate-400 hover:text-slate-200"
-                : "text-slate-600 hover:text-slate-900"
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+          <span className={`text-xs font-bold font-mono uppercase tracking-wider ${isNight ? "text-slate-300" : "text-slate-700"}`}>
+            Analytics Mode
+          </span>
+        </div>
+
+        <div className="w-full sm:w-auto overflow-x-auto no-scrollbar">
+          <div
+            className={`flex items-center gap-1.5 p-1.5 rounded-xl border shrink-0 ${
+              isNight
+                ? "bg-slate-950/90 border-slate-800/90 shadow-inner"
+                : "bg-slate-100/90 border-slate-200/90"
             }`}
           >
-            📈 Cumulative
-          </button>
-          <button
-            onClick={() => setActiveTab("daily")}
-            className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-center ${
-              activeTab === "daily"
-                ? "bg-blue-500 text-white shadow-sm"
-                : isNight
-                ? "text-slate-400 hover:text-slate-200"
-                : "text-slate-600 hover:text-slate-900"
-            }`}
-          >
-            ⚡ Activity Spikes
-          </button>
-          <button
-            onClick={() => setActiveTab("difficulty")}
-            className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-center ${
-              activeTab === "difficulty"
-                ? "bg-blue-500 text-white shadow-sm"
-                : isNight
-                ? "text-slate-400 hover:text-slate-200"
-                : "text-slate-600 hover:text-slate-900"
-            }`}
-          >
-            🎯 Difficulty
-          </button>
+            <button
+              onClick={() => setActiveTab("cumulative")}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === "cumulative"
+                  ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-blue-500/25 scale-[1.02]"
+                  : isNight
+                  ? "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+              }`}
+            >
+              <span>📈 Cumulative</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("daily")}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === "daily"
+                  ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/25 scale-[1.02]"
+                  : isNight
+                  ? "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+              }`}
+            >
+              <span>⚡ Activity Spikes</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("difficulty")}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === "difficulty"
+                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25 scale-[1.02]"
+                  : isNight
+                  ? "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+              }`}
+            >
+              <span>🎯 Difficulty Split</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Stats Highlight Bar */}
+      {/* Modern High-Tech Metrics Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div
-          className={`p-3 rounded-xl border flex flex-col justify-between ${
-            isNight ? "bg-slate-950/60 border-slate-800/80" : "bg-slate-50/80 border-slate-200/80"
+          className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:border-blue-500/40 ${
+            isNight
+              ? "bg-slate-950/70 border-slate-800/80 shadow-md"
+              : "bg-slate-50/80 border-slate-200/80"
           }`}
         >
-          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
-            Total Target Solved
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+            Total Solved
           </span>
-          <div className="flex items-baseline gap-1 mt-1">
-            <span className="text-xl font-bold font-poppins text-blue-500">
+          <div className="flex items-baseline justify-between mt-1">
+            <span className="text-2xl font-extrabold font-outfit text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.2)]">
               {totalSolved}
             </span>
-            <span className="text-xs text-emerald-500 font-semibold">↑ 100%</span>
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">
+              100%
+            </span>
           </div>
         </div>
 
         <div
-          className={`p-3 rounded-xl border flex flex-col justify-between ${
-            isNight ? "bg-slate-950/60 border-slate-800/80" : "bg-slate-50/80 border-slate-200/80"
+          className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:border-amber-500/40 ${
+            isNight
+              ? "bg-slate-950/70 border-slate-800/80 shadow-md"
+              : "bg-slate-50/80 border-slate-200/80"
           }`}
         >
-          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
-            Single-Day Peak
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+            Peak Solved / Day
           </span>
-          <div className="flex items-baseline gap-1 mt-1">
-            <span className="text-xl font-bold font-poppins text-amber-500">
+          <div className="flex items-baseline justify-between mt-1">
+            <span className="text-2xl font-extrabold font-outfit text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.2)]">
               {peakDaily}
             </span>
-            <span className="text-xs text-slate-400">problems</span>
+            <span className="text-[11px] text-slate-400 font-mono">problems</span>
           </div>
         </div>
 
         <div
-          className={`p-3 rounded-xl border flex flex-col justify-between ${
-            isNight ? "bg-slate-950/60 border-slate-800/80" : "bg-slate-50/80 border-slate-200/80"
+          className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:border-emerald-500/40 ${
+            isNight
+              ? "bg-slate-950/70 border-slate-800/80 shadow-md"
+              : "bg-slate-50/80 border-slate-200/80"
           }`}
         >
-          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
-            Active Milestone
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+            Active Sessions
           </span>
-          <div className="flex items-baseline gap-1 mt-1">
-            <span className="text-xl font-bold font-poppins text-emerald-500">
+          <div className="flex items-baseline justify-between mt-1">
+            <span className="text-2xl font-extrabold font-outfit text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.2)]">
               {graphData.length}
             </span>
-            <span className="text-xs text-slate-400">active sessions</span>
+            <span className="text-[11px] text-emerald-400 font-mono font-medium">days active</span>
           </div>
         </div>
 
         <div
-          className={`p-3 rounded-xl border flex flex-col justify-between ${
-            isNight ? "bg-slate-950/60 border-slate-800/80" : "bg-slate-50/80 border-slate-200/80"
+          className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all duration-300 hover:border-indigo-500/40 ${
+            isNight
+              ? "bg-slate-950/70 border-slate-800/80 shadow-md"
+              : "bg-slate-50/80 border-slate-200/80"
           }`}
         >
-          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
             Med & Hard Ratio
           </span>
-          <div className="flex items-baseline gap-1 mt-1">
-            <span className="text-xl font-bold font-poppins text-indigo-400">
-              {Math.round(((mediumSolved + hardSolved) / totalSolved) * 100)}%
+          <div className="flex items-baseline justify-between mt-1">
+            <span className="text-2xl font-extrabold font-outfit text-indigo-400 drop-shadow-[0_0_10px_rgba(129,140,248,0.2)]">
+              {Math.round(((mediumSolved + hardSolved) / (totalSolved || 1)) * 100)}%
             </span>
-            <span className="text-xs text-slate-400">advanced & core</span>
+            <span className="text-[11px] text-slate-400 font-mono">core DSA</span>
           </div>
         </div>
       </div>
 
       {/* Main Graph Card Container */}
       <div
-        className={`p-4 sm:p-5 rounded-2xl border relative overflow-hidden transition-all shadow-md ${
-          isNight ? "bg-slate-950/80 border-slate-800" : "bg-slate-50/90 border-slate-200"
+        className={`p-4 sm:p-6 rounded-2xl border relative overflow-hidden transition-all shadow-xl backdrop-blur-md ${
+          isNight
+            ? "bg-slate-950/80 border-slate-800/90 shadow-slate-950/60"
+            : "bg-white/90 border-slate-200/90 shadow-slate-300/40"
         }`}
       >
-        {/* Line Chart SVG */}
-        <div className="w-full overflow-x-auto select-none">
+        {/* Line Chart SVG with Crosshair Mouse Tracking */}
+        <div className="w-full overflow-x-auto select-none no-scrollbar">
           <svg
+            ref={svgRef}
             viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-            className="w-full h-auto min-w-[650px] overflow-visible"
+            className="w-full h-auto min-w-[650px] overflow-visible cursor-crosshair"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
           >
             <defs>
-              {/* Cumulative Gradient */}
+              {/* Vibrant Dual-Tone Gradients */}
               <linearGradient id="cumGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.45" />
-                <stop offset="60%" stopColor="#6366f1" stopOpacity="0.15" />
+                <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.5" />
+                <stop offset="50%" stopColor="#6366f1" stopOpacity="0.2" />
                 <stop offset="100%" stopColor="#6366f1" stopOpacity="0.0" />
               </linearGradient>
 
-              {/* Daily Activity Gradient */}
               <linearGradient id="dailyGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.45" />
+                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.5" />
+                <stop offset="70%" stopColor="#d97706" stopOpacity="0.1" />
                 <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.0" />
               </linearGradient>
 
-              {/* Glow Filter */}
-              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              {/* Glowing Blur Filter */}
+              <filter id="glowEffect" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
               </filter>
             </defs>
 
-            {/* Horizontal Grid Lines & Y-Axis Labels */}
+            {/* Grid Background Lines */}
             {gridTicks.map((tick, i) => (
               <g key={`grid-${i}`}>
                 <line
@@ -343,16 +388,17 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
                   y1={tick.y}
                   x2={padding.left + graphW}
                   y2={tick.y}
-                  stroke={isNight ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)"}
+                  stroke={isNight ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)"}
                   strokeDasharray={i === 0 ? "0" : "4 4"}
                 />
                 <text
-                  x={padding.left - 10}
+                  x={padding.left - 12}
                   y={tick.y + 4}
                   textAnchor="end"
                   fontSize="10"
                   fontFamily="monospace"
-                  fill={isNight ? "#94a3b8" : "#64748b"}
+                  fontWeight="600"
+                  fill={isNight ? "#64748b" : "#94a3b8"}
                 >
                   {tick.val}
                 </text>
@@ -361,44 +407,52 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
 
             {/* X-Axis Date Labels */}
             {coords.map((pt, i) => {
-              // Render labels selectively so they don't overlap
               const step = Math.max(1, Math.floor(coords.length / 7));
               if (i % step !== 0 && i !== coords.length - 1) return null;
               return (
                 <text
                   key={`xlabel-${i}`}
                   x={pt.x}
-                  y={padding.top + graphH + 20}
+                  y={padding.top + graphH + 22}
                   textAnchor="middle"
                   fontSize="10"
                   fontFamily="sans-serif"
-                  fill={isNight ? "#94a3b8" : "#64748b"}
+                  fontWeight="500"
+                  fill={isNight ? "#64748b" : "#94a3b8"}
                 >
                   {pt.dateStr}
                 </text>
               );
             })}
 
-            {/* Graph Views Rendering */}
+            {/* Crosshair Vertical Scan Line */}
+            {hoveredPoint && (
+              <line
+                x1={hoveredPoint.x}
+                y1={padding.top}
+                x2={hoveredPoint.x}
+                y2={padding.top + graphH}
+                stroke={activeTab === "daily" ? "#f59e0b" : "#38bdf8"}
+                strokeWidth="1.5"
+                strokeDasharray="3 3"
+                opacity="0.85"
+              />
+            )}
 
             {/* TAB 1: CUMULATIVE GROWTH */}
             {activeTab === "cumulative" && (
               <g>
-                {/* Area Fill */}
                 <path d={cumulativeArea} fill="url(#cumGradient)" />
-
-                {/* Main Curve Line */}
                 <path
                   d={cumulativeLine}
                   fill="none"
                   stroke="#38bdf8"
-                  strokeWidth="3"
+                  strokeWidth="3.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  filter="url(#glow)"
+                  filter="url(#glowEffect)"
                 />
 
-                {/* Hover / Data Nodes */}
                 {coords.map((pt, i) => {
                   const isHovered = hoveredPoint?.ts === pt.ts;
                   return (
@@ -406,24 +460,24 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
                       <circle
                         cx={pt.x}
                         cy={pt.yCum}
-                        r={isHovered ? "6" : "3.5"}
+                        r={isHovered ? "7" : "3.5"}
                         fill={isHovered ? "#38bdf8" : "#0284c7"}
-                        stroke={isNight ? "#0f172a" : "#ffffff"}
-                        strokeWidth="2"
-                        className="transition-all duration-150 cursor-pointer"
-                        onMouseEnter={() => setHoveredPoint(pt)}
-                        onMouseLeave={() => setHoveredPoint(null)}
+                        stroke={isNight ? "#090d16" : "#ffffff"}
+                        strokeWidth="2.5"
+                        className="transition-all duration-200"
                       />
-                      {/* Invisible larger hit box for smooth hovering */}
-                      <circle
-                        cx={pt.x}
-                        cy={pt.yCum}
-                        r="14"
-                        fill="transparent"
-                        className="cursor-pointer"
-                        onMouseEnter={() => setHoveredPoint(pt)}
-                        onMouseLeave={() => setHoveredPoint(null)}
-                      />
+                      {isHovered && (
+                        <circle
+                          cx={pt.x}
+                          cy={pt.yCum}
+                          r="12"
+                          fill="none"
+                          stroke="#38bdf8"
+                          strokeWidth="1.5"
+                          opacity="0.5"
+                          className="animate-ping"
+                        />
+                      )}
                     </g>
                   );
                 })}
@@ -438,10 +492,10 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
                   d={dailyLine}
                   fill="none"
                   stroke="#f59e0b"
-                  strokeWidth="3"
+                  strokeWidth="3.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  filter="url(#glow)"
+                  filter="url(#glowEffect)"
                 />
 
                 {coords.map((pt, i) => {
@@ -451,22 +505,11 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
                       <circle
                         cx={pt.x}
                         cy={pt.yDaily}
-                        r={isHovered ? "6" : "3.5"}
+                        r={isHovered ? "7" : "3.5"}
                         fill={isHovered ? "#fbbf24" : "#d97706"}
-                        stroke={isNight ? "#0f172a" : "#ffffff"}
-                        strokeWidth="2"
-                        className="transition-all duration-150 cursor-pointer"
-                        onMouseEnter={() => setHoveredPoint(pt)}
-                        onMouseLeave={() => setHoveredPoint(null)}
-                      />
-                      <circle
-                        cx={pt.x}
-                        cy={pt.yDaily}
-                        r="14"
-                        fill="transparent"
-                        className="cursor-pointer"
-                        onMouseEnter={() => setHoveredPoint(pt)}
-                        onMouseLeave={() => setHoveredPoint(null)}
+                        stroke={isNight ? "#090d16" : "#ffffff"}
+                        strokeWidth="2.5"
+                        className="transition-all duration-200"
                       />
                     </g>
                   );
@@ -477,7 +520,6 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
             {/* TAB 3: DIFFICULTY BREAKDOWN */}
             {activeTab === "difficulty" && (
               <g>
-                {/* Easy Line */}
                 <path
                   d={easyLine}
                   fill="none"
@@ -485,16 +527,14 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
                   strokeWidth="2.5"
                   strokeLinecap="round"
                 />
-                {/* Medium Line */}
                 <path
                   d={medLine}
                   fill="none"
                   stroke="#f59e0b"
-                  strokeWidth="3"
+                  strokeWidth="3.5"
                   strokeLinecap="round"
-                  filter="url(#glow)"
+                  filter="url(#glowEffect)"
                 />
-                {/* Hard Line */}
                 <path
                   d={hardLine}
                   fill="none"
@@ -510,22 +550,10 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
                       <circle
                         cx={pt.x}
                         cy={pt.yMed}
-                        r={isHovered ? "6" : "3.5"}
+                        r={isHovered ? "7" : "3.5"}
                         fill="#f59e0b"
-                        stroke={isNight ? "#0f172a" : "#ffffff"}
-                        strokeWidth="2"
-                        className="cursor-pointer"
-                        onMouseEnter={() => setHoveredPoint(pt)}
-                        onMouseLeave={() => setHoveredPoint(null)}
-                      />
-                      <circle
-                        cx={pt.x}
-                        cy={pt.yMed}
-                        r="14"
-                        fill="transparent"
-                        className="cursor-pointer"
-                        onMouseEnter={() => setHoveredPoint(pt)}
-                        onMouseLeave={() => setHoveredPoint(null)}
+                        stroke={isNight ? "#090d16" : "#ffffff"}
+                        strokeWidth="2.5"
                       />
                     </g>
                   );
@@ -536,19 +564,19 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
         </div>
 
         {/* Legend Footer */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mt-3 pt-3 border-t border-slate-700/20 text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-3 border-t border-slate-700/20 text-xs">
           <div className="flex items-center gap-4">
             {activeTab === "cumulative" && (
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-1 rounded bg-sky-400" />
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
                 <span className={isNight ? "text-slate-300" : "text-slate-700"}>
-                  Cumulative Problems Line
+                  Cumulative Total Growth
                 </span>
               </div>
             )}
             {activeTab === "daily" && (
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-1 rounded bg-amber-400" />
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]" />
                 <span className={isNight ? "text-slate-300" : "text-slate-700"}>
                   Daily Solved Submissions
                 </span>
@@ -557,57 +585,67 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
             {activeTab === "difficulty" && (
               <>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
                   <span className={isNight ? "text-slate-300" : "text-slate-700"}>Easy</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.5)]" />
                   <span className={isNight ? "text-slate-300" : "text-slate-700"}>Medium</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.5)]" />
                   <span className={isNight ? "text-slate-300" : "text-slate-700"}>Hard</span>
                 </div>
               </>
             )}
           </div>
 
-          <span className={`text-[11px] ${isNight ? "text-slate-400" : "text-slate-500"}`}>
-            Hover over graph points for exact metrics
+          <span className={`text-[11px] font-mono ${isNight ? "text-slate-400" : "text-slate-500"}`}>
+            Hover or drag over graph for exact stats
           </span>
         </div>
 
-        {/* Interactive Floating Tooltip */}
-        {hoveredPoint && (
+        {/* Dynamic Glass Tooltip Bar */}
+        {hoveredPoint ? (
           <div
-            className={`mt-2 p-3 rounded-xl border shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 transition-all duration-200 animate-in fade-in ${
+            className={`mt-3 p-3.5 rounded-xl border shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-200 animate-in fade-in slide-in-from-bottom-2 ${
               isNight
-                ? "bg-slate-900 border-slate-700 text-slate-100 shadow-blue-950/40"
-                : "bg-white border-slate-200 text-slate-900 shadow-slate-300/50"
+                ? "bg-slate-900/90 border-slate-700/80 text-slate-100 shadow-blue-950/50 backdrop-blur-md"
+                : "bg-white border-slate-200 text-slate-900 shadow-slate-300/60"
             }`}
           >
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span className="font-semibold text-xs font-mono">
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
+              <span className="font-bold text-xs font-mono tracking-wide text-cyan-300">
                 {hoveredPoint.fullDateStr}
               </span>
             </div>
 
-            <div className="flex items-center gap-4 text-xs">
+            <div className="flex flex-wrap items-center gap-4 text-xs font-poppins">
               <div>
-                <span className="text-slate-400">Solved on day: </span>
-                <span className="font-bold text-amber-500">
-                  {hoveredPoint.daily} {hoveredPoint.daily === 1 ? "problem" : "problems"}
+                <span className="text-slate-400">Daily Solved: </span>
+                <span className="font-extrabold text-amber-400 font-mono">
+                  +{hoveredPoint.daily} {hoveredPoint.daily === 1 ? "problem" : "problems"}
                 </span>
               </div>
-              <div className="h-3 w-px bg-slate-700/40" />
+              <div className="h-3 w-px bg-slate-700/40 hidden sm:block" />
               <div>
-                <span className="text-slate-400">Total Cumulative: </span>
-                <span className="font-bold text-blue-500">
-                  {hoveredPoint.cumulative} solved
+                <span className="text-slate-400">Total Solved: </span>
+                <span className="font-extrabold text-cyan-400 font-mono">
+                  {hoveredPoint.cumulative}
                 </span>
+              </div>
+              <div className="h-3 w-px bg-slate-700/40 hidden sm:block" />
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] text-emerald-400 font-mono">E: {hoveredPoint.easy}</span>
+                <span className="text-[11px] text-amber-400 font-mono">M: {hoveredPoint.medium}</span>
+                <span className="text-[11px] text-rose-400 font-mono">H: {hoveredPoint.hard}</span>
               </div>
             </div>
+          </div>
+        ) : (
+          <div className="mt-3 p-3 text-center text-xs text-slate-400 font-mono bg-slate-900/40 rounded-xl border border-dashed border-slate-800/60">
+            💡 Drag cursor over the chart to inspect problem-solving velocity & milestones
           </div>
         )}
       </div>

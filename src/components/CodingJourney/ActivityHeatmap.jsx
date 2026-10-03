@@ -5,7 +5,6 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
   const { isNight } = useTheme();
   const [hoveredDay, setHoveredDay] = useState(null);
 
-  // Generate 365 days ending today
   const heatmapData = useMemo(() => {
     const activeDates = {};
     if (submissionCalendar) {
@@ -20,12 +19,9 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
 
     const today = new Date();
     const days = [];
-    
-    // Calculate start date (364 days ago)
     const startDate = new Date(today);
     startDate.setDate(today.getDate() - 364);
 
-    // Align start to the preceding Sunday to make a neat grid
     const dayOfWeek = startDate.getDay();
     startDate.setDate(startDate.getDate() - dayOfWeek);
 
@@ -44,13 +40,11 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
       currentIter.setDate(currentIter.getDate() + 1);
     }
 
-    // Group into weeks (columns of 7 days)
     const weeks = [];
     for (let i = 0; i < days.length; i += 7) {
       weeks.push(days.slice(i, i + 7));
     }
 
-    // Generate Month Labels
     const months = [];
     let currentMonth = -1;
 
@@ -75,22 +69,22 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
     if (isFuture) return "opacity-0 pointer-events-none";
     if (count === 0)
       return isNight
-        ? "bg-slate-800/70 border-slate-700/50"
+        ? "bg-slate-900/80 border-slate-800/60"
         : "bg-slate-200/80 border-slate-300/60";
     if (count === 1)
       return isNight
-        ? "bg-emerald-900/90 border-emerald-700/80 text-emerald-200"
+        ? "bg-emerald-950/90 border-emerald-800/80 text-emerald-300 shadow-[0_0_6px_rgba(16,185,129,0.2)]"
         : "bg-emerald-200 border-emerald-300 text-emerald-900";
     if (count <= 3)
       return isNight
-        ? "bg-emerald-700 border-emerald-600 text-emerald-100"
+        ? "bg-emerald-800/90 border-emerald-600/90 text-emerald-100 shadow-[0_0_8px_rgba(16,185,129,0.3)]"
         : "bg-emerald-400 border-emerald-500 text-emerald-900";
     if (count <= 5)
       return isNight
-        ? "bg-emerald-500 border-emerald-400 text-white"
+        ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_10px_rgba(16,185,129,0.4)]"
         : "bg-emerald-500 border-emerald-600 text-white";
     return isNight
-      ? "bg-emerald-400 border-emerald-300 text-slate-950 font-bold"
+      ? "bg-emerald-400 border-emerald-300 text-slate-950 font-bold shadow-[0_0_12px_rgba(52,211,153,0.6)]"
       : "bg-emerald-600 border-emerald-700 text-white font-bold";
   };
 
@@ -106,30 +100,31 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 mt-2">
       <div className="flex items-center justify-between">
-        <h4
-          className={`text-sm font-semibold tracking-wide font-poppins uppercase ${
-            isNight ? "text-slate-300" : "text-slate-700"
-          }`}
-        >
-          Yearly Activity Heatmap
-        </h4>
-        <span
-          className={`text-xs ${
-            isNight ? "text-slate-400" : "text-slate-500"
-          }`}
-        >
-          Past 365 Days
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+          <h4
+            className={`text-sm font-bold tracking-wider font-mono uppercase ${
+              isNight ? "text-slate-300" : "text-slate-700"
+            }`}
+          >
+            Yearly Activity Heatmap
+          </h4>
+        </div>
+        <span className="text-xs font-mono text-slate-400">
+          Past 365 Days Activity
         </span>
       </div>
 
       <div
-        className={`p-4 sm:p-5 rounded-xl border transition-colors overflow-x-auto relative ${
-          isNight ? "bg-slate-950/60 border-slate-800" : "bg-slate-50/80 border-slate-200"
+        className={`p-4 sm:p-5 rounded-2xl border transition-all overflow-x-auto relative backdrop-blur-md ${
+          isNight
+            ? "bg-slate-950/80 border-slate-800/90 shadow-xl"
+            : "bg-slate-50/90 border-slate-200/90 shadow-sm"
         }`}
       >
-        <div className="min-w-[680px] flex flex-col gap-2">
+        <div className="min-w-[680px] flex flex-col gap-2 select-none">
           {/* Month Labels Header */}
           <div className="flex text-xs pl-8 relative h-4">
             {heatmapData.months.map((m, idx) => (
@@ -137,7 +132,7 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
                 key={`${m.name}-${idx}`}
                 className={`absolute ${
                   isNight ? "text-slate-400" : "text-slate-500"
-                } font-medium text-[11px]`}
+                } font-bold font-mono text-[11px]`}
                 style={{ left: `${m.weekIndex * 15 + 32}px` }}
               >
                 {m.name}
@@ -148,14 +143,14 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
           {/* Grid Container with Day Labels */}
           <div className="flex gap-2">
             {/* Day Labels Column */}
-            <div className="flex flex-col gap-[3px] text-[10px] font-mono justify-between pr-1 select-none">
+            <div className="flex flex-col gap-[3px] text-[10px] font-mono justify-between pr-1">
               {daysOfWeek.map((day, i) => (
                 <span
                   key={day}
                   className={`h-3 flex items-center ${
                     i % 2 === 1
                       ? isNight
-                        ? "text-slate-400"
+                        ? "text-slate-400 font-semibold"
                         : "text-slate-500"
                       : "opacity-0"
                   }`}
@@ -166,15 +161,15 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
             </div>
 
             {/* Heatmap Weeks Grid */}
-            <div className="flex gap-[3px] flex-1">
+            <div className="flex gap-[3.5px] flex-1">
               {heatmapData.weeks.map((week, wIdx) => (
-                <div key={wIdx} className="flex flex-col gap-[3px]">
+                <div key={wIdx} className="flex flex-col gap-[3.5px]">
                   {week.map((day) => (
                     <div
                       key={day.dateStr}
                       onMouseEnter={() => !day.isFuture && setHoveredDay(day)}
                       onMouseLeave={() => setHoveredDay(null)}
-                      className={`w-3 h-3 rounded-[3px] border transition-transform duration-100 cursor-pointer hover:scale-125 hover:z-10 ${getIntensityClass(
+                      className={`w-3 h-3 rounded-[3px] border transition-all duration-150 cursor-pointer hover:scale-150 hover:z-20 ${getIntensityClass(
                         day.count,
                         day.isFuture
                       )}`}
@@ -188,32 +183,32 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
           {/* Heatmap Legend */}
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-700/20 text-xs">
             <span
-              className={`text-[11px] ${
+              className={`text-[11px] font-mono ${
                 isNight ? "text-slate-400" : "text-slate-500"
               }`}
             >
-              Hover over a day to view details
+              Hover over heatmap squares to inspect daily submissions
             </span>
 
-            <div className="flex items-center gap-1.5 text-[11px]">
+            <div className="flex items-center gap-2 text-[11px] font-mono">
               <span className={isNight ? "text-slate-400" : "text-slate-500"}>
                 Less
               </span>
               <div
                 className={`w-3 h-3 rounded-[3px] border ${
                   isNight
-                    ? "bg-slate-800/70 border-slate-700/50"
+                    ? "bg-slate-900/80 border-slate-800/60"
                     : "bg-slate-200/80 border-slate-300/60"
                 }`}
               />
               <div
                 className={`w-3 h-3 rounded-[3px] border ${
-                  isNight ? "bg-emerald-900/90 border-emerald-700/80" : "bg-emerald-200 border-emerald-300"
+                  isNight ? "bg-emerald-950/90 border-emerald-800/80" : "bg-emerald-200 border-emerald-300"
                 }`}
               />
               <div
                 className={`w-3 h-3 rounded-[3px] border ${
-                  isNight ? "bg-emerald-700 border-emerald-600" : "bg-emerald-400 border-emerald-500"
+                  isNight ? "bg-emerald-800/90 border-emerald-600/90" : "bg-emerald-400 border-emerald-500"
                 }`}
               />
               <div
@@ -233,20 +228,20 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
           </div>
         </div>
 
-        {/* Floating Tooltip */}
+        {/* Floating Day Detail Bar */}
         {hoveredDay && (
           <div
-            className={`mt-2 p-2.5 rounded-lg text-xs border shadow-xl flex items-center justify-between transition-opacity ${
+            className={`mt-3 p-3 rounded-xl text-xs border shadow-xl flex items-center justify-between transition-all animate-in fade-in ${
               isNight
-                ? "bg-slate-900 border-slate-700 text-slate-100"
+                ? "bg-slate-900/95 border-slate-700 text-slate-100 backdrop-blur-md"
                 : "bg-white border-slate-300 text-slate-900"
             }`}
           >
-            <span className="font-medium">{formatDate(hoveredDay.date)}</span>
-            <span className="font-bold text-emerald-500">
+            <span className="font-bold font-mono text-cyan-300">{formatDate(hoveredDay.date)}</span>
+            <span className="font-extrabold font-mono text-emerald-400">
               {hoveredDay.count === 0
-                ? "No submissions"
-                : `${hoveredDay.count} problem${
+                ? "No submissions logged"
+                : `+${hoveredDay.count} problem${
                     hoveredDay.count > 1 ? "s" : ""
                   } solved`}
             </span>
