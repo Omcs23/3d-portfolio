@@ -163,8 +163,6 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
     y: padding.top + graphH - pct * graphH,
   }));
 
-  const peakDaily = Math.max(...graphData.map((d) => d.daily), 0);
-
   const handleMouseMove = (e) => {
     if (!svgRef.current) return;
     const rect = svgRef.current.getBoundingClientRect();
@@ -205,44 +203,44 @@ const ConsistencyLineGraph = ({ submissionCalendar = {}, stats = {} }) => {
 
         <div className="w-full sm:w-auto overflow-x-auto no-scrollbar">
           <div
-            className={`flex items-center gap-1 p-1 rounded-xl border shrink-0 ${
+            className={`flex items-center gap-1.5 p-1.5 rounded-2xl border shrink-0 ${
               isNight
                 ? "bg-slate-950/90 border-slate-800"
-                : "bg-slate-100 border-slate-200"
+                : "bg-slate-200/70 border-slate-300/80"
             }`}
           >
             <button
               onClick={() => setActiveTab("cumulative")}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap shadow-sm ${
                 activeTab === "cumulative"
-                  ? "bg-blue-600 text-white shadow-sm"
+                  ? "bg-blue-600 text-white border border-blue-500 shadow-blue-500/20 scale-[1.01]"
                   : isNight
-                  ? "text-slate-400 hover:text-slate-200"
-                  : "text-slate-700 hover:text-slate-900"
+                  ? "bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80"
+                  : "bg-white hover:bg-slate-100 text-slate-800 border border-slate-300/80"
               }`}
             >
               <span>📈 Cumulative</span>
             </button>
             <button
               onClick={() => setActiveTab("daily")}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap shadow-sm ${
                 activeTab === "daily"
-                  ? "bg-amber-600 text-white shadow-sm"
+                  ? "bg-amber-600 text-white border border-amber-500 shadow-amber-500/20 scale-[1.01]"
                   : isNight
-                  ? "text-slate-400 hover:text-slate-200"
-                  : "text-slate-700 hover:text-slate-900"
+                  ? "bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80"
+                  : "bg-white hover:bg-slate-100 text-slate-800 border border-slate-300/80"
               }`}
             >
               <span>⚡ Activity Spikes</span>
             </button>
             <button
               onClick={() => setActiveTab("difficulty")}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap shadow-sm ${
                 activeTab === "difficulty"
-                  ? "bg-emerald-600 text-white shadow-sm"
+                  ? "bg-emerald-600 text-white border border-emerald-500 shadow-emerald-500/20 scale-[1.01]"
                   : isNight
-                  ? "text-slate-400 hover:text-slate-200"
-                  : "text-slate-700 hover:text-slate-900"
+                  ? "bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80"
+                  : "bg-white hover:bg-slate-100 text-slate-800 border border-slate-300/80"
               }`}
             >
               <span>🎯 Difficulty Split</span>
