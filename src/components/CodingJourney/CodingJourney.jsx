@@ -73,8 +73,8 @@ const CodingJourney = () => {
 
   const platforms = [
     { id: "leetcode", label: "LeetCode", active: true, icon: "⚡" },
-    { id: "hackerrank", label: "HackerRank", active: true, icon: "💚" },
     { id: "codeforces", label: "Codeforces", active: false, icon: "🏆" },
+    { id: "hackerrank", label: "HackerRank", active: false, icon: "💚" },
     { id: "github", label: "GitHub", active: false, icon: "🐙" },
   ];
 
