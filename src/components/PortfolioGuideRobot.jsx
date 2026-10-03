@@ -221,7 +221,7 @@ const PortfolioGuideRobot = () => {
   const optionsContainerRef = useRef(null);
   const inactivityTimerRef = useRef(null);
 
-  // Keep window at top scroll position (0,0) when typing keyboard opens on mobile
+  // Handle mobile visual viewport height changes when virtual keyboard opens/closes
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -229,48 +229,30 @@ const PortfolioGuideRobot = () => {
       if (window.visualViewport) {
         setViewportHeight(window.visualViewport.height);
       }
-      if (window.scrollY > 0 || window.scrollX > 0) {
-        window.scrollTo(0, 0);
-      }
-    };
-
-    const handleWindowScroll = () => {
-      if (isOpen || isInputFocused) {
-        if (window.scrollY > 0 || window.scrollX > 0) {
-          window.scrollTo(0, 0);
-        }
-      }
     };
 
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", handleViewportChange);
       window.visualViewport.addEventListener("scroll", handleViewportChange);
     }
-    window.addEventListener("scroll", handleWindowScroll, { passive: true });
 
     return () => {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener("resize", handleViewportChange);
         window.visualViewport.removeEventListener("scroll", handleViewportChange);
       }
-      window.removeEventListener("scroll", handleWindowScroll);
     };
-  }, [isOpen, isInputFocused]);
+  }, []);
 
   const handleInputFocus = () => {
     setIsInputFocused(true);
-    window.scrollTo(0, 0);
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-
-    requestAnimationFrame(() => window.scrollTo(0, 0));
-    setTimeout(() => window.scrollTo(0, 0), 100);
-    setTimeout(() => window.scrollTo(0, 0), 300);
+    if (location.pathname === "/") {
+      window.scrollTo(0, 0);
+    }
   };
 
   const handleInputBlur = () => {
     setIsInputFocused(false);
-    setTimeout(() => window.scrollTo(0, 0), 100);
   };
 
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Route, HashRouter as Router, Routes, useLocation } from "react-router-dom";
 import { Footer, Navbar, Preloader, PortfolioGuideRobot } from "./components";
 import { About, Contact, Home, Projects } from "./pages";
@@ -9,6 +9,10 @@ const MainContent = () => {
   const [hasPreloaded, setHasPreloaded] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <>
