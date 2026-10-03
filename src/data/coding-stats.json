@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-03T02:59:14.570Z",
+  "lastUpdated": "2026-10-03T05:05:41.190Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -11,9 +11,9 @@
         "easySolved": 43,
         "mediumSolved": 66,
         "hardSolved": 45,
-        "currentStreak": 4,
+        "currentStreak": 5,
         "longestStreak": 11,
-        "totalActiveDays": 28
+        "totalActiveDays": 29
       },
       "submissionCalendar": {
         "1759708800": 1,
@@ -43,9 +43,17 @@
         "1790640000": 3,
         "1790726400": 11,
         "1790812800": 1,
-        "1790899200": 3
+        "1790899200": 3,
+        "1790985600": 1
       },
       "recentSubmissions": [
+        {
+          "title": "Longest Valid Parentheses",
+          "titleSlug": "longest-valid-parentheses",
+          "timestamp": 1790998061,
+          "statusDisplay": "Accepted",
+          "lang": "java"
+        },
         {
           "title": "Subsets",
           "titleSlug": "subsets",
@@ -106,13 +114,6 @@
           "title": "Candy",
           "titleSlug": "candy",
           "timestamp": 1790736878,
-          "statusDisplay": "Accepted",
-          "lang": "java"
-        },
-        {
-          "title": "Palindrome Partitioning II",
-          "titleSlug": "palindrome-partitioning-ii",
-          "timestamp": 1790736793,
           "statusDisplay": "Accepted",
           "lang": "java"
         }
