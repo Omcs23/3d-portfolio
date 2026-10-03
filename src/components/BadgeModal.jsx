@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTheme } from "../context/ThemeContext";
 
 const BadgeModal = ({ cert, onClose }) => {
@@ -11,6 +12,18 @@ const BadgeModal = ({ cert, onClose }) => {
     } else {
       setActiveTab(0);
     }
+  }, [cert]);
+
+  // Lock body scroll while modal is active
+  useEffect(() => {
+    if (!cert) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
   }, [cert]);
 
   useEffect(() => {
@@ -33,9 +46,9 @@ const BadgeModal = ({ cert, onClose }) => {
   const displayPlatform = currentBadge.verificationPlatform || cert.verificationPlatform || "Official";
   const displaySkills = currentBadge.skills || cert.skills;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn"
       onClick={onClose}
     >
       <div
@@ -254,7 +267,8 @@ const BadgeModal = ({ cert, onClose }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

@@ -263,8 +263,8 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Enable hardware acceleration for smooth 60fps scrolling */
-main, section, header, nav, aside {
+/* Enable hardware acceleration on demand for smooth 60fps scrolling without breaking fixed positioning */
+.gpu-accelerated {
   transform: translateZ(0);
   backface-visibility: hidden;
 }

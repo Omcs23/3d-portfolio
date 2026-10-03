@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 
@@ -896,10 +897,11 @@ If asked about contact or projects, suggest navigating to the Projects page or C
     480
   );
 
-  return (
+  return createPortal(
     <aside
       aria-label="Emmy Island Guide"
-      className={`fixed bottom-4 sm:bottom-6 left-0 right-0 w-full max-w-5xl mx-auto px-4 sm:px-16 z-[99] flex flex-col items-start pointer-events-none transition-all duration-1000 ${
+      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      className={`fixed bottom-6 sm:bottom-8 left-4 sm:left-12 z-[900] flex flex-col items-start pointer-events-none transition-all duration-1000 ${
         isInitialFloating && !isOpen ? "animate-monkey-entry-wave" : ""
       }`}
     >
@@ -1131,7 +1133,8 @@ If asked about contact or projects, suggest navigating to the Projects page or C
           <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} className="relative z-10" />
         </button>
       </div>
-    </aside>
+    </aside>,
+    document.body
   );
 };
 

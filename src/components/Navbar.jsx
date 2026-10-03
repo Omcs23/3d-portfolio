@@ -11,7 +11,7 @@ const Navbar = ({ onOpenTerminal }) => {
     <header
       className={`${
         isHome ? "fixed top-0" : "sticky top-0"
-      } flex justify-between items-center sm:px-12 px-3 py-3 sm:py-4 max-w-5xl mx-auto z-40 right-0 left-0 w-full pointer-events-auto transition-all duration-300`}
+      } flex justify-between items-center sm:px-12 px-3 py-3 sm:py-4 max-w-5xl mx-auto z-50 right-0 left-0 w-full pointer-events-auto transition-all duration-300`}
     >
       {/* Home Brand Button */}
       <NavLink

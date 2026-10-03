@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { useTheme } from "../context/ThemeContext";
 
 const DevTerminal = ({ isOpen, onClose }) => {
@@ -17,6 +18,18 @@ Press [ESC] or click '✕' to close terminal.`,
 
   const inputRef = useRef(null);
   const terminalEndRef = useRef(null);
+
+  // Lock body scroll when terminal modal is open
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
 
   // Auto-focus input when terminal opens
   useEffect(() => {
@@ -237,8 +250,8 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/65 backdrop-blur-sm animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-200">
       {/* Compact Spotlight Terminal Window Frame */}
       <div className="w-full max-w-xl h-[65vh] sm:h-[430px] bg-slate-950/95 backdrop-blur-xl rounded-xl border border-cyan-500/30 shadow-2xl shadow-cyan-950/60 flex flex-col overflow-hidden font-mono text-xs select-text">
         {/* Sleek Title Bar */}
@@ -438,7 +451,8 @@ Certified in GenAI (Oracle), DevOps (Oracle), & Cybersecurity (Google).`,
           </button>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
