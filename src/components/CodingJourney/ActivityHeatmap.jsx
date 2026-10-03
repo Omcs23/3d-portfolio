@@ -70,7 +70,7 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
     if (count === 0)
       return isNight
         ? "bg-slate-900/80 border-slate-800/60"
-        : "bg-slate-200/80 border-slate-300/60";
+        : "bg-slate-200 border-slate-300";
     if (count === 1)
       return isNight
         ? "bg-emerald-950/90 border-emerald-800/80 text-emerald-300 shadow-[0_0_6px_rgba(16,185,129,0.2)]"
@@ -78,7 +78,7 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
     if (count <= 3)
       return isNight
         ? "bg-emerald-800/90 border-emerald-600/90 text-emerald-100 shadow-[0_0_8px_rgba(16,185,129,0.3)]"
-        : "bg-emerald-400 border-emerald-500 text-emerald-900";
+        : "bg-emerald-300 border-emerald-400 text-emerald-950";
     if (count <= 5)
       return isNight
         ? "bg-emerald-500 border-emerald-400 text-white shadow-[0_0_10px_rgba(16,185,129,0.4)]"
@@ -100,40 +100,40 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="flex flex-col gap-3 mt-2">
+    <div className="flex flex-col gap-2.5 mt-1">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <h4
-            className={`text-sm font-bold tracking-wider font-mono uppercase ${
+            className={`text-xs font-bold tracking-wider font-mono uppercase ${
               isNight ? "text-slate-300" : "text-slate-700"
             }`}
           >
             Yearly Activity Heatmap
           </h4>
         </div>
-        <span className="text-xs font-mono text-slate-400">
-          Past 365 Days Activity
+        <span className={`text-xs font-mono ${isNight ? "text-slate-400" : "text-slate-600"}`}>
+          Past 365 Days
         </span>
       </div>
 
       <div
-        className={`p-4 sm:p-5 rounded-2xl border transition-all overflow-x-auto relative backdrop-blur-md ${
+        className={`p-3.5 sm:p-4 rounded-xl border transition-all overflow-x-auto relative backdrop-blur-md ${
           isNight
-            ? "bg-slate-950/80 border-slate-800/90 shadow-xl"
-            : "bg-slate-50/90 border-slate-200/90 shadow-sm"
+            ? "bg-slate-950/80 border-slate-800/90 shadow-md"
+            : "bg-slate-50 border-slate-200 shadow-sm"
         }`}
       >
-        <div className="min-w-[680px] flex flex-col gap-2 select-none">
+        <div className="min-w-[650px] flex flex-col gap-1.5 select-none">
           {/* Month Labels Header */}
           <div className="flex text-xs pl-8 relative h-4">
             {heatmapData.months.map((m, idx) => (
               <span
                 key={`${m.name}-${idx}`}
                 className={`absolute ${
-                  isNight ? "text-slate-400" : "text-slate-500"
+                  isNight ? "text-slate-400" : "text-slate-700"
                 } font-bold font-mono text-[11px]`}
-                style={{ left: `${m.weekIndex * 15 + 32}px` }}
+                style={{ left: `${m.weekIndex * 14.5 + 32}px` }}
               >
                 {m.name}
               </span>
@@ -151,7 +151,7 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
                     i % 2 === 1
                       ? isNight
                         ? "text-slate-400 font-semibold"
-                        : "text-slate-500"
+                        : "text-slate-700 font-bold"
                       : "opacity-0"
                   }`}
                 >
@@ -161,15 +161,15 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
             </div>
 
             {/* Heatmap Weeks Grid */}
-            <div className="flex gap-[3.5px] flex-1">
+            <div className="flex gap-[3px] flex-1">
               {heatmapData.weeks.map((week, wIdx) => (
-                <div key={wIdx} className="flex flex-col gap-[3.5px]">
+                <div key={wIdx} className="flex flex-col gap-[3px]">
                   {week.map((day) => (
                     <div
                       key={day.dateStr}
                       onMouseEnter={() => !day.isFuture && setHoveredDay(day)}
                       onMouseLeave={() => setHoveredDay(null)}
-                      className={`w-3 h-3 rounded-[3px] border transition-all duration-150 cursor-pointer hover:scale-150 hover:z-20 ${getIntensityClass(
+                      className={`w-3 h-3 rounded-[2.5px] border transition-all duration-150 cursor-pointer hover:scale-150 hover:z-20 ${getIntensityClass(
                         day.count,
                         day.isFuture
                       )}`}
@@ -181,47 +181,47 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
           </div>
 
           {/* Heatmap Legend */}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-700/20 text-xs">
+          <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
             <span
               className={`text-[11px] font-mono ${
-                isNight ? "text-slate-400" : "text-slate-500"
+                isNight ? "text-slate-400" : "text-slate-600"
               }`}
             >
-              Hover over heatmap squares to inspect daily submissions
+              Hover heatmap squares for daily details
             </span>
 
-            <div className="flex items-center gap-2 text-[11px] font-mono">
-              <span className={isNight ? "text-slate-400" : "text-slate-500"}>
+            <div className="flex items-center gap-1.5 text-[11px] font-mono">
+              <span className={isNight ? "text-slate-400" : "text-slate-700"}>
                 Less
               </span>
               <div
-                className={`w-3 h-3 rounded-[3px] border ${
+                className={`w-3 h-3 rounded-[2.5px] border ${
                   isNight
                     ? "bg-slate-900/80 border-slate-800/60"
-                    : "bg-slate-200/80 border-slate-300/60"
+                    : "bg-slate-200 border-slate-300"
                 }`}
               />
               <div
-                className={`w-3 h-3 rounded-[3px] border ${
+                className={`w-3 h-3 rounded-[2.5px] border ${
                   isNight ? "bg-emerald-950/90 border-emerald-800/80" : "bg-emerald-200 border-emerald-300"
                 }`}
               />
               <div
-                className={`w-3 h-3 rounded-[3px] border ${
-                  isNight ? "bg-emerald-800/90 border-emerald-600/90" : "bg-emerald-400 border-emerald-500"
+                className={`w-3 h-3 rounded-[2.5px] border ${
+                  isNight ? "bg-emerald-800/90 border-emerald-600/90" : "bg-emerald-300 border-emerald-400"
                 }`}
               />
               <div
-                className={`w-3 h-3 rounded-[3px] border ${
+                className={`w-3 h-3 rounded-[2.5px] border ${
                   isNight ? "bg-emerald-500 border-emerald-400" : "bg-emerald-500 border-emerald-600"
                 }`}
               />
               <div
-                className={`w-3 h-3 rounded-[3px] border ${
+                className={`w-3 h-3 rounded-[2.5px] border ${
                   isNight ? "bg-emerald-400 border-emerald-300" : "bg-emerald-600 border-emerald-700"
                 }`}
               />
-              <span className={isNight ? "text-slate-400" : "text-slate-500"}>
+              <span className={isNight ? "text-slate-400" : "text-slate-700"}>
                 More
               </span>
             </div>
@@ -231,16 +231,16 @@ const ActivityHeatmap = ({ submissionCalendar = {} }) => {
         {/* Floating Day Detail Bar */}
         {hoveredDay && (
           <div
-            className={`mt-3 p-3 rounded-xl text-xs border shadow-xl flex items-center justify-between transition-all animate-in fade-in ${
+            className={`mt-2 p-2.5 rounded-lg text-xs border shadow-md flex items-center justify-between transition-all ${
               isNight
-                ? "bg-slate-900/95 border-slate-700 text-slate-100 backdrop-blur-md"
+                ? "bg-slate-900 border-slate-700 text-slate-100"
                 : "bg-white border-slate-300 text-slate-900"
             }`}
           >
-            <span className="font-bold font-mono text-cyan-300">{formatDate(hoveredDay.date)}</span>
-            <span className="font-extrabold font-mono text-emerald-400">
+            <span className="font-bold font-mono text-blue-600 dark:text-cyan-400">{formatDate(hoveredDay.date)}</span>
+            <span className="font-bold font-mono text-emerald-700 dark:text-emerald-400">
               {hoveredDay.count === 0
-                ? "No submissions logged"
+                ? "No submissions"
                 : `+${hoveredDay.count} problem${
                     hoveredDay.count > 1 ? "s" : ""
                   } solved`}

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import ActivityHeatmap from "./ActivityHeatmap";
 import ConsistencyLineGraph from "./ConsistencyLineGraph";
-import RecentProblems from "./RecentProblems";
 import codingStatsData from "../../data/coding-stats.json";
 
 const CodingJourney = () => {
@@ -23,7 +22,6 @@ const CodingJourney = () => {
       totalActiveDays: 13,
     },
     submissionCalendar: {},
-    recentSubmissions: [],
   };
 
   const lastUpdated = codingStatsData?.lastUpdated
@@ -56,28 +54,28 @@ const CodingJourney = () => {
   const hardPct = totalSolved > 0 ? Math.round((hardSolved / totalSolved) * 100) : 0;
 
   return (
-    <section id="coding-journey" className="py-10 flex flex-col gap-8">
+    <section id="coding-journey" className="py-6 flex flex-col gap-5">
       {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold font-space uppercase tracking-wider bg-amber-500/10 text-amber-500 border border-amber-500/20 mb-2">
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 mb-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
             Live Competitive Programming
           </div>
-          <h3 className="subhead-text">Coding Journey & Statistics</h3>
+          <h3 className="subhead-text text-xl sm:text-2xl">Coding Journey & Statistics</h3>
           <p
-            className={`mt-1.5 text-sm ${
-              isNight ? "text-slate-400" : "text-slate-500"
+            className={`mt-0.5 text-xs sm:text-sm font-medium ${
+              isNight ? "text-slate-400" : "text-slate-600"
             }`}
           >
-            Real-time problem-solving activity, streaks, and platform contributions:
+            Real-time problem-solving activity, streaks, and platform metrics:
           </p>
         </div>
 
         {/* Platform Tabs */}
         <div
-          className={`flex items-center gap-1.5 p-1.5 rounded-2xl border max-w-full overflow-x-auto self-start sm:self-auto shrink-0 shadow-lg backdrop-blur-md ${
-            isNight ? "bg-slate-900/90 border-slate-800" : "bg-slate-100/90 border-slate-200"
+          className={`flex items-center gap-1 p-1 rounded-xl border max-w-full overflow-x-auto self-start sm:self-auto shrink-0 shadow-sm ${
+            isNight ? "bg-slate-900/90 border-slate-800" : "bg-slate-100 border-slate-200"
           }`}
         >
           {platforms.map((p) => (
@@ -85,26 +83,26 @@ const CodingJourney = () => {
               key={p.id}
               onClick={() => p.active && setActivePlatform(p.id)}
               disabled={!p.active}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex items-center gap-2 whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap ${
                 activePlatform === p.id && p.active
-                  ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 text-white shadow-md shadow-blue-500/25 scale-[1.02]"
+                  ? "bg-blue-600 text-white shadow-sm scale-[1.01]"
                   : p.active
                   ? isNight
                     ? "text-slate-300 hover:text-white hover:bg-slate-800/60"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+                    : "text-slate-700 hover:text-slate-900 hover:bg-white/80"
                   : isNight
                   ? "text-slate-600 cursor-not-allowed opacity-50"
                   : "text-slate-400 cursor-not-allowed opacity-50"
               }`}
             >
-              <span>{p.icon}</span>
+              <span className="text-xs">{p.icon}</span>
               <span>{p.label}</span>
               {!p.active && (
                 <span
-                  className={`text-[9px] px-1.5 py-0.5 rounded-full font-extrabold uppercase tracking-wider ${
+                  className={`text-[9px] px-1.5 py-0.2 rounded font-mono uppercase font-bold ${
                     isNight
-                      ? "bg-indigo-950/90 text-indigo-300 border border-indigo-700/60"
-                      : "bg-blue-100 text-blue-800 border border-blue-300/90 shadow-sm"
+                      ? "bg-indigo-950 text-indigo-300 border border-indigo-800"
+                      : "bg-blue-100 text-blue-800 border border-blue-300"
                   }`}
                 >
                   Soon
@@ -117,38 +115,38 @@ const CodingJourney = () => {
 
       {/* Main Glass Dashboard Container */}
       <div
-        className={`p-5 sm:p-8 rounded-3xl border transition-all shadow-2xl backdrop-blur-xl flex flex-col gap-8 ${
+        className={`p-4 sm:p-6 rounded-2xl border transition-all shadow-xl backdrop-blur-xl flex flex-col gap-5 ${
           isNight
-            ? "bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 border-slate-800/90 shadow-sky-950/20"
-            : "bg-gradient-to-b from-white/95 via-slate-50/90 to-white/95 border-slate-200/90 shadow-sky-500/10"
+            ? "bg-slate-900/90 border-slate-800/90 text-slate-100 shadow-slate-950/50"
+            : "bg-white border-slate-200/90 text-slate-900 shadow-slate-200/60"
         }`}
       >
-        {/* LeetCode Profile Banner */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-700/20">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 via-orange-500/20 to-amber-600/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-2xl shadow-lg shadow-amber-500/10 shrink-0">
+        {/* LeetCode Profile Compact Banner */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 font-bold text-lg shrink-0">
               ⚡
             </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2.5">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
                 <h4
-                  className={`text-xl sm:text-2xl font-extrabold font-outfit ${
+                  className={`text-base sm:text-lg font-bold font-outfit ${
                     isNight ? "text-white" : "text-slate-900"
                   }`}
                 >
                   LeetCode Profile
                 </h4>
-                <span className="text-xs px-2.5 py-0.5 rounded-full font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 shadow-sm">
+                <span className="text-xs px-2 py-0.5 rounded-md font-mono font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
                   @{leetcode.username}
                 </span>
               </div>
               <p
-                className={`text-xs sm:text-sm mt-1 leading-relaxed ${
-                  isNight ? "text-slate-400" : "text-slate-500"
+                className={`text-xs mt-0.5 ${
+                  isNight ? "text-slate-400" : "text-slate-600"
                 }`}
               >
                 Global Rank:{" "}
-                <span className="font-extrabold font-mono text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
+                <span className="font-bold font-mono text-blue-600 dark:text-cyan-400">
                   #{leetcode.ranking > 0 ? leetcode.ranking.toLocaleString() : "N/A"}
                 </span>{" "}
                 • Solved across Data Structures & Algorithms
@@ -160,194 +158,188 @@ const CodingJourney = () => {
             href={leetcode.profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn px-5 py-3 rounded-2xl text-xs font-bold flex items-center justify-center gap-2.5 w-full md:w-auto shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 active:scale-95 transition-all duration-200 uppercase tracking-wider"
+            className="btn px-4 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 w-full sm:w-auto shadow-md hover:shadow-blue-500/20 active:scale-95 transition-all"
           >
             <span>View LeetCode Profile</span>
-            <span className="text-sm font-bold">↗</span>
+            <span className="text-xs">↗</span>
           </a>
         </div>
 
-        {/* Problem Metrics & Difficulties Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {/* Minimal & Compact Problem Metrics Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
           {/* Total Solved Card */}
           <div
-            className={`p-5 rounded-2xl border flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] ${
+            className={`p-3 sm:p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
               isNight
-                ? "bg-slate-950/80 border-slate-800/90 shadow-inner"
-                : "bg-slate-50/90 border-slate-200/90 shadow-sm"
+                ? "bg-slate-950/70 border-slate-800/90"
+                : "bg-slate-50 border-slate-200/90"
             }`}
           >
             <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-400 font-mono">
-                Total Solved
-              </span>
-              <div className="my-3 flex items-baseline gap-2">
-                <span className="text-4xl font-black font-outfit bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(34,211,238,0.3)]">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
+                  Total Solved
+                </span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold bg-blue-500/10 text-blue-700 dark:text-cyan-400 border border-blue-500/20">
+                  {Math.min(Math.round((totalSolved / 300) * 100), 100)}%
+                </span>
+              </div>
+              <div className="my-1.5 flex items-baseline gap-1.5">
+                <span className="text-2xl sm:text-3xl font-extrabold font-outfit text-blue-600 dark:text-cyan-400">
                   {totalSolved}
                 </span>
-                <span
-                  className={`text-xs font-semibold ${
-                    isNight ? "text-slate-400" : "text-slate-500"
-                  }`}
-                >
+                <span className={`text-xs ${isNight ? "text-slate-400" : "text-slate-600"}`}>
                   problems
                 </span>
               </div>
             </div>
-
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] font-mono font-medium">
-                <span className="text-slate-400">Target Progress</span>
-                <span className="text-cyan-400 font-bold">{Math.min(Math.round((totalSolved / 300) * 100), 100)}%</span>
-              </div>
-              <div className="w-full bg-slate-800/60 h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-700/40">
-                <div
-                  className="bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-500 h-full rounded-full transition-all duration-700 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
-                  style={{ width: `${Math.min((totalSolved / 300) * 100, 100)}%` }}
-                />
-              </div>
+            <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+              <div
+                className="bg-blue-600 dark:bg-cyan-400 h-full rounded-full transition-all duration-500"
+                style={{ width: `${Math.min((totalSolved / 300) * 100, 100)}%` }}
+              />
             </div>
           </div>
 
-          {/* Difficulty Cards */}
-          <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {/* Easy */}
-            <div
-              className={`p-4 sm:p-5 rounded-2xl border flex flex-col justify-between transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg ${
-                isNight
-                  ? "bg-gradient-to-br from-emerald-950/30 via-slate-950/60 to-slate-900/80 border-emerald-800/40 hover:border-emerald-500/60"
-                  : "bg-emerald-50/70 border-emerald-200/80 hover:border-emerald-400"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-emerald-400 uppercase tracking-wider font-mono">
-                  Easy
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 font-mono font-bold border border-emerald-500/20">
-                  ★ {easyPct}%
-                </span>
-              </div>
-              <div className="my-2">
-                <span className="text-3xl font-black font-outfit text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.3)]">
-                  {easySolved}
-                </span>
-              </div>
-              <span className={`text-[11px] font-medium ${isNight ? "text-slate-400" : "text-slate-500"}`}>
-                Fundamentals & Data Types
+          {/* Easy Card */}
+          <div
+            className={`p-3 sm:p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
+              isNight
+                ? "bg-emerald-950/20 border-emerald-800/40"
+                : "bg-emerald-50/80 border-emerald-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase font-mono">
+                Easy
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-mono font-bold border border-emerald-500/20">
+                ★ {easyPct}%
               </span>
             </div>
+            <div className="my-1 flex items-baseline gap-1.5">
+              <span className="text-2xl sm:text-3xl font-extrabold font-outfit text-emerald-600 dark:text-emerald-400">
+                {easySolved}
+              </span>
+              <span className={`text-[11px] ${isNight ? "text-slate-400" : "text-slate-600"}`}>
+                solved
+              </span>
+            </div>
+            <span className={`text-[11px] truncate font-medium ${isNight ? "text-slate-400" : "text-slate-600"}`}>
+              Fundamentals & Data Types
+            </span>
+          </div>
 
-            {/* Medium */}
-            <div
-              className={`p-4 sm:p-5 rounded-2xl border flex flex-col justify-between transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg ${
-                isNight
-                  ? "bg-gradient-to-br from-amber-950/30 via-slate-950/60 to-slate-900/80 border-amber-800/40 hover:border-amber-500/60"
-                  : "bg-amber-50/70 border-amber-200/80 hover:border-amber-400"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wider font-mono">
-                  Medium
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 font-mono font-bold border border-amber-500/20">
-                  ★★ {mediumPct}%
-                </span>
-              </div>
-              <div className="my-2">
-                <span className="text-3xl font-black font-outfit text-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.3)]">
-                  {mediumSolved}
-                </span>
-              </div>
-              <span className={`text-[11px] font-medium ${isNight ? "text-slate-400" : "text-slate-500"}`}>
-                Core Algorithms & Trees
+          {/* Medium Card */}
+          <div
+            className={`p-3 sm:p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
+              isNight
+                ? "bg-amber-950/20 border-amber-800/40"
+                : "bg-amber-50/80 border-amber-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase font-mono">
+                Medium
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 font-mono font-bold border border-amber-500/20">
+                ★★ {mediumPct}%
               </span>
             </div>
+            <div className="my-1 flex items-baseline gap-1.5">
+              <span className="text-2xl sm:text-3xl font-extrabold font-outfit text-amber-600 dark:text-amber-400">
+                {mediumSolved}
+              </span>
+              <span className={`text-[11px] ${isNight ? "text-slate-400" : "text-slate-600"}`}>
+                solved
+              </span>
+            </div>
+            <span className={`text-[11px] truncate font-medium ${isNight ? "text-slate-400" : "text-slate-600"}`}>
+              Core Algorithms & Trees
+            </span>
+          </div>
 
-            {/* Hard */}
-            <div
-              className={`p-4 sm:p-5 rounded-2xl border flex flex-col justify-between transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg ${
-                isNight
-                  ? "bg-gradient-to-br from-rose-950/30 via-slate-950/60 to-slate-900/80 border-rose-800/40 hover:border-rose-500/60"
-                  : "bg-rose-50/70 border-rose-200/80 hover:border-rose-400"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-rose-400 uppercase tracking-wider font-mono">
-                  Hard
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-400 font-mono font-bold border border-rose-500/20">
-                  ★★★ {hardPct}%
-                </span>
-              </div>
-              <div className="my-2">
-                <span className="text-3xl font-black font-outfit text-rose-400 drop-shadow-[0_0_10px_rgba(244,63,94,0.3)]">
-                  {hardSolved}
-                </span>
-              </div>
-              <span className={`text-[11px] font-medium ${isNight ? "text-slate-400" : "text-slate-500"}`}>
-                Advanced Graphs & DP
+          {/* Hard Card */}
+          <div
+            className={`p-3 sm:p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
+              isNight
+                ? "bg-rose-950/20 border-rose-800/40"
+                : "bg-rose-50/80 border-rose-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold text-rose-700 dark:text-rose-400 uppercase font-mono">
+                Hard
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-700 dark:text-rose-400 font-mono font-bold border border-rose-500/20">
+                ★★★ {hardPct}%
               </span>
             </div>
+            <div className="my-1 flex items-baseline gap-1.5">
+              <span className="text-2xl sm:text-3xl font-extrabold font-outfit text-rose-600 dark:text-rose-400">
+                {hardSolved}
+              </span>
+              <span className={`text-[11px] ${isNight ? "text-slate-400" : "text-slate-600"}`}>
+                solved
+              </span>
+            </div>
+            <span className={`text-[11px] truncate font-medium ${isNight ? "text-slate-400" : "text-slate-600"}`}>
+              Advanced Graphs & DP
+            </span>
           </div>
         </div>
 
-        {/* Streaks & Consistency Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Minimal & Compact Streak Cards Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           <div
-            className={`p-4 sm:p-5 rounded-2xl border flex items-center gap-4 transition-all duration-300 ${
+            className={`p-3 rounded-xl border flex items-center gap-3 transition-all ${
               isNight
-                ? "bg-gradient-to-r from-amber-500/10 via-slate-950/70 to-slate-950/70 border-amber-500/30 text-slate-100"
-                : "bg-amber-50/80 border-amber-200/90 text-slate-800"
+                ? "bg-slate-950/70 border-slate-800/80"
+                : "bg-slate-50 border-slate-200"
             }`}
           >
-            <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-2xl shrink-0 shadow-md shadow-amber-500/10">
-              🔥
-            </div>
-            <div>
-              <div className="text-xs font-bold font-mono text-amber-400 uppercase tracking-wider">
+            <div className="text-xl shrink-0">🔥</div>
+            <div className="min-w-0">
+              <div className={`text-[10px] font-bold uppercase tracking-wider font-mono ${isNight ? "text-slate-400" : "text-slate-600"}`}>
                 Current Streak
               </div>
-              <div className="text-xl font-extrabold font-outfit text-slate-100">
+              <div className={`text-sm sm:text-base font-bold font-outfit ${isNight ? "text-slate-100" : "text-slate-900"}`}>
                 {currentStreak} {currentStreak === 1 ? "day" : "days"} active
               </div>
             </div>
           </div>
 
           <div
-            className={`p-4 sm:p-5 rounded-2xl border flex items-center gap-4 transition-all duration-300 ${
+            className={`p-3 rounded-xl border flex items-center gap-3 transition-all ${
               isNight
-                ? "bg-gradient-to-r from-yellow-500/10 via-slate-950/70 to-slate-950/70 border-yellow-500/30 text-slate-100"
-                : "bg-yellow-50/80 border-yellow-200/90 text-slate-800"
+                ? "bg-slate-950/70 border-slate-800/80"
+                : "bg-slate-50 border-slate-200"
             }`}
           >
-            <div className="w-12 h-12 rounded-xl bg-yellow-500/20 border border-yellow-500/30 flex items-center justify-center text-2xl shrink-0 shadow-md shadow-yellow-500/10">
-              🏆
-            </div>
-            <div>
-              <div className="text-xs font-bold font-mono text-yellow-400 uppercase tracking-wider">
+            <div className="text-xl shrink-0">🏆</div>
+            <div className="min-w-0">
+              <div className={`text-[10px] font-bold uppercase tracking-wider font-mono ${isNight ? "text-slate-400" : "text-slate-600"}`}>
                 Longest Streak
               </div>
-              <div className="text-xl font-extrabold font-outfit text-slate-100">
+              <div className={`text-sm sm:text-base font-bold font-outfit ${isNight ? "text-slate-100" : "text-slate-900"}`}>
                 {longestStreak} {longestStreak === 1 ? "day" : "days"} record
               </div>
             </div>
           </div>
 
           <div
-            className={`p-4 sm:p-5 rounded-2xl border flex items-center gap-4 transition-all duration-300 ${
+            className={`p-3 rounded-xl border flex items-center gap-3 transition-all ${
               isNight
-                ? "bg-gradient-to-r from-emerald-500/10 via-slate-950/70 to-slate-950/70 border-emerald-500/30 text-slate-100"
-                : "bg-emerald-50/80 border-emerald-200/90 text-slate-800"
+                ? "bg-slate-950/70 border-slate-800/80"
+                : "bg-slate-50 border-slate-200"
             }`}
           >
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-2xl shrink-0 shadow-md shadow-emerald-500/10">
-              🗓️
-            </div>
-            <div>
-              <div className="text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider">
+            <div className="text-xl shrink-0">🗓️</div>
+            <div className="min-w-0">
+              <div className={`text-[10px] font-bold uppercase tracking-wider font-mono ${isNight ? "text-slate-400" : "text-slate-600"}`}>
                 Total Active Days
               </div>
-              <div className="text-xl font-extrabold font-outfit text-slate-100">
+              <div className={`text-sm sm:text-base font-bold font-outfit ${isNight ? "text-slate-100" : "text-slate-900"}`}>
                 {totalActiveDays} {totalActiveDays === 1 ? "day" : "days"} logged
               </div>
             </div>
@@ -363,18 +355,13 @@ const CodingJourney = () => {
         {/* Yearly Activity Heatmap */}
         <ActivityHeatmap submissionCalendar={leetcode.submissionCalendar} />
 
-        {/* Recent Submissions */}
-        {leetcode.recentSubmissions && leetcode.recentSubmissions.length > 0 && (
-          <RecentProblems submissions={leetcode.recentSubmissions} />
-        )}
-
         {/* Footer Timestamp Sync Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 border-t border-slate-700/20 text-xs font-mono">
-          <span className="flex items-center gap-2 text-slate-400">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
-            Auto-synced twice daily via GitHub Actions Workflow
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs font-mono">
+          <span className={`flex items-center gap-2 ${isNight ? "text-slate-400" : "text-slate-600"}`}>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            Auto-synced twice daily via GitHub Actions
           </span>
-          <span className="text-slate-500">
+          <span className={`${isNight ? "text-slate-500" : "text-slate-600"}`}>
             Last refreshed: {lastUpdated}
           </span>
         </div>
