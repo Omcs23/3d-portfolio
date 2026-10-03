@@ -5,7 +5,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const USERNAME = 'OmSharma152';
+const LEETCODE_USERNAME = 'OmSharma152';
+const HACKERRANK_USERNAME = 'iOmSharma52';
 const OUTPUT_FILE = path.join(__dirname, '../../src/data/coding-stats.json');
 
 // Ensure output directory exists
@@ -116,7 +117,6 @@ function calculateStreaks(submissionCalendar) {
     return { currentStreak: 0, longestStreak: 0 };
   }
 
-  // Convert timestamps to YYYY-MM-DD in UTC
   const activeDateSet = new Set();
   Object.keys(submissionCalendar).forEach(tsStr => {
     const ts = parseInt(tsStr, 10);
@@ -132,7 +132,6 @@ function calculateStreaks(submissionCalendar) {
 
   const sortedDates = Array.from(activeDateSet).sort();
   
-  // Calculate longest streak
   let longestStreak = 0;
   let tempStreak = 0;
   let prevDate = null;
@@ -156,7 +155,6 @@ function calculateStreaks(submissionCalendar) {
     prevDate = curDate;
   }
 
-  // Calculate current streak ending today or yesterday
   const now = new Date();
   const todayStr = now.toISOString().split('T')[0];
   const yesterday = new Date(now);
@@ -237,8 +235,59 @@ function parseLeetCodeGraphQLData(data, username) {
   };
 }
 
+async function fetchHackerRankData(username) {
+  try {
+    const res = await fetch(`https://www.hackerrank.com/rest/hackers/${username}/badges`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    });
+    if (!res.ok) throw new Error(`HackerRank API error: ${res.status}`);
+    const data = await res.json();
+    if (!data || !data.models) throw new Error('Invalid HackerRank response');
+
+    let totalSolved = 0;
+    let totalPoints = 0;
+    let maxStars = 0;
+
+    const badges = data.models.map((b) => {
+      const solved = b.solved || 0;
+      const points = b.current_points || b.total_points || 0;
+      const stars = b.stars || 0;
+
+      totalSolved += solved;
+      totalPoints += points;
+      if (stars > maxStars) maxStars = stars;
+
+      return {
+        name: b.badge_name,
+        stars: stars,
+        solved: solved,
+        points: points,
+        category: b.category_name || 'Language Proficiency',
+        rank: b.hacker_rank || null
+      };
+    });
+
+    return {
+      username: username,
+      profileUrl: `https://www.hackerrank.com/profile/${username}`,
+      stats: {
+        totalSolved,
+        totalPoints,
+        badgesCount: badges.length,
+        stars: maxStars
+      },
+      badges
+    };
+  } catch (err) {
+    console.warn('HackerRank fetch failed:', err.message);
+    return null;
+  }
+}
+
 async function main() {
-  console.log(`Fetching LeetCode statistics for user: ${USERNAME}...`);
+  console.log(`Fetching statistics for LeetCode (${LEETCODE_USERNAME}) & HackerRank (${HACKERRANK_USERNAME})...`);
 
   let existingData = null;
   if (fs.existsSync(OUTPUT_FILE)) {
@@ -250,14 +299,13 @@ async function main() {
   }
 
   let leetcodeData = null;
-
   try {
-    leetcodeData = await fetchFromLeetCodeGraphQL(USERNAME);
+    leetcodeData = await fetchFromLeetCodeGraphQL(LEETCODE_USERNAME);
     console.log('Successfully fetched LeetCode data via GraphQL API.');
   } catch (err) {
     console.warn('LeetCode GraphQL API failed:', err.message);
     try {
-      leetcodeData = await fetchFromFallbackAPI(USERNAME);
+      leetcodeData = await fetchFromFallbackAPI(LEETCODE_USERNAME);
       console.log('Successfully fetched LeetCode data via Fallback API.');
     } catch (fallbackErr) {
       console.error('Fallback API also failed:', fallbackErr.message);
@@ -265,29 +313,20 @@ async function main() {
   }
 
   if (!leetcodeData) {
-    if (existingData && existingData.platforms?.leetcode) {
-      console.warn('Using existing cached LeetCode data as fallback.');
-      leetcodeData = existingData.platforms.leetcode;
-    } else {
-      console.warn('Generating default placeholder LeetCode structure.');
-      leetcodeData = {
-        username: USERNAME,
-        profileUrl: `https://leetcode.com/u/${USERNAME}/`,
-        avatarUrl: '',
-        ranking: 0,
-        stats: {
-          totalSolved: 0,
-          easySolved: 0,
-          mediumSolved: 0,
-          hardSolved: 0,
-          currentStreak: 0,
-          longestStreak: 0,
-          totalActiveDays: 0
-        },
-        submissionCalendar: {},
-        recentSubmissions: []
-      };
-    }
+    leetcodeData = existingData?.platforms?.leetcode || {
+      username: LEETCODE_USERNAME,
+      profileUrl: `https://leetcode.com/u/${LEETCODE_USERNAME}/`,
+      avatarUrl: '',
+      ranking: 0,
+      stats: { totalSolved: 0, easySolved: 0, mediumSolved: 0, hardSolved: 0, currentStreak: 0, longestStreak: 0, totalActiveDays: 0 },
+      submissionCalendar: {},
+      recentSubmissions: []
+    };
+  }
+
+  let hackerrankData = await fetchHackerRankData(HACKERRANK_USERNAME);
+  if (!hackerrankData && existingData?.platforms?.hackerrank) {
+    hackerrankData = existingData.platforms.hackerrank;
   }
 
   const finalOutput = {
@@ -295,7 +334,7 @@ async function main() {
     platforms: {
       leetcode: leetcodeData,
       codeforces: existingData?.platforms?.codeforces || null,
-      hackerrank: existingData?.platforms?.hackerrank || null,
+      hackerrank: hackerrankData,
       github: existingData?.platforms?.github || null
     }
   };
