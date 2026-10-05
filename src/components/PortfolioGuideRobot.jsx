@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
-import { portfolioData } from "../constants";
-import { RPSGameModal } from "./games";
+import { NumberGuessModal } from "./games";
 
 
 
@@ -183,7 +182,7 @@ const OPTION_CATEGORIES = [
 
 const CATEGORIZED_OPTIONS = {
   games: [
-    { id: "rps", label: "✊✌️ Rock Paper Scissors", icon: "✊" },
+    { id: "numberguess", label: "🔢 Number Guess", icon: "🔢" },
   ],
   portfolio: [
     { id: "home", label: "🏠 3D World", icon: "🏠" },
@@ -232,7 +231,7 @@ const PortfolioGuideRobot = () => {
     },
     {
       sender: "robot",
-      text: "I can tell you about Om, his projects, skills, certifications, coding journey, play games like Snake or Cross & Zero with you, and help you navigate around.\n\nWant to explore or play something? ✨",
+      text: "I can tell you about Om, his projects, skills, certifications, coding journey, play Number Guessing Game with you, and help you navigate around.\n\nWant to explore or play something? ✨",
       action: null,
     },
   ]);
@@ -247,24 +246,24 @@ const PortfolioGuideRobot = () => {
   );
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const handleRPSEnd = ({ winner, playerScore, emmyScore, streak }) => {
-    let reactionText = "A tie match! Great minds think alike 😄";
-    if (winner === "PLAYER") {
-      if (streak >= 3) {
-        reactionText = `Okay... I might have underestimated you! 🔥 (${streak} win streak)`;
+  const handleNumberGuessEnd = ({ status, attempts, maxAttempts, maxRange, secretNumber }) => {
+    let reactionText = "";
+    if (status === "WON") {
+      if (attempts <= 3) {
+        reactionText = `WHOA! 🧠 Mind reader alert! You guessed my secret number (${secretNumber}) in only ${attempts} tries! 🔥`;
       } else {
-        reactionText = "Okay... you got me. 😭 Good game!";
+        reactionText = `Bingo! 🎉 You guessed my secret number (${secretNumber}) in ${attempts} tries! Good game!`;
       }
-    } else if (winner === "EMMY") {
-      reactionText = "Too easy. 😌 Better luck next round!";
+    } else {
+      reactionText = `Haha! 🙈 Out of attempts! My secret number was ${secretNumber}! Want to try again?`;
     }
 
     setChatHistory((prev) => [
       ...prev,
       {
         sender: "robot",
-        text: `${reactionText}\n\nMatch Final: You ${playerScore} — ${emmyScore} Emmy`,
-        action: { type: "game", gameId: "rps", label: "🎮 PLAY AGAIN" },
+        text: reactionText,
+        action: { type: "game", gameId: "numberguess", label: "🎮 PLAY AGAIN" },
       },
     ]);
   };
@@ -464,10 +463,14 @@ Strict rules:
       const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (aiText) {
         // Check if response relates to playing Snake / game
-        if (userQuery.toLowerCase().includes("snake")) {
+        if (
+          userQuery.toLowerCase().includes("guess") ||
+          userQuery.toLowerCase().includes("number") ||
+          userQuery.toLowerCase().includes("game")
+        ) {
           return {
             text: aiText.trim(),
-            action: { type: "game", gameId: "snake", label: "🎮 PLAY SNAKE" },
+            action: { type: "game", gameId: "numberguess", label: "🎮 PLAY NUMBER GUESS" },
           };
         }
         return {
@@ -496,10 +499,9 @@ Strict rules:
 
     // Rock Paper Scissors & Game Requests
     if (
-      q.includes("rock") ||
-      q.includes("paper") ||
-      q.includes("scissors") ||
-      q.includes("rps") ||
+      q.includes("guess") ||
+      q.includes("number") ||
+      q.includes("guessing") ||
       q.includes("play a game") ||
       q.includes("play game") ||
       q.includes("want to play") ||
@@ -508,8 +510,8 @@ Strict rules:
       q.includes("games")
     ) {
       return {
-        text: "Rock Paper Scissors? 😏\nLet's see if you can beat me.",
-        action: { type: "game", gameId: "rps", label: "🎮 PLAY ROCK PAPER SCISSORS" },
+        text: "Number Guessing Game? 😏\nLet me pick a secret number and see how fast you can guess it!",
+        action: { type: "game", gameId: "numberguess", label: "🎮 PLAY NUMBER GUESS" },
       };
     }
 
@@ -758,14 +760,14 @@ Strict rules:
       let botResponse = { sender: "robot", text: "", action: null };
 
       switch (option.id) {
-        case "rps":
+        case "numberguess":
           botResponse = {
             sender: "robot",
-            text: "Rock Paper Scissors? 😏\nLet's see if you can beat me.",
+            text: "Number Guessing Game? 😏\nLet me pick a secret number and see how fast you can guess it!",
             action: {
               type: "game",
-              gameId: "rps",
-              label: "🎮 PLAY ROCK PAPER SCISSORS",
+              gameId: "numberguess",
+              label: "🎮 PLAY NUMBER GUESS",
             },
           };
           break;
@@ -1312,11 +1314,11 @@ Strict rules:
         </div>
       </aside>
 
-      {/* Standalone Emmy Arcade Rock Paper Scissors Modal Overlay */}
-      <RPSGameModal
-        isOpen={activeGame === "rps"}
+      {/* Standalone Emmy Arcade Number Guessing Game Modal Overlay */}
+      <NumberGuessModal
+        isOpen={activeGame === "numberguess"}
         onClose={() => setActiveGame(null)}
-        onGameEnd={handleRPSEnd}
+        onGameEnd={handleNumberGuessEnd}
       />
     </>,
     document.body

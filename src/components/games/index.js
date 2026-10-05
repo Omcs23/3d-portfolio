@@ -1,1 +1,1 @@
-export { default as RPSGameModal } from "./RPSGame/RPSGameModal";
+export { default as NumberGuessModal } from "./NumberGuessGame/NumberGuessModal";

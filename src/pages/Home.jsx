@@ -53,11 +53,11 @@ const Home = ({ hasPreloaded = false }) => {
     let screenScale, screenPosition;
 
     if (window.innerWidth < 768) {
-      screenScale = [0.9, 0.9, 0.9];
-      screenPosition = [0, -6.5, -43.4];
+      screenScale = [0.85, 0.85, 0.85];
+      screenPosition = [0, -7.2, -43.4];
     } else {
       screenScale = [1, 1, 1];
-      screenPosition = [0, -6.5, -43.4];
+      screenPosition = [0, -7.5, -43.4];
     }
 
     return [screenScale, screenPosition];
@@ -85,7 +85,7 @@ const Home = ({ hasPreloaded = false }) => {
         </div>
       )}
 
-      <div className="absolute top-[76px] sm:top-24 left-0 right-0 z-10 flex items-center justify-center px-4 pointer-events-none">
+      <div className="absolute top-[80px] sm:top-24 left-0 right-0 z-30 flex items-center justify-center px-4 pointer-events-none">
         {currentStage && (
           <div className="pointer-events-auto">
             <HomeInfo currentStage={currentStage} />
