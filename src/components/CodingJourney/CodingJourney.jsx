@@ -18,9 +18,9 @@ const CodingJourney = () => {
       easySolved: 43,
       mediumSolved: 66,
       hardSolved: 45,
-      currentStreak: 4,
+      currentStreak: 0,
       longestStreak: 11,
-      totalActiveDays: 28,
+      totalActiveDays: 29,
     },
     submissionCalendar: {},
   };
@@ -81,9 +81,9 @@ const CodingJourney = () => {
   const easySolved = leetcode.stats?.easySolved || 43;
   const mediumSolved = leetcode.stats?.mediumSolved || 66;
   const hardSolved = leetcode.stats?.hardSolved || 45;
-  const currentStreak = leetcode.stats?.currentStreak || 4;
+  const currentStreak = leetcode.stats?.currentStreak ?? 0;
   const longestStreak = leetcode.stats?.longestStreak || 11;
-  const totalActiveDays = leetcode.stats?.totalActiveDays || 28;
+  const totalActiveDays = leetcode.stats?.totalActiveDays || 29;
 
   const easyPct = totalSolved > 0 ? Math.round((easySolved / totalSolved) * 100) : 0;
   const mediumPct = totalSolved > 0 ? Math.round((mediumSolved / totalSolved) * 100) : 0;
@@ -204,8 +204,16 @@ const CodingJourney = () => {
                       <span className="text-xs text-slate-400">problems</span>
                     </div>
                   </div>
-                  <div className="w-10 h-10 rounded-full border-2 border-cyan-500/40 flex items-center justify-center text-xs font-bold font-mono text-cyan-500">
-                    {Math.min(Math.round((totalSolved / 300) * 100), 100)}%
+                  <div className="flex flex-col items-center">
+                    <div
+                      className="w-10 h-10 rounded-full border-2 border-cyan-500/40 flex items-center justify-center text-xs font-bold font-mono text-cyan-500"
+                      title="Progress toward 300 problems goal"
+                    >
+                      {Math.min(Math.round((totalSolved / 300) * 100), 100)}%
+                    </div>
+                    <span className="text-[9px] font-mono font-semibold text-slate-400 mt-0.5 uppercase tracking-wider">
+                      Target 300
+                    </span>
                   </div>
                 </div>
 
