@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { portfolioData } from "../constants";
-import { SnakeGameModal, TicTacToeModal } from "./games";
+import { RPSGameModal } from "./games";
 
 
 
@@ -183,8 +183,7 @@ const OPTION_CATEGORIES = [
 
 const CATEGORIZED_OPTIONS = {
   games: [
-    { id: "snake", label: "🐍 Snake", icon: "🐍" },
-    { id: "tictactoe", label: "❌⭕ Cross & Zero", icon: "❌" },
+    { id: "rps", label: "✊✌️ Rock Paper Scissors", icon: "✊" },
   ],
   portfolio: [
     { id: "home", label: "🏠 3D World", icon: "🏠" },
@@ -248,38 +247,24 @@ const PortfolioGuideRobot = () => {
   );
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const handleGameEnd = ({ score, highScore, isNewHighScore }) => {
-    let reactionText = "Well... that snake had a good run 😂";
-    if (isNewHighScore) {
-      reactionText = "You actually beat your record 👀";
-    } else if (score >= 500) {
-      reactionText = "Okay, I wasn't expecting THAT score.";
+  const handleRPSEnd = ({ winner, playerScore, emmyScore, streak }) => {
+    let reactionText = "A tie match! Great minds think alike 😄";
+    if (winner === "PLAYER") {
+      if (streak >= 3) {
+        reactionText = `Okay... I might have underestimated you! 🔥 (${streak} win streak)`;
+      } else {
+        reactionText = "Okay... you got me. 😭 Good game!";
+      }
+    } else if (winner === "EMMY") {
+      reactionText = "Too easy. 😌 Better luck next round!";
     }
 
     setChatHistory((prev) => [
       ...prev,
       {
         sender: "robot",
-        text: `${reactionText}\n\nFinal Score: ${score} | High Score: ${highScore}`,
-        action: { type: "game", gameId: "snake", label: "🎮 PLAY SNAKE AGAIN" },
-      },
-    ]);
-  };
-
-  const handleTicTacToeEnd = ({ winner, isPlayerWinner }) => {
-    let reactionText = "A tie! Great minds think alike 😄";
-    if (isPlayerWinner) {
-      reactionText = "Whoa! You outsmarted me at Cross & Zero! 🧠✨";
-    } else if (winner === "O" || winner === "X") {
-      reactionText = "Gotcha! Emmy takes this round 🐒🔥";
-    }
-
-    setChatHistory((prev) => [
-      ...prev,
-      {
-        sender: "robot",
-        text: reactionText,
-        action: { type: "game", gameId: "tictactoe", label: "🎮 PLAY AGAIN" },
+        text: `${reactionText}\n\nMatch Final: You ${playerScore} — ${emmyScore} Emmy`,
+        action: { type: "game", gameId: "rps", label: "🎮 PLAY AGAIN" },
       },
     ]);
   };
@@ -509,50 +494,22 @@ Strict rules:
     ];
     const randomReaction = humanReactions[Math.floor(Math.random() * humanReactions.length)];
 
-    // Specific Snake requests
+    // Rock Paper Scissors & Game Requests
     if (
-      q.includes("snake") ||
-      q.includes("play snake") ||
-      q.includes("open snake") ||
-      q.includes("start snake") ||
-      q.includes("can we play snake") ||
-      q.includes("let's play snake") ||
-      q.includes("lets play snake")
-    ) {
-      return {
-        text: "Snake? Good choice 🐍 Let's see what you've got.",
-        action: { type: "game", gameId: "snake", label: "🎮 PLAY SNAKE" },
-      };
-    }
-
-    // Cross & Zero / Tic Tac Toe requests
-    if (
-      q.includes("cross zero") ||
-      q.includes("cross and zero") ||
-      q.includes("tic tac toe") ||
-      q.includes("tictactoe") ||
-      q.includes("xo") ||
-      q.includes("x o") ||
-      q.includes("noughts")
-    ) {
-      return {
-        text: "Cross & Zero? You're on! ❌⭕ Let's see if you can beat me.",
-        action: { type: "game", gameId: "tictactoe", label: "🎮 PLAY CROSS & ZERO" },
-      };
-    }
-
-    // General game requests / bored
-    if (
+      q.includes("rock") ||
+      q.includes("paper") ||
+      q.includes("scissors") ||
+      q.includes("rps") ||
       q.includes("play a game") ||
-      q.includes("want to play") ||
       q.includes("play game") ||
+      q.includes("want to play") ||
       q.includes("bored") ||
       q.includes("game") ||
       q.includes("games")
     ) {
       return {
-        text: "Sure 😄 What do you want to play?",
-        action: { type: "game", gameId: "tictactoe", label: "❌⭕ Cross & Zero" },
+        text: "Rock Paper Scissors? 😏\nLet's see if you can beat me.",
+        action: { type: "game", gameId: "rps", label: "🎮 PLAY ROCK PAPER SCISSORS" },
       };
     }
 
@@ -801,26 +758,14 @@ Strict rules:
       let botResponse = { sender: "robot", text: "", action: null };
 
       switch (option.id) {
-        case "snake":
+        case "rps":
           botResponse = {
             sender: "robot",
-            text: "Snake? Good choice 🐍 Let's see what you've got.",
+            text: "Rock Paper Scissors? 😏\nLet's see if you can beat me.",
             action: {
               type: "game",
-              gameId: "snake",
-              label: "🎮 PLAY SNAKE",
-            },
-          };
-          break;
-
-        case "tictactoe":
-          botResponse = {
-            sender: "robot",
-            text: "Cross & Zero? You're on! ❌⭕ Let's see if you can beat me.",
-            action: {
-              type: "game",
-              gameId: "tictactoe",
-              label: "🎮 PLAY CROSS & ZERO",
+              gameId: "rps",
+              label: "🎮 PLAY ROCK PAPER SCISSORS",
             },
           };
           break;
@@ -1367,18 +1312,11 @@ Strict rules:
         </div>
       </aside>
 
-      {/* Standalone Snake Game Modal Overlay */}
-      <SnakeGameModal
-        isOpen={activeGame === "snake"}
+      {/* Standalone Emmy Arcade Rock Paper Scissors Modal Overlay */}
+      <RPSGameModal
+        isOpen={activeGame === "rps"}
         onClose={() => setActiveGame(null)}
-        onGameEnd={handleGameEnd}
-      />
-
-      {/* Standalone Cross & Zero (Tic Tac Toe) Modal Overlay */}
-      <TicTacToeModal
-        isOpen={activeGame === "tictactoe"}
-        onClose={() => setActiveGame(null)}
-        onGameEnd={handleTicTacToeEnd}
+        onGameEnd={handleRPSEnd}
       />
     </>,
     document.body
