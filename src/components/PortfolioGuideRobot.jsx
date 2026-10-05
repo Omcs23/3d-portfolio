@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { portfolioData } from "../constants";
+import SnakeGameModal from "./games/SnakeGame/SnakeGameModal";
 
 
 // Boundary-free 3D Monkey Avatar Component (Emmy - Female Island Guide Monkey with cute flower accessory)
@@ -174,6 +175,7 @@ const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, classN
 
 // Full options list including 3D home, social media & coding profiles
 const INITIAL_OPTIONS = [
+  { id: "snake", label: "🐍 Play Snake", icon: "🐍" },
   { id: "home", label: "🏠 3D World", icon: "🏠" },
   { id: "about", label: "👨‍💻 About Om", icon: "👨‍💻" },
   { id: "skills", label: "🛠️ Skills", icon: "🛠️" },
@@ -204,6 +206,7 @@ const PortfolioGuideRobot = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [activeGame, setActiveGame] = useState(null);
   const [showInitialSpeech, setShowInitialSpeech] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isSleeping, setIsSleeping] = useState(false);
@@ -216,7 +219,7 @@ const PortfolioGuideRobot = () => {
     },
     {
       sender: "robot",
-      text: "I can tell you about Om, his projects, skills, certifications, coding journey, and even help you find your way around this world.\n\nWant to explore something? ✨",
+      text: "I can tell you about Om, his projects, skills, certifications, coding journey, play games like Snake with you, and help you navigate around.\n\nWant to explore or play something? ✨",
       action: null,
     },
   ]);
@@ -230,6 +233,24 @@ const PortfolioGuideRobot = () => {
       : 600
   );
   const [isInputFocused, setIsInputFocused] = useState(false);
+
+  const handleGameEnd = ({ score, highScore, isNewHighScore }) => {
+    let reactionText = "Well... that snake had a good run 😂";
+    if (isNewHighScore) {
+      reactionText = "You actually beat your record 👀";
+    } else if (score >= 500) {
+      reactionText = "Okay, I wasn't expecting THAT score.";
+    }
+
+    setChatHistory((prev) => [
+      ...prev,
+      {
+        sender: "robot",
+        text: `${reactionText}\n\nFinal Score: ${score} | High Score: ${highScore}`,
+        action: { type: "game", gameId: "snake", label: "🎮 PLAY SNAKE AGAIN" },
+      },
+    ]);
+  };
 
   const chatContainerRef = useRef(null);
   const optionsContainerRef = useRef(null);
@@ -389,7 +410,7 @@ const PortfolioGuideRobot = () => {
 
     try {
       const systemPrompt = `You are Emmy, a friendly, warm, curious, and helpful 3D island guide monkey companion living inside Om Sharma's portfolio website.
-Your role: Welcome visitors, explain Om's portfolio, guide them around, and discuss Om's work.
+Your role: Welcome visitors, explain Om's portfolio, guide them around, discuss Om's work, and play mini-games like Snake.
 Personality: Human-like, warm, playful, concise (1-3 short sentences), occasional natural emojis.
 Strict rules:
 1. Answer using ONLY actual portfolio data:
@@ -399,8 +420,9 @@ Strict rules:
 - Certifications: Oracle OCI 2025 Certified Generative AI Professional, Oracle OCI 2025 Certified DevOps Professional, Google Cybersecurity Professional Certificate, Infosys Java & MERN.
 - Coding: LeetCode (OmSharma152 - 150+ solved), Codeforces (OmSharma_cs), HackerRank (iOmSharma52 - 5-star Java/Python).
 2. NEVER invent fake projects, certs, jobs, companies, or stats.
-3. If asked about unrelated topics (weather, coding homework, general trivia), politely redirect: "I'm mainly here to show you around Om's world 😄 Ask me about his projects, skills, certifications, or portfolio."
-4. If information is unavailable, say: "I'm not seeing that information in Om's portfolio yet. You can check the Projects section or ask me about something else. 🙂"`;
+3. If asked to play Snake or games, respond naturally (e.g. "Snake? Good choice 🐍 Let's see what you've got.") and invite them to launch the game!
+4. If asked about unrelated topics (weather, coding homework, general trivia), politely redirect: "I'm mainly here to show you around Om's world 😄 Ask me about his projects, skills, certifications, or portfolio."
+5. If information is unavailable, say: "I'm not seeing that information in Om's portfolio yet. You can check the Projects section or ask me about something else. 🙂"`;
 
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
@@ -426,6 +448,13 @@ Strict rules:
       const data = await response.json();
       const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (aiText) {
+        // Check if response relates to playing Snake / game
+        if (userQuery.toLowerCase().includes("snake")) {
+          return {
+            text: aiText.trim(),
+            action: { type: "game", gameId: "snake", label: "🎮 PLAY SNAKE" },
+          };
+        }
         return {
           text: aiText.trim(),
           action: null,
@@ -449,6 +478,36 @@ Strict rules:
       "Hope you're enjoying the little world! ✨ "
     ];
     const randomReaction = humanReactions[Math.floor(Math.random() * humanReactions.length)];
+
+    // Specific Snake requests
+    if (
+      q.includes("snake") ||
+      q.includes("play snake") ||
+      q.includes("open snake") ||
+      q.includes("start snake") ||
+      q.includes("can we play snake") ||
+      q.includes("let's play snake") ||
+      q.includes("lets play snake")
+    ) {
+      return {
+        text: "Snake? Good choice 🐍 Let's see what you've got.",
+        action: { type: "game", gameId: "snake", label: "🎮 PLAY SNAKE" },
+      };
+    }
+
+    // General game requests / bored
+    if (
+      q.includes("play a game") ||
+      q.includes("want to play") ||
+      q.includes("play game") ||
+      q.includes("bored") ||
+      q.includes("game")
+    ) {
+      return {
+        text: "Sure 😄 What do you want to play?",
+        action: { type: "game", gameId: "snake", label: "🐍 Snake" },
+      };
+    }
 
     // Navigation requests: Where are the projects / Show me projects
     if (
@@ -695,6 +754,18 @@ Strict rules:
       let botResponse = { sender: "robot", text: "", action: null };
 
       switch (option.id) {
+        case "snake":
+          botResponse = {
+            sender: "robot",
+            text: "Snake? Good choice 🐍 Let's see what you've got.",
+            action: {
+              type: "game",
+              gameId: "snake",
+              label: "🎮 PLAY SNAKE",
+            },
+          };
+          break;
+
         case "home":
           botResponse = {
             sender: "robot",
@@ -946,6 +1017,8 @@ Strict rules:
         ? `${window.location.origin}${basePath}${action.target.slice(1)}`
         : action.target;
       window.open(fullUrl, "_blank", "noopener,noreferrer");
+    } else if (action.type === "game") {
+      setActiveGame(action.gameId);
     }
   };
 
@@ -978,243 +1051,252 @@ Strict rules:
   );
 
   return createPortal(
-    <aside
-      aria-label="Emmy Island Guide"
-      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
-      className={`fixed bottom-6 sm:bottom-8 left-4 sm:left-12 lg:left-[calc(50vw-29rem)] z-[900] flex flex-col items-start pointer-events-none transition-all duration-1000 ${
-        isInitialFloating && !isOpen ? "animate-monkey-entry-wave" : ""
-      }`}
-    >
-      {/* CHAT POPUP WINDOW */}
-      {isOpen && (
-        <div
-          onTouchStart={(e) => e.stopPropagation()}
-          onTouchMove={(e) => e.stopPropagation()}
-          style={{
-            maxHeight: `${calculatedMaxHeight}px`,
-            height: `${calculatedMaxHeight}px`,
-          }}
-          className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[320px] sm:max-w-[360px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-left overscroll-contain ${
-            isNight
-              ? "bg-slate-900/95 backdrop-blur-md border-slate-700/80 text-slate-100 shadow-slate-950/80"
-              : "bg-white/95 backdrop-blur-md border-slate-200 text-slate-800 shadow-xl"
-          }`}
-        >
-          {/* Chat Header */}
+    <>
+      <aside
+        aria-label="Emmy Island Guide"
+        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+        className={`fixed bottom-6 sm:bottom-8 left-4 sm:left-12 lg:left-[calc(50vw-29rem)] z-[900] flex flex-col items-start pointer-events-none transition-all duration-1000 ${
+          isInitialFloating && !isOpen ? "animate-monkey-entry-wave" : ""
+        }`}
+      >
+        {/* CHAT POPUP WINDOW */}
+        {isOpen && (
           <div
-            className={`px-4 py-3 flex items-center justify-between border-b shrink-0 ${
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            style={{
+              maxHeight: `${calculatedMaxHeight}px`,
+              height: `${calculatedMaxHeight}px`,
+            }}
+            className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[320px] sm:max-w-[360px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-left overscroll-contain ${
               isNight
-                ? "bg-slate-800/80 border-slate-700/80"
-                : "bg-slate-100/80 border-slate-200"
+                ? "bg-slate-900/95 backdrop-blur-md border-slate-700/80 text-slate-100 shadow-slate-950/80"
+                : "bg-white/95 backdrop-blur-md border-slate-200 text-slate-800 shadow-xl"
             }`}
           >
-            <div className="flex items-center gap-2">
-              <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} />
-              <div>
-                <h3 className="font-bold text-xs sm:text-sm font-outfit leading-tight flex items-center gap-1">
-                  <span>Emmy</span> 🐒✨
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold font-mono bg-gradient-to-r from-blue-600 to-indigo-600 text-white uppercase tracking-wider ml-1">
-                    AI Powered
-                  </span>
-                </h3>
-
-                {isSleeping ? (
-                  <span className="text-[10px] text-indigo-400 dark:text-indigo-300 font-medium flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping" />
-                    Sleeping 😴
-                  </span>
-                ) : (
-                  <span className="text-[10px] text-emerald-500 font-medium flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    Awake & Swingin' 🌴
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <button
-              onClick={toggleOpen}
-              aria-label="Close Emmy Guide"
-              className={`p-1 rounded-lg transition-colors text-sm font-semibold ${
+            {/* Chat Header */}
+            <div
+              className={`px-4 py-3 flex items-center justify-between border-b shrink-0 ${
                 isNight
-                  ? "hover:bg-slate-700 text-slate-400 hover:text-slate-100"
-                  : "hover:bg-slate-200 text-slate-500 hover:text-slate-900"
+                  ? "bg-slate-800/80 border-slate-700/80"
+                  : "bg-slate-100/80 border-slate-200"
               }`}
             >
-              ✕
-            </button>
-          </div>
+              <div className="flex items-center gap-2">
+                <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} />
+                <div>
+                  <h3 className="font-bold text-xs sm:text-sm font-outfit leading-tight flex items-center gap-1">
+                    <span>Emmy</span> 🐒✨
+                    <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold font-mono bg-gradient-to-r from-blue-600 to-indigo-600 text-white uppercase tracking-wider ml-1">
+                      AI Powered
+                    </span>
+                  </h3>
 
-          {/* Chat History Area */}
-          <div
-            ref={chatContainerRef}
-            className="flex-1 p-3.5 overflow-y-auto custom-scrollbar overscroll-contain space-y-3 text-xs sm:text-sm scroll-smooth"
-          >
-            {chatHistory.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex flex-col ${
-                  msg.sender === "user" ? "items-end" : "items-start"
+                  {isSleeping ? (
+                    <span className="text-[10px] text-indigo-400 dark:text-indigo-300 font-medium flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping" />
+                      Sleeping 😴
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-emerald-500 font-medium flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Awake & Swingin' 🌴
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <button
+                onClick={toggleOpen}
+                aria-label="Close Emmy Guide"
+                className={`p-1 rounded-lg transition-colors text-sm font-semibold ${
+                  isNight
+                    ? "hover:bg-slate-700 text-slate-400 hover:text-slate-100"
+                    : "hover:bg-slate-200 text-slate-500 hover:text-slate-900"
                 }`}
               >
+                ✕
+              </button>
+            </div>
+
+            {/* Chat History Area */}
+            <div
+              ref={chatContainerRef}
+              className="flex-1 p-3.5 overflow-y-auto custom-scrollbar overscroll-contain space-y-3 text-xs sm:text-sm scroll-smooth"
+            >
+              {chatHistory.map((msg, index) => (
                 <div
-                  className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl whitespace-pre-line leading-relaxed ${
-                    msg.sender === "user"
-                      ? isNight
-                        ? "bg-indigo-600 text-white rounded-br-none shadow-sm"
-                        : "bg-blue-600 text-white rounded-br-none shadow-sm"
-                      : isNight
-                      ? "bg-slate-800 border border-slate-700 text-slate-200 rounded-bl-none"
-                      : "bg-slate-100 border border-slate-200/80 text-slate-800 rounded-bl-none"
+                  key={index}
+                  className={`flex flex-col ${
+                    msg.sender === "user" ? "items-end" : "items-start"
                   }`}
                 >
-                  {msg.text}
-                </div>
-
-                {/* Optional Action Button */}
-                {msg.action && (
-                  <button
-                    onClick={() => handleActionClick(msg.action)}
-                    type="button"
-                    className={`mt-2 px-3 py-1.5 rounded-xl font-semibold text-xs transition-all border flex items-center gap-1.5 active:scale-95 ${
-                      isNight
-                        ? "bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border-indigo-500/30"
-                        : "bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 border-blue-500/30"
+                  <div
+                    className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl whitespace-pre-line leading-relaxed ${
+                      msg.sender === "user"
+                        ? isNight
+                          ? "bg-indigo-600 text-white rounded-br-none shadow-sm"
+                          : "bg-blue-600 text-white rounded-br-none shadow-sm"
+                        : isNight
+                        ? "bg-slate-800 border border-slate-700 text-slate-200 rounded-bl-none"
+                        : "bg-slate-100 border border-slate-200/80 text-slate-800 rounded-bl-none"
                     }`}
                   >
-                    <span>{msg.action.label}</span>
-                  </button>
-                )}
-              </div>
-            ))}
+                    {msg.text}
+                  </div>
 
-            {/* Typing Indicator */}
-            {isTyping && (
-              <div className="flex items-center gap-1.5 p-1.5 text-slate-400">
-                <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} className="opacity-75 scale-75" />
-                <span className="text-xs italic">Emmy is thinking...</span>
-              </div>
-            )}
-          </div>
-
-          {/* Quick Action Pills Area */}
-          <div
-            className={`px-2.5 pt-2 pb-1.5 border-t flex flex-col gap-1 shrink-0 ${
-              isNight
-                ? "bg-slate-900/90 border-slate-800"
-                : "bg-slate-50/90 border-slate-200/80"
-            }`}
-          >
-            <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 px-0.5">
-              Quick Topics:
-            </span>
-            <div
-              ref={optionsContainerRef}
-              className="flex items-center gap-1 overflow-x-auto custom-scrollbar overscroll-contain pb-1 no-scrollbar sm:flex-wrap sm:max-h-[64px]"
-            >
-              {INITIAL_OPTIONS.map((opt) => (
-                <button
-                  key={opt.id}
-                  onClick={() => handleOptionClick(opt)}
-                  type="button"
-                  className={`px-2 py-1 shrink-0 rounded-xl text-[11px] font-medium transition-all duration-200 border flex items-center gap-1 active:scale-95 ${
-                    isNight
-                      ? "bg-slate-800 hover:bg-indigo-600/30 border-slate-700 hover:border-indigo-500 text-slate-200"
-                      : "bg-white hover:bg-sky-50 border-slate-200 hover:border-sky-400 text-slate-700"
-                  }`}
-                >
-                  <span>{opt.label}</span>
-                </button>
+                  {/* Optional Action Button */}
+                  {msg.action && (
+                    <button
+                      onClick={() => handleActionClick(msg.action)}
+                      type="button"
+                      className={`mt-2 px-3 py-1.5 rounded-xl font-semibold text-xs transition-all border flex items-center gap-1.5 active:scale-95 ${
+                        isNight
+                          ? "bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border-indigo-500/30"
+                          : "bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 border-blue-500/30"
+                      }`}
+                    >
+                      <span>{msg.action.label}</span>
+                    </button>
+                  )}
+                </div>
               ))}
-            </div>
-          </div>
 
-          {/* Custom Message Keyboard Input Bar */}
-          <form
-            onSubmit={handleCustomSubmit}
-            className={`p-2 border-t flex items-center gap-1.5 shrink-0 ${
-              isNight
-                ? "bg-slate-900 border-slate-800 text-slate-100"
-                : "bg-white border-slate-200 text-slate-800"
+              {/* Typing Indicator */}
+              {isTyping && (
+                <div className="flex items-center gap-1.5 p-1.5 text-slate-400">
+                  <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} className="opacity-75 scale-75" />
+                  <span className="text-xs italic">Emmy is thinking...</span>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Action Pills Area */}
+            <div
+              className={`px-2.5 pt-2 pb-1.5 border-t flex flex-col gap-1 shrink-0 ${
+                isNight
+                  ? "bg-slate-900/90 border-slate-800"
+                  : "bg-slate-50/90 border-slate-200/80"
+              }`}
+            >
+              <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 px-0.5">
+                Quick Topics:
+              </span>
+              <div
+                ref={optionsContainerRef}
+                className="flex items-center gap-1 overflow-x-auto custom-scrollbar overscroll-contain pb-1 no-scrollbar sm:flex-wrap sm:max-h-[64px]"
+              >
+                {INITIAL_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.id}
+                    onClick={() => handleOptionClick(opt)}
+                    type="button"
+                    className={`px-2 py-1 shrink-0 rounded-xl text-[11px] font-medium transition-all duration-200 border flex items-center gap-1 active:scale-95 ${
+                      isNight
+                        ? "bg-slate-800 hover:bg-indigo-600/30 border-slate-700 hover:border-indigo-500 text-slate-200"
+                        : "bg-white hover:bg-sky-50 border-slate-200 hover:border-sky-400 text-slate-700"
+                    }`}
+                  >
+                    <span>{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Custom Message Keyboard Input Bar */}
+            <form
+              onSubmit={handleCustomSubmit}
+              className={`p-2 border-t flex items-center gap-1.5 shrink-0 ${
+                isNight
+                  ? "bg-slate-900 border-slate-800 text-slate-100"
+                  : "bg-white border-slate-200 text-slate-800"
+              }`}
+            >
+              <input
+                ref={textInputRef}
+                type="text"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                placeholder="Ask Emmy anything about Om..."
+                enterKeyHint="send"
+                className={`flex-1 px-3 py-1.5 rounded-xl text-xs sm:text-sm border outline-none transition-colors ${
+                  isNight
+                    ? "bg-slate-800/90 border-slate-700 text-slate-100 placeholder-slate-400 focus:border-indigo-500"
+                    : "bg-slate-100/90 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-blue-500"
+                }`}
+              />
+              <button
+                type="submit"
+                disabled={!inputText.trim()}
+                aria-label="Send message"
+                className={`p-2 rounded-xl transition-all flex items-center justify-center shrink-0 ${
+                  inputText.trim()
+                    ? isNight
+                      ? "bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95 shadow-md shadow-indigo-950/40"
+                      : "bg-blue-600 text-white hover:bg-blue-500 active:scale-95 shadow-md shadow-blue-500/20"
+                    : isNight
+                    ? "bg-slate-800 text-slate-600 cursor-not-allowed"
+                    : "bg-slate-100 text-slate-300 cursor-not-allowed"
+                }`}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4"
+                >
+                  <line x1="22" y1="2" x2="11" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* DOCK ANCHOR CONTAINER FOR FLOATING MONKEY AVATAR */}
+        <div className="relative pointer-events-auto flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 shrink-0">
+
+          {/* Boundary-Free 3D Floating Monkey Avatar Button (Removes when chat mode is active, comes back when closed) */}
+          <button
+            onClick={toggleOpen}
+            aria-label={isOpen ? "Close Emmy Guide" : "Open Emmy Guide"}
+            type="button"
+            tabIndex={isOpen ? -1 : 0}
+            className={`relative group flex items-center justify-center focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-transparent border-none p-0 animate-monkey-float transition-all duration-300 transform w-full h-full z-10 ${
+              isOpen
+                ? "scale-0 opacity-0 pointer-events-none"
+                : "scale-100 opacity-100 pointer-events-auto cursor-pointer"
             }`}
           >
-            <input
-              ref={textInputRef}
-              type="text"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-              placeholder="Ask Emmy anything about Om..."
-              enterKeyHint="send"
-              className={`flex-1 px-3 py-1.5 rounded-xl text-xs sm:text-sm border outline-none transition-colors ${
-                isNight
-                  ? "bg-slate-800/90 border-slate-700 text-slate-100 placeholder-slate-400 focus:border-indigo-500"
-                  : "bg-slate-100/90 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-blue-500"
+            {/* Soft Ambient Character Aura */}
+            <div
+              className={`absolute inset-1 rounded-full opacity-40 blur-lg group-hover:opacity-80 transition-opacity animate-pulse ${
+                isSleeping
+                  ? "bg-indigo-500/40"
+                  : isNight
+                  ? "bg-indigo-500/60"
+                  : "bg-sky-400/60"
               }`}
             />
-            <button
-              type="submit"
-              disabled={!inputText.trim()}
-              aria-label="Send message"
-              className={`p-2 rounded-xl transition-all flex items-center justify-center shrink-0 ${
-                inputText.trim()
-                  ? isNight
-                    ? "bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95 shadow-md shadow-indigo-950/40"
-                    : "bg-blue-600 text-white hover:bg-blue-500 active:scale-95 shadow-md shadow-blue-500/20"
-                  : isNight
-                  ? "bg-slate-800 text-slate-600 cursor-not-allowed"
-                  : "bg-slate-100 text-slate-300 cursor-not-allowed"
-              }`}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-4 h-4"
-              >
-                <line x1="22" y1="2" x2="11" y2="13" />
-                <polygon points="22 2 15 22 11 13 2 9 22 2" />
-              </svg>
-            </button>
-          </form>
+
+            {/* Boundary-Free 3D Monkey Avatar */}
+            <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} className="relative z-10" />
+          </button>
         </div>
-      )}
+      </aside>
 
-      {/* DOCK ANCHOR CONTAINER FOR FLOATING MONKEY AVATAR */}
-      <div className="relative pointer-events-auto flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 shrink-0">
-
-        {/* Boundary-Free 3D Floating Monkey Avatar Button (Removes when chat mode is active, comes back when closed) */}
-        <button
-          onClick={toggleOpen}
-          aria-label={isOpen ? "Close Emmy Guide" : "Open Emmy Guide"}
-          type="button"
-          tabIndex={isOpen ? -1 : 0}
-          className={`relative group flex items-center justify-center focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-transparent border-none p-0 animate-monkey-float transition-all duration-300 transform w-full h-full z-10 ${
-            isOpen
-              ? "scale-0 opacity-0 pointer-events-none"
-              : "scale-100 opacity-100 pointer-events-auto cursor-pointer"
-          }`}
-        >
-          {/* Soft Ambient Character Aura */}
-          <div
-            className={`absolute inset-1 rounded-full opacity-40 blur-lg group-hover:opacity-80 transition-opacity animate-pulse ${
-              isSleeping
-                ? "bg-indigo-500/40"
-                : isNight
-                ? "bg-indigo-500/60"
-                : "bg-sky-400/60"
-            }`}
-          />
-
-          {/* Boundary-Free 3D Monkey Avatar */}
-          <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} className="relative z-10" />
-        </button>
-      </div>
-    </aside>,
+      {/* Standalone Snake Game Modal Overlay */}
+      <SnakeGameModal
+        isOpen={activeGame === "snake"}
+        onClose={() => setActiveGame(null)}
+        onGameEnd={handleGameEnd}
+      />
+    </>,
     document.body
   );
 };
