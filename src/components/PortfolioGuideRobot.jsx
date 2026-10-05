@@ -3,7 +3,8 @@ import { createPortal } from "react-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { portfolioData } from "../constants";
-import SnakeGameModal from "./games/SnakeGame/SnakeGameModal";
+import { SnakeGameModal, TicTacToeModal } from "./games";
+
 
 
 // Boundary-free 3D Monkey Avatar Component (Emmy - Female Island Guide Monkey with cute flower accessory)
@@ -173,25 +174,37 @@ const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, classN
   );
 };
 
-// Full options list including 3D home, social media & coding profiles
-const INITIAL_OPTIONS = [
-  { id: "snake", label: "🐍 Play Snake", icon: "🐍" },
-  { id: "home", label: "🏠 3D World", icon: "🏠" },
-  { id: "about", label: "👨‍💻 About Om", icon: "👨‍💻" },
-  { id: "skills", label: "🛠️ Skills", icon: "🛠️" },
-  { id: "projects", label: "🚀 Projects", icon: "🚀" },
-  { id: "certifications", label: "📜 Certifications", icon: "📜" },
-  { id: "coding", label: "💻 Coding Journey", icon: "💻" },
-  { id: "education", label: "🎓 Education", icon: "🎓" },
-  { id: "github", label: "🐙 GitHub", icon: "🐙" },
-  { id: "leetcode", label: "⚡ LeetCode", icon: "⚡" },
-  { id: "codeforces", label: "🏆 Codeforces", icon: "🏆" },
-  { id: "hackerrank", label: "⭐ HackerRank", icon: "⭐" },
-  { id: "instagram", label: "📸 Instagram", icon: "📸" },
-  { id: "resume", label: "📄 Resume", icon: "📄" },
-  { id: "contact", label: "💬 Let's Talk", icon: "💬" },
-  { id: "ask", label: "Ask Emmy 💬", icon: "💬" },
+// Option Categories and Lists (Games classified separately)
+const OPTION_CATEGORIES = [
+  { id: "games", label: "🎮 Mini Games" },
+  { id: "portfolio", label: "👨‍💻 Portfolio" },
+  { id: "profiles", label: "🔗 Profiles" },
 ];
+
+const CATEGORIZED_OPTIONS = {
+  games: [
+    { id: "snake", label: "🐍 Snake", icon: "🐍" },
+    { id: "tictactoe", label: "❌⭕ Cross & Zero", icon: "❌" },
+  ],
+  portfolio: [
+    { id: "home", label: "🏠 3D World", icon: "🏠" },
+    { id: "about", label: "👨‍💻 About Om", icon: "👨‍💻" },
+    { id: "skills", label: "🛠️ Skills", icon: "🛠️" },
+    { id: "projects", label: "🚀 Projects", icon: "🚀" },
+    { id: "certifications", label: "📜 Certifications", icon: "📜" },
+    { id: "coding", label: "💻 Coding Journey", icon: "💻" },
+    { id: "education", label: "🎓 Education", icon: "🎓" },
+    { id: "resume", label: "📄 Resume", icon: "📄" },
+    { id: "contact", label: "💬 Let's Talk", icon: "💬" },
+  ],
+  profiles: [
+    { id: "github", label: "🐙 GitHub", icon: "🐙" },
+    { id: "leetcode", label: "⚡ LeetCode", icon: "⚡" },
+    { id: "codeforces", label: "🏆 Codeforces", icon: "🏆" },
+    { id: "hackerrank", label: "⭐ HackerRank", icon: "⭐" },
+    { id: "instagram", label: "📸 Instagram", icon: "📸" },
+  ],
+};
 
 // Wake Up Messages
 const WAKE_UP_MESSAGES = [
@@ -207,6 +220,7 @@ const PortfolioGuideRobot = () => {
   const location = useLocation();
 
   const [activeGame, setActiveGame] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("games");
   const [showInitialSpeech, setShowInitialSpeech] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isSleeping, setIsSleeping] = useState(false);
@@ -219,7 +233,7 @@ const PortfolioGuideRobot = () => {
     },
     {
       sender: "robot",
-      text: "I can tell you about Om, his projects, skills, certifications, coding journey, play games like Snake with you, and help you navigate around.\n\nWant to explore or play something? ✨",
+      text: "I can tell you about Om, his projects, skills, certifications, coding journey, play games like Snake or Cross & Zero with you, and help you navigate around.\n\nWant to explore or play something? ✨",
       action: null,
     },
   ]);
@@ -248,6 +262,24 @@ const PortfolioGuideRobot = () => {
         sender: "robot",
         text: `${reactionText}\n\nFinal Score: ${score} | High Score: ${highScore}`,
         action: { type: "game", gameId: "snake", label: "🎮 PLAY SNAKE AGAIN" },
+      },
+    ]);
+  };
+
+  const handleTicTacToeEnd = ({ winner, isPlayerWinner }) => {
+    let reactionText = "A tie! Great minds think alike 😄";
+    if (isPlayerWinner) {
+      reactionText = "Whoa! You outsmarted me at Cross & Zero! 🧠✨";
+    } else if (winner === "O" || winner === "X") {
+      reactionText = "Gotcha! Emmy takes this round 🐒🔥";
+    }
+
+    setChatHistory((prev) => [
+      ...prev,
+      {
+        sender: "robot",
+        text: reactionText,
+        action: { type: "game", gameId: "tictactoe", label: "🎮 PLAY AGAIN" },
       },
     ]);
   };
@@ -354,11 +386,9 @@ const PortfolioGuideRobot = () => {
     };
 
     const cleanupChat = attachScrollGuard(chatContainerRef.current);
-    const cleanupOpts = attachScrollGuard(optionsContainerRef.current);
 
     return () => {
       cleanupChat();
-      cleanupOpts();
     };
   }, [isOpen]);
 
@@ -495,17 +525,34 @@ Strict rules:
       };
     }
 
+    // Cross & Zero / Tic Tac Toe requests
+    if (
+      q.includes("cross zero") ||
+      q.includes("cross and zero") ||
+      q.includes("tic tac toe") ||
+      q.includes("tictactoe") ||
+      q.includes("xo") ||
+      q.includes("x o") ||
+      q.includes("noughts")
+    ) {
+      return {
+        text: "Cross & Zero? You're on! ❌⭕ Let's see if you can beat me.",
+        action: { type: "game", gameId: "tictactoe", label: "🎮 PLAY CROSS & ZERO" },
+      };
+    }
+
     // General game requests / bored
     if (
       q.includes("play a game") ||
       q.includes("want to play") ||
       q.includes("play game") ||
       q.includes("bored") ||
-      q.includes("game")
+      q.includes("game") ||
+      q.includes("games")
     ) {
       return {
         text: "Sure 😄 What do you want to play?",
-        action: { type: "game", gameId: "snake", label: "🐍 Snake" },
+        action: { type: "game", gameId: "tictactoe", label: "❌⭕ Cross & Zero" },
       };
     }
 
@@ -762,6 +809,18 @@ Strict rules:
               type: "game",
               gameId: "snake",
               label: "🎮 PLAY SNAKE",
+            },
+          };
+          break;
+
+        case "tictactoe":
+          botResponse = {
+            sender: "robot",
+            text: "Cross & Zero? You're on! ❌⭕ Let's see if you can beat me.",
+            action: {
+              type: "game",
+              gameId: "tictactoe",
+              label: "🎮 PLAY CROSS & ZERO",
             },
           };
           break;
@@ -1171,27 +1230,45 @@ Strict rules:
               )}
             </div>
 
-            {/* Quick Action Pills Area */}
+            {/* Quick Action Pills Area with Category Switcher & Smooth Swiping */}
             <div
-              className={`px-2.5 pt-2 pb-1.5 border-t flex flex-col gap-1 shrink-0 ${
+              className={`px-2.5 pt-2 pb-2 border-t flex flex-col gap-1.5 shrink-0 ${
                 isNight
-                  ? "bg-slate-900/90 border-slate-800"
-                  : "bg-slate-50/90 border-slate-200/80"
+                  ? "bg-slate-900/95 border-slate-800"
+                  : "bg-slate-50/95 border-slate-200/80"
               }`}
             >
-              <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 px-0.5">
-                Quick Topics:
-              </span>
+              {/* Category Filter Tabs */}
+              <div className="flex items-center gap-1 font-semibold text-[10px] tracking-wide uppercase">
+                {OPTION_CATEGORIES.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={`px-2 py-0.5 rounded-lg transition-all duration-200 ${
+                      activeCategory === cat.id
+                        ? isNight
+                          ? "bg-indigo-600 text-white shadow-sm font-bold"
+                          : "bg-blue-600 text-white shadow-sm font-bold"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Horizontal Scrollable Pills Area with Butter Smooth Touch/Swipe */}
               <div
                 ref={optionsContainerRef}
-                className="flex items-center gap-1 overflow-x-auto custom-scrollbar overscroll-contain pb-1 no-scrollbar sm:flex-wrap sm:max-h-[64px]"
+                className="flex items-center gap-1.5 overflow-x-auto touch-pan-x custom-scrollbar py-0.5 no-scrollbar overscroll-x-contain select-none"
               >
-                {INITIAL_OPTIONS.map((opt) => (
+                {CATEGORIZED_OPTIONS[activeCategory]?.map((opt) => (
                   <button
                     key={opt.id}
                     onClick={() => handleOptionClick(opt)}
                     type="button"
-                    className={`px-2 py-1 shrink-0 rounded-xl text-[11px] font-medium transition-all duration-200 border flex items-center gap-1 active:scale-95 ${
+                    className={`px-2.5 py-1 shrink-0 rounded-xl text-[11px] font-medium transition-all duration-200 border flex items-center gap-1 active:scale-95 whitespace-nowrap ${
                       isNight
                         ? "bg-slate-800 hover:bg-indigo-600/30 border-slate-700 hover:border-indigo-500 text-slate-200"
                         : "bg-white hover:bg-sky-50 border-slate-200 hover:border-sky-400 text-slate-700"
@@ -1295,6 +1372,13 @@ Strict rules:
         isOpen={activeGame === "snake"}
         onClose={() => setActiveGame(null)}
         onGameEnd={handleGameEnd}
+      />
+
+      {/* Standalone Cross & Zero (Tic Tac Toe) Modal Overlay */}
+      <TicTacToeModal
+        isOpen={activeGame === "tictactoe"}
+        onClose={() => setActiveGame(null)}
+        onGameEnd={handleTicTacToeEnd}
       />
     </>,
     document.body
