@@ -68,13 +68,25 @@ const Home = ({ hasPreloaded = false }) => {
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    
+    // Auto reset scroll offset if mobile soft keyboard shifted page scroll
+    const handleScrollReset = () => {
+      if (window.scrollY !== 0 || window.scrollX !== 0) {
+        window.scrollTo(0, 0);
+      }
+    };
+    window.addEventListener("scroll", handleScrollReset, { passive: true });
+
     return () => {
       document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+      window.removeEventListener("scroll", handleScrollReset);
     };
   }, []);
 
   return (
-    <section className="w-full h-screen h-[100dvh] relative overflow-hidden touch-none select-none">
+    <section className="fixed inset-0 w-full h-screen h-[100dvh] overflow-hidden touch-none select-none z-0">
       {/* Space Meteors & Small Roaming Asteroids Canvas */}
       <MeteorShower />
 

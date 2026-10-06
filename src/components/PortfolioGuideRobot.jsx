@@ -306,6 +306,11 @@ const PortfolioGuideRobot = () => {
 
   const handleInputBlur = () => {
     setIsInputFocused(false);
+    if (location.pathname === "/") {
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 50);
+    }
   };
 
 
