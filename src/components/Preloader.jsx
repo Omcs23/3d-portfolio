@@ -146,7 +146,7 @@ const Preloader = ({ onComplete }) => {
       <div className="w-full max-w-2xl sm:max-w-4xl mx-auto min-h-full flex flex-col justify-between py-2">
         {/* Top Headline Section */}
         <div className="w-full pt-2 sm:pt-4 shrink-0">
-          <h1 className="text-[36px] xs:text-[44px] sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.98] text-white uppercase text-left font-sans">
+          <h1 className="text-[32px] xs:text-[40px] sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-wider leading-[1.1] text-white uppercase text-left font-pixel">
             WELCOME<br />
             TO MY<br />
             WORLD!
@@ -155,14 +155,13 @@ const Preloader = ({ onComplete }) => {
 
         {/* Middle Bio Section */}
         <div className="w-full flex flex-col items-end text-right my-auto py-6 sm:py-8 shrink-0">
-          <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-neutral-100 font-outfit font-medium leading-relaxed max-w-[300px] xs:max-w-[340px] sm:max-w-md md:max-w-lg text-right">
+          <p className="text-sm xs:text-base sm:text-lg md:text-xl text-neutral-100 font-pixel leading-relaxed max-w-[320px] xs:max-w-[360px] sm:max-w-md md:max-w-lg text-right tracking-wide">
             I'm Om Sharma, a Full-Stack Developer & AI Explorer passionate about building interactive web applications & 3D experiences.
           </p>
 
-          <p className="text-xs sm:text-sm text-neutral-400 font-mono mt-4 sm:mt-6 tracking-wide text-right">
+          <p className="text-xs sm:text-sm text-neutral-400 font-pixel mt-4 sm:mt-6 tracking-wider text-right">
             Interactive 3D Portfolio • 2026
           </p>
-
         </div>
 
 
@@ -186,13 +185,13 @@ const Preloader = ({ onComplete }) => {
             />
 
             {/* Bold Black Text inside pill */}
-            <span className="relative z-10 font-extrabold text-sm sm:text-base tracking-[0.2em] uppercase text-black">
+            <span className="relative z-10 font-bold text-xs sm:text-sm md:text-base tracking-[0.15em] uppercase text-black font-pixel">
               {isLoaded ? "CLICK TO ENTER" : `LOADING... ${Math.round(displayProgress)}%`}
             </span>
           </button>
 
           {isLoaded && (
-            <p className="text-center text-[10px] sm:text-xs text-neutral-400 mt-2 font-mono tracking-wider">
+            <p className="text-center text-[10px] sm:text-xs text-neutral-400 mt-2 font-pixel tracking-wider">
               Click pill or press ENTER to start
             </p>
           )}

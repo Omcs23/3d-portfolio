@@ -30,7 +30,10 @@ export default {
         jakarta: ["Plus Jakarta Sans", "sans-serif"],
         space: ["Space Grotesk", "monospace"],
         worksans: ["Work Sans", "sans-serif"],
-        poppins: ["Poppins", "sans-serif"]
+        poppins: ["Poppins", "sans-serif"],
+        pixel: ['"Pixelify Sans"', '"Press Start 2P"', '"Silkscreen"', "monospace"],
+        pressStart: ['"Press Start 2P"', "cursive", "monospace"],
+        silkscreen: ['"Silkscreen"', "monospace"],
       },
       boxShadow: {
         card: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)",
