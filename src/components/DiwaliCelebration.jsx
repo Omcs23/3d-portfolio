@@ -127,85 +127,13 @@ const DiwaliCelebration = ({ hasPreloaded = true }) => {
 
   if (stage === "hidden") return null;
 
-  const isExiting = stage === "slidingOut";
-  const isEntering = stage === "slidingIn";
-
   return (
-    <div className="fixed inset-0 z-[999999] pointer-events-none flex flex-col justify-end items-center pb-8 sm:pb-12 px-4 select-none">
+    <div className="fixed inset-0 z-[999999] pointer-events-none select-none">
       {/* Firecracker Canvas */}
       <canvas
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none z-0"
       />
-
-      {/* Clean Pure Visual Motion Deepak (No Text, Overflow-Visible Flame) */}
-      <div
-        className={`relative z-10 flex flex-col items-center justify-center p-4 overflow-visible transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1) ${
-          isEntering
-            ? "translate-y-24 opacity-0 scale-90"
-            : isExiting
-            ? "translate-y-28 opacity-0 scale-95"
-            : "translate-y-0 opacity-100 scale-100"
-        }`}
-      >
-        {/* Cute Motion Deepak Container */}
-        <div className="relative w-28 h-32 sm:w-32 sm:h-36 flex items-center justify-center overflow-visible">
-          {/* Glowing Aura Background */}
-          <div className="absolute inset-0 bg-amber-400/40 rounded-full blur-2xl animate-pulse" />
-
-          {/* SVG with overflow-visible to ensure top flame is NEVER lost or clipped */}
-          <svg
-            viewBox="0 0 64 72"
-            className="w-28 h-32 sm:w-32 sm:h-36 filter drop-shadow-[0_0_20px_rgba(255,193,7,0.95)] overflow-visible"
-          >
-            {/* Clay Diya Base */}
-            <path
-              d="M12 44 C12 58, 52 58, 52 44 C42 50, 22 50, 12 44 Z"
-              fill="url(#slideDiyaGradNoText)"
-            />
-            <ellipse cx="32" cy="44" rx="20" ry="4" fill="#B7791F" />
-
-            {/* Flame Group - Smooth natural pulse/flicker without clipping */}
-            <g className="origin-bottom animate-[flamePulse_1.2s_ease-in-out_infinite]">
-              {/* Outer Golden Flame */}
-              <path
-                d="M32 12 Q24 28 32 42 Q40 28 32 12 Z"
-                fill="url(#slideFlameGradNoText)"
-              />
-              {/* Inner Bright Yellow Core */}
-              <path
-                d="M32 22 Q27 32 32 41 Q37 32 32 22 Z"
-                fill="#FFF59D"
-              />
-              {/* White Center Hotspot */}
-              <circle cx="32" cy="34" r="3" fill="#FFFFFF" className="opacity-90" />
-            </g>
-
-            <defs>
-              <linearGradient id="slideDiyaGradNoText" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#F59E0B" />
-                <stop offset="100%" stopColor="#78350F" />
-              </linearGradient>
-              <linearGradient id="slideFlameGradNoText" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#FFEE58" />
-                <stop offset="50%" stopColor="#FF9800" />
-                <stop offset="100%" stopColor="#E65100" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        <style>{`
-          @keyframes flamePulse {
-            0%, 100% {
-              transform: translateY(0px) scale(1);
-            }
-            50% {
-              transform: translateY(-4px) scale(1.05);
-            }
-          }
-        `}</style>
-      </div>
     </div>
   );
 };
