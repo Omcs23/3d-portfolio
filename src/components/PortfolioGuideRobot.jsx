@@ -6,8 +6,8 @@ import { NumberGuessModal } from "./games";
 
 
 
-// Boundary-free 3D Monkey Avatar Component (Emmy - Female Island Guide Monkey with cute flower accessory)
-const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, className = "" }) => {
+// Boundary-free 3D Monkey Avatar Component (Emmy - Female Island Guide Monkey with cute flower accessory & over-ear headphones option)
+const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, hasHeadphones = false, className = "" }) => {
   const sizeClasses = {
     sm: "w-8 h-8",
     md: "w-10 h-10",
@@ -92,6 +92,36 @@ const MonkeyAvatar = ({ size = "md", isNight = false, isSleeping = false, classN
           <circle cx="45" cy="14" r="3.8" fill="#ff6b81" />
           <circle cx="45" cy="14" r="1.6" fill="#feca57" />
         </g>
+
+        {/* OVER-EAR HEADPHONES (Active while awake listening to music: 0-50 seconds of inactivity) */}
+        {hasHeadphones && !isSleeping && (
+          <g filter="url(#soft3dShadow)">
+            {/* Sleek Metallic Outer Headband Arch */}
+            <path
+              d="M 11 31 Q 35 3 59 31"
+              stroke="#0f172a"
+              strokeWidth="5.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* Red Accent Inner Racing Stripe */}
+            <path
+              d="M 11 31 Q 35 3 59 31"
+              stroke="#dc2626"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+
+            {/* Left Over-Ear Cushion Cup */}
+            <rect x="5" y="23" width="9" height="19" rx="4.5" fill="#0f172a" stroke="#dc2626" strokeWidth="1.5" />
+            <rect x="7" y="25" width="5" height="15" rx="2.5" fill="#ef4444" opacity="0.95" />
+
+            {/* Right Over-Ear Cushion Cup */}
+            <rect x="56" y="23" width="9" height="19" rx="4.5" fill="#0f172a" stroke="#dc2626" strokeWidth="1.5" />
+            <rect x="58" y="25" width="5" height="15" rx="2.5" fill="#ef4444" opacity="0.95" />
+          </g>
+        )}
 
         {/* 3. 3D MUZZLE & CHEEKS SHAPE */}
         <path
@@ -223,6 +253,7 @@ const PortfolioGuideRobot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSleeping, setIsSleeping] = useState(false);
   const [isInitialFloating, setIsInitialFloating] = useState(true);
+  const [inactivitySeconds, setInactivitySeconds] = useState(0);
   const [chatHistory, setChatHistory] = useState([
     {
       sender: "robot",
@@ -237,6 +268,10 @@ const PortfolioGuideRobot = () => {
   ]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+
+  // Emmy wears headphones while awake listening to music (0 to 50 seconds of inactivity).
+  // During the last 10 seconds (50s-60s), headphones disappear before sleep mode.
+  const hasHeadphones = !isSleeping && inactivitySeconds < 50;
   const [viewportHeight, setViewportHeight] = useState(
     typeof window !== "undefined" && window.visualViewport
       ? window.visualViewport.height
@@ -323,6 +358,29 @@ const PortfolioGuideRobot = () => {
     return () => clearTimeout(motionTimer);
   }, []);
 
+  // 60-second inactivity timer logic:
+  // 0s to 50s -> Emmy awake listening to music (wearing headphones)
+  // 50s to 60s -> last 10 seconds remaining, headphones disappear before sleep
+  // 60s -> sleep mode (isSleeping = true)
+  useEffect(() => {
+    if (isOpen) {
+      setInactivitySeconds(0);
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setInactivitySeconds((prev) => {
+        const next = prev + 1;
+        if (next >= 60) {
+          setIsSleeping(true);
+        }
+        return next;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isOpen]);
+
   // Prevent scroll chaining / background webpage scrolling while inside Emmy Chat
   useEffect(() => {
     if (!isOpen) return;
@@ -381,40 +439,6 @@ const PortfolioGuideRobot = () => {
     };
   }, [isOpen]);
 
-
-  // 60-second inactivity sleep timer logic (both initial site load AND during chat)
-  const startInactivityTimer = () => {
-    if (inactivityTimerRef.current) {
-      clearTimeout(inactivityTimerRef.current);
-    }
-
-    inactivityTimerRef.current = setTimeout(() => {
-      setIsSleeping(true);
-      if (isOpen) {
-        setChatHistory((prev) => [
-          ...prev,
-          {
-            sender: "robot",
-            text: "Zzz... 😴 *Emmy curls up under a warm palm leaf* Zzz...",
-            action: null,
-          },
-        ]);
-      }
-    }, 60000); // 60 seconds of no interaction -> sleep!
-  };
-
-  useEffect(() => {
-    if (!isSleeping) {
-      startInactivityTimer();
-    } else {
-      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
-    }
-
-    return () => {
-      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
-    };
-  }, [isOpen, isSleeping]);
-
   // Scroll to bottom of chat history when updated
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -467,7 +491,6 @@ Strict rules:
       const data = await response.json();
       const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (aiText) {
-        // Check if response relates to playing Snake / game
         if (
           userQuery.toLowerCase().includes("guess") ||
           userQuery.toLowerCase().includes("number") ||
@@ -493,7 +516,6 @@ Strict rules:
   const processTypedQuery = (query) => {
     const q = query.toLowerCase().trim();
 
-    // Natural human touches & reactions
     const humanReactions = [
       "Nice choice 👀 ",
       "Ah, checking out Om's work! 🚀 ",
@@ -502,7 +524,6 @@ Strict rules:
     ];
     const randomReaction = humanReactions[Math.floor(Math.random() * humanReactions.length)];
 
-    // Rock Paper Scissors & Game Requests
     if (
       q.includes("guess") ||
       q.includes("number") ||
@@ -520,7 +541,6 @@ Strict rules:
       };
     }
 
-    // Navigation requests: Where are the projects / Show me projects
     if (
       q.includes("where are the projects") ||
       q.includes("where are projects") ||
@@ -535,7 +555,6 @@ Strict rules:
       };
     }
 
-    // Navigation requests: How do I contact Om / Where is contact
     if (
       q.includes("how do i contact") ||
       q.includes("how to contact") ||
@@ -550,7 +569,6 @@ Strict rules:
       };
     }
 
-    // Projects: What projects has Om built?
     if (
       q.includes("project") ||
       q.includes("built") ||
@@ -566,7 +584,6 @@ Strict rules:
       };
     }
 
-    // Technologies / Skills: What technologies does he know?
     if (
       q.includes("technology") ||
       q.includes("technologies") ||
@@ -575,7 +592,6 @@ Strict rules:
       q.includes("stack") ||
       q.includes("framework")
     ) {
-      // Specific Java query check
       if (q.includes("java")) {
         return {
           text: "Om is proficient in Java! He uses it for Data Structures & Algorithms, competitive programming (100+ problems solved), and holds Java certifications from Infosys Springboard. ☕",
@@ -589,7 +605,6 @@ Strict rules:
       };
     }
 
-    // Specific Java query fallback
     if (q.includes("java")) {
       return {
         text: "Om is proficient in Java! He uses it for Data Structures & Algorithms, competitive programming (100+ problems solved), and holds Java certifications from Infosys Springboard. ☕",
@@ -597,7 +612,6 @@ Strict rules:
       };
     }
 
-    // Certifications: Tell me about his certifications
     if (
       q.includes("certif") ||
       q.includes("oracle") ||
@@ -612,7 +626,6 @@ Strict rules:
       };
     }
 
-    // Website: What is this website built with?
     if (
       q.includes("this website") ||
       q.includes("this portfolio") ||
@@ -627,7 +640,6 @@ Strict rules:
       };
     }
 
-    // Contact: Can I contact Om?
     if (
       q.includes("can i contact") ||
       q.includes("contact om") ||
@@ -642,7 +654,6 @@ Strict rules:
       };
     }
 
-    // GitHub: Show me his GitHub
     if (q.includes("github") || q.includes("repo") || q.includes("code")) {
       return {
         text: "You can check out Om's GitHub profile at github.com/Omcs23 to view his repositories and open-source projects! 🚀",
@@ -654,7 +665,6 @@ Strict rules:
       };
     }
 
-    // LeetCode / Coding stats
     if (
       q.includes("leetcode") ||
       q.includes("hackerrank") ||
@@ -668,7 +678,6 @@ Strict rules:
       };
     }
 
-    // Education / About
     if (
       q.includes("education") ||
       q.includes("college") ||
@@ -684,7 +693,6 @@ Strict rules:
       };
     }
 
-    // Resume
     if (q.includes("resume") || q.includes("cv") || q.includes("pdf")) {
       return {
         text: "You can view or download Om's official Resume PDF directly:",
@@ -696,7 +704,22 @@ Strict rules:
       };
     }
 
-    // Greetings: Hi / Hello / Hey
+    if (
+      q.includes("artist") ||
+      q.includes("music") ||
+      q.includes("sidhu") ||
+      q.includes("song")
+    ) {
+      return {
+        text: "Want to explore my favorite music artist's page? 🎧✨",
+        action: {
+          type: "navigate",
+          target: "/tribute",
+          label: "🎵 Open My Favorite Artist Page →",
+        },
+      };
+    }
+
     if (
       q.includes("hi") ||
       q.includes("hello") ||
@@ -710,25 +733,6 @@ Strict rules:
       };
     }
 
-    // Unrelated questions redirect (weather, math, general AI trivia)
-    if (
-      q.includes("weather") ||
-      q.includes("temperature") ||
-      q.includes("math") ||
-      q.includes("solve") ||
-      q.includes("write code") ||
-      q.includes("python script") ||
-      q.includes("capital") ||
-      q.includes("president") ||
-      q.includes("news")
-    ) {
-      return {
-        text: "I'm mainly here to show you around Om's world 😄 Ask me about his projects, skills, certifications, or portfolio.",
-        action: null,
-      };
-    }
-
-    // Honest missing information fallback
     return {
       text: "I'm not seeing that information in Om's portfolio yet. You can check the Projects section or ask me about something else. 🙂",
       action: null,
@@ -741,8 +745,7 @@ Strict rules:
     if (isSleeping) {
       setIsSleeping(false);
     }
-
-    startInactivityTimer();
+    setInactivitySeconds(0);
 
     const userMessage = { sender: "user", text: option.label };
 
@@ -945,17 +948,6 @@ Strict rules:
           };
           break;
 
-        case "ask":
-          botResponse = {
-            sender: "robot",
-            text: "Ask me anything! For example: 'What projects has Om built?' or 'What technologies does he know?' 😄",
-            action: null,
-          };
-          setTimeout(() => {
-            textInputRef.current?.focus();
-          }, 100);
-          break;
-
         default:
           botResponse = {
             sender: "robot",
@@ -966,8 +958,7 @@ Strict rules:
 
       setChatHistory((prev) => [...prev, botResponse]);
       setIsTyping(false);
-
-      startInactivityTimer();
+      setInactivitySeconds(0);
     }, 400);
   };
 
@@ -981,8 +972,7 @@ Strict rules:
     if (isSleeping) {
       setIsSleeping(false);
     }
-
-    startInactivityTimer();
+    setInactivitySeconds(0);
 
     const userMessage = { sender: "user", text: query };
     setInputText("");
@@ -1006,8 +996,7 @@ Strict rules:
       const botResponse = aiResult || processTypedQuery(query);
       setChatHistory((prev) => [...prev, botResponse]);
       setIsTyping(false);
-
-      startInactivityTimer();
+      setInactivitySeconds(0);
     });
   };
 
@@ -1036,8 +1025,21 @@ Strict rules:
   const toggleOpen = () => {
     setIsInitialFloating(false);
 
-    // If opening while sleeping, wake up!
-    if (!isOpen && isSleeping) {
+    // If clicking Emmy while she is wearing headphones (headset time)
+    if (!isOpen && hasHeadphones) {
+      setChatHistory((prev) => [
+        ...prev,
+        {
+          sender: "robot",
+          text: "Hey! 🎧 Do you want to join and listen to my favorite artist?",
+          action: {
+            type: "navigate",
+            target: "/tribute",
+            label: "🎵 Open My Favorite Artist Page →",
+          },
+        },
+      ]);
+    } else if (!isOpen && isSleeping) {
       setIsSleeping(false);
       const randomWakeUp =
         WAKE_UP_MESSAGES[Math.floor(Math.random() * WAKE_UP_MESSAGES.length)];
@@ -1047,6 +1049,7 @@ Strict rules:
       ]);
     }
 
+    setInactivitySeconds(0);
     setIsOpen((prev) => !prev);
   };
 
@@ -1094,7 +1097,7 @@ Strict rules:
               }`}
             >
               <div className="flex items-center gap-2">
-                <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} />
+                <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} hasHeadphones={hasHeadphones} />
                 <div>
                   <h3 className="font-bold text-xs sm:text-sm font-outfit leading-tight flex items-center gap-1">
                     <span>Emmy</span> 🐒✨
@@ -1111,7 +1114,7 @@ Strict rules:
                   ) : (
                     <span className="text-[10px] text-emerald-500 font-medium flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Awake & Swingin' 🌴
+                      {hasHeadphones ? "Listening to Music 🎧" : "Awake & Swingin' 🌴"}
                     </span>
                   )}
                 </div>
@@ -1176,7 +1179,7 @@ Strict rules:
               {/* Typing Indicator */}
               {isTyping && (
                 <div className="flex items-center gap-1.5 p-1.5 text-slate-400">
-                  <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} className="opacity-75 scale-75" />
+                  <MonkeyAvatar size="sm" isNight={isNight} isSleeping={isSleeping} hasHeadphones={hasHeadphones} className="opacity-75 scale-75" />
                   <span className="text-xs italic">Emmy is thinking...</span>
                 </div>
               )}
@@ -1210,7 +1213,7 @@ Strict rules:
                 ))}
               </div>
 
-              {/* Horizontal Scrollable Pills Area with Butter Smooth Touch/Swipe */}
+              {/* Horizontal Scrollable Pills Area */}
               <div
                 ref={optionsContainerRef}
                 className="flex items-center gap-1.5 overflow-x-auto touch-pan-x custom-scrollbar py-0.5 no-scrollbar overscroll-x-contain select-none"
@@ -1289,8 +1292,7 @@ Strict rules:
 
         {/* DOCK ANCHOR CONTAINER FOR FLOATING MONKEY AVATAR */}
         <div className="relative pointer-events-auto flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 shrink-0">
-
-          {/* Boundary-Free 3D Floating Monkey Avatar Button (Removes when chat mode is active, comes back when closed) */}
+          {/* Boundary-Free 3D Floating Monkey Avatar Button */}
           <button
             onClick={toggleOpen}
             aria-label={isOpen ? "Close Emmy Guide" : "Open Emmy Guide"}
@@ -1307,6 +1309,8 @@ Strict rules:
               className={`absolute inset-1 rounded-full opacity-40 blur-lg group-hover:opacity-80 transition-opacity animate-pulse ${
                 isSleeping
                   ? "bg-indigo-500/40"
+                  : hasHeadphones
+                  ? "bg-red-500/60"
                   : isNight
                   ? "bg-indigo-500/60"
                   : "bg-sky-400/60"
@@ -1314,7 +1318,7 @@ Strict rules:
             />
 
             {/* Boundary-Free 3D Monkey Avatar */}
-            <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} className="relative z-10" />
+            <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} hasHeadphones={hasHeadphones} className="relative z-10" />
           </button>
         </div>
       </aside>

@@ -40,6 +40,11 @@ const Navbar = ({ onOpenTerminal }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Hide header completely on the Sidhu Moose Wala Tribute page
+  if (location.pathname === "/tribute") {
+    return null;
+  }
+
   return (
     <header
       className={`fixed top-0 right-0 left-0 w-full max-w-5xl mx-auto flex justify-between items-center sm:px-12 px-3 py-3 sm:py-4 z-50 pointer-events-auto transition-all duration-500 transform ${

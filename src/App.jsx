@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Route, HashRouter as Router, Routes, useLocation } from "react-router-dom";
 import { Footer, Navbar, Preloader, PortfolioGuideRobot, DevTerminal } from "./components";
-import { About, Contact, Home, Projects } from "./pages";
+import { About, Contact, Home, Projects, Tribute } from "./pages";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
 const MainContent = () => {
@@ -50,6 +50,7 @@ const MainContent = () => {
                   <Route path="/about" element={<About />} />
                   <Route path="/projects" element={<Projects />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/tribute" element={<Tribute />} />
                 </Routes>
                 <Footer />
               </>

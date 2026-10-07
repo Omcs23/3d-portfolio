@@ -11,6 +11,7 @@ import PortfolioGuideRobot from "./PortfolioGuideRobot";
 import MeteorShower from "./MeteorShower";
 import BadgeModal from "./BadgeModal";
 import DevTerminal from "./DevTerminal";
+import DiwaliCelebration from "./DiwaliCelebration";
 
 export {
     CTA,
@@ -25,5 +26,6 @@ export {
     PortfolioGuideRobot,
     MeteorShower,
     BadgeModal,
-    DevTerminal
+    DevTerminal,
+    DiwaliCelebration
 }

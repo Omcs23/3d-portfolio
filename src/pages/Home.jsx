@@ -2,7 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useRef, useState } from "react";
 
 import sakura from "../assets/sakura.mp3";
-import { HomeInfo, Loader, MeteorShower } from "../components";
+import { HomeInfo, Loader, MeteorShower, DiwaliCelebration } from "../components";
 import { Bird, Island, Plane, Sky } from "../models";
 import { useTheme } from "../context/ThemeContext";
 
@@ -87,6 +87,9 @@ const Home = ({ hasPreloaded = false }) => {
 
   return (
     <section className="fixed inset-0 w-full h-screen h-[100dvh] overflow-hidden touch-none select-none z-0">
+      {/* Festive Diwali Motion Deepak, Fireworks Crackers & Greetings Quote Modal */}
+      <DiwaliCelebration hasPreloaded={hasPreloaded} />
+
       {/* Space Meteors & Small Roaming Asteroids Canvas */}
       <MeteorShower />
 
