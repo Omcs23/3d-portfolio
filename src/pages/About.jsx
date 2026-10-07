@@ -81,35 +81,40 @@ PROFILES:
     <section className="max-container">
       {alert.show && <Alert {...alert} />}
 
-      <div className="flex flex-col items-start">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold font-space uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 mb-3">
-          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-          Full-Stack Developer & AI Explorer
-        </div>
-        
-        <h1 className="head-text">
-          Hello, I'm{" "}
-          <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 dark:from-sky-400 dark:via-indigo-300 dark:to-cyan-300 bg-clip-text text-transparent drop-shadow-sm font-extrabold">
-            Om Sharma
-          </span>{" "}
-          👋
-        </h1>
-      </div>
+      {/* Developer Profile Card (Designed from user reference image) */}
+      <div className="w-full my-4 p-6 sm:p-8 md:p-10 rounded-3xl bg-[#0d0d0d] border border-neutral-800 shadow-2xl shadow-red-950/20 text-white relative overflow-hidden">
+        {/* Subtle top accent gradient */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-amber-500 to-red-600 opacity-80" />
 
-      <div
-        className={`mt-5 flex flex-col gap-3.5 leading-relaxed text-base sm:text-lg ${
-          isNight ? "text-slate-300" : "text-slate-600"
-        }`}
-      >
-        <p>
-          I'm a passionate software developer who loves turning ideas into smooth, intuitive, and visually captivating digital experiences. I specialize in full-stack web development, competitive programming, and 3D web interfaces.
+        {/* Top Pixel Category Label */}
+        <p className="text-[10px] sm:text-xs font-pixel tracking-[0.2em] text-neutral-400 uppercase mb-2">
+          ABOUT THE DEVELOPER
         </p>
-        <p>
-          Currently pursuing my B.Tech in Computer Science & Engineering at GLA University, I am certified in Generative AI, DevOps, and Cybersecurity by Oracle & Google.
+
+        {/* Main Red Pixel Headline */}
+        <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-pixel font-bold text-red-600 tracking-wider uppercase leading-tight mb-3">
+          WHO IS OM SHARMA?
+        </h1>
+
+        {/* Subtitle in Pixel Font */}
+        <p className="text-xs sm:text-sm font-pixel text-neutral-300 tracking-wide mb-6">
+          Om Sharma — The Legacy of Code & Full-Stack Development
         </p>
-        <p className={`font-semibold font-outfit text-lg ${isNight ? "text-slate-100" : "text-slate-900"}`}>
-          Still learning. Still creating. Still building what's next 🚀
-        </p>
+
+        {/* Left Red Accent Line Container */}
+        <div className="border-l-2 sm:border-l-4 border-red-600 pl-4 sm:pl-6 flex flex-col gap-4 text-neutral-200 font-sans text-sm sm:text-base leading-relaxed">
+          <p>
+            <span className="font-semibold text-white">Om Sharma</span>, known to tech communities as an active competitive programmer and builder, is not just a developer — he is a <span className="font-semibold text-white">digital architect & innovator</span>.
+          </p>
+
+          <p>
+            Currently pursuing his B.Tech in Computer Science & Engineering at GLA University, Om has carved his own path with pure talent, raw authenticity, and a relentless work ethic. He brings modern full-stack web development, algorithmic problem solving, and 3D web interfaces to reality while staying certified in Generative AI, DevOps, and Cybersecurity by Oracle and Google.
+          </p>
+
+          <blockquote className="italic text-amber-400 font-sans text-sm sm:text-base pt-2">
+            "His code builds anthems of logic, creativity, and precision. Driven by curiosity, he continues to inspire and build high-impact digital experiences."
+          </blockquote>
+        </div>
       </div>
 
 
@@ -195,7 +200,12 @@ PROFILES:
       <div className="py-10 flex flex-col w-full">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
           <div>
-            <h3 className="subhead-text">Skills & Technologies</h3>
+            <p className="text-[10px] sm:text-xs font-pixel text-red-600 dark:text-red-500 uppercase tracking-widest mb-1">
+              OFFICIAL STACK
+            </p>
+            <h3 className="subhead-text font-pixel uppercase">
+              FEATURED SKILLS
+            </h3>
             <p className={`mt-1.5 text-sm ${isNight ? "text-slate-400" : "text-slate-500"}`}>
               Languages, frameworks, database systems, and developer tools I work with:
             </p>
@@ -234,7 +244,12 @@ PROFILES:
 
       {/* Education & Certifications Timeline */}
       <div className="py-16">
-        <h3 className="subhead-text">Education & Certifications.</h3>
+        <p className="text-[10px] sm:text-xs font-pixel text-red-600 dark:text-red-500 uppercase tracking-widest mb-1">
+          ACADEMIC & CREDENTIALS
+        </p>
+        <h3 className="subhead-text font-pixel uppercase">
+          EDUCATION & CERTIFICATIONS
+        </h3>
         <div
           className={`mt-5 flex flex-col gap-3 ${
             isNight ? "text-slate-400" : "text-slate-500"
