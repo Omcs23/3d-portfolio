@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T18:49:15.589Z",
+  "lastUpdated": "2026-10-08T05:49:12.565Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -11,7 +11,7 @@
         "easySolved": 43,
         "mediumSolved": 68,
         "hardSolved": 45,
-        "currentStreak": 1,
+        "currentStreak": 0,
         "longestStreak": 11,
         "totalActiveDays": 29
       },
@@ -136,7 +136,7 @@
           "solved": 14,
           "points": 158,
           "category": "Language Proficiency",
-          "rank": 441900
+          "rank": 441934
         },
         {
           "name": "Python",
@@ -144,7 +144,7 @@
           "solved": 31,
           "points": 415,
           "category": "Language Proficiency",
-          "rank": 315233
+          "rank": 315253
         },
         {
           "name": "30 Days of Code",
