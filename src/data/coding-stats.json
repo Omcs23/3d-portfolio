@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-09T18:17:26.831Z",
+  "lastUpdated": "2026-10-10T05:36:21.744Z",
   "platforms": {
     "leetcode": {
       "username": "OmSharma152",
@@ -136,7 +136,7 @@
           "solved": 14,
           "points": 158,
           "category": "Language Proficiency",
-          "rank": 442138
+          "rank": 442152
         },
         {
           "name": "Python",
@@ -144,7 +144,7 @@
           "solved": 31,
           "points": 415,
           "category": "Language Proficiency",
-          "rank": 315389
+          "rank": 315408
         },
         {
           "name": "30 Days of Code",
