@@ -237,13 +237,15 @@ const PortfolioGuideRobot = () => {
   ]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [viewportHeight, setViewportHeight] = useState(
-    typeof window !== "undefined" && window.visualViewport
-      ? window.visualViewport.height
-      : typeof window !== "undefined"
-      ? window.innerHeight
-      : 600
-  );
+  const [viewportDims, setViewportDims] = useState(() => {
+    if (typeof window === "undefined") {
+      return { width: 360, height: 600, isLandscape: false };
+    }
+    const vv = window.visualViewport;
+    const h = vv ? vv.height : window.innerHeight;
+    const w = vv ? vv.width : window.innerWidth;
+    return { width: w, height: h, isLandscape: w > h && h < 600 };
+  });
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   const handleNumberGuessEnd = ({ status, attempts, maxAttempts, maxRange, secretNumber }) => {
@@ -274,25 +276,37 @@ const PortfolioGuideRobot = () => {
   const inactivityTimerRef = useRef(null);
 
 
-  // Handle mobile visual viewport height changes when virtual keyboard opens/closes
+  // Handle mobile visual viewport & orientation changes when virtual keyboard opens or phone rotates
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const handleViewportChange = () => {
-      if (window.visualViewport) {
-        setViewportHeight(window.visualViewport.height);
-      }
+      const vv = window.visualViewport;
+      const h = vv ? vv.height : window.innerHeight;
+      const w = vv ? vv.width : window.innerWidth;
+      const isLandscape = w > h && h < 600;
+      setViewportDims({ width: w, height: h, isLandscape });
     };
 
+    window.addEventListener("resize", handleViewportChange);
+    window.addEventListener("orientationchange", handleViewportChange);
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", handleViewportChange);
       window.visualViewport.addEventListener("scroll", handleViewportChange);
     }
+    if (window.screen && window.screen.orientation) {
+      window.screen.orientation.addEventListener("change", handleViewportChange);
+    }
 
     return () => {
+      window.removeEventListener("resize", handleViewportChange);
+      window.removeEventListener("orientationchange", handleViewportChange);
       if (window.visualViewport) {
         window.visualViewport.removeEventListener("resize", handleViewportChange);
         window.visualViewport.removeEventListener("scroll", handleViewportChange);
+      }
+      if (window.screen && window.screen.orientation) {
+        window.screen.orientation.removeEventListener("change", handleViewportChange);
       }
     };
   }, []);
@@ -302,6 +316,11 @@ const PortfolioGuideRobot = () => {
     if (location.pathname === "/") {
       window.scrollTo(0, 0);
     }
+    setTimeout(() => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+    }, 120);
   };
 
   const handleInputBlur = () => {
@@ -323,61 +342,21 @@ const PortfolioGuideRobot = () => {
     return () => clearTimeout(motionTimer);
   }, []);
 
-  // Prevent scroll chaining / background webpage scrolling while inside Emmy Chat
+  // Prevent wheel events from leaking to background 3D scene while scrolling inside Emmy Chat
   useEffect(() => {
     if (!isOpen) return;
 
-    const attachScrollGuard = (el) => {
-      if (!el) return () => {};
+    const el = chatContainerRef.current;
+    if (!el) return;
 
-      let startY = 0;
-
-      const handleWheel = (e) => {
-        const delta = e.deltaY;
-        const isAtTop = el.scrollTop <= 0 && delta < 0;
-        const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1 && delta > 0;
-
-        if (isAtTop || isAtBottom) {
-          if (e.cancelable) e.preventDefault();
-        }
-        e.stopPropagation();
-      };
-
-      const handleTouchStart = (e) => {
-        if (e.touches.length === 1) {
-          startY = e.touches[0].clientY;
-        }
-      };
-
-      const handleTouchMove = (e) => {
-        if (e.touches.length !== 1) return;
-        const currentY = e.touches[0].clientY;
-        const deltaY = currentY - startY;
-
-        const isAtTop = el.scrollTop <= 0 && deltaY > 0;
-        const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1 && deltaY < 0;
-
-        if (isAtTop || isAtBottom) {
-          if (e.cancelable) e.preventDefault();
-        }
-        e.stopPropagation();
-      };
-
-      el.addEventListener("wheel", handleWheel, { passive: false });
-      el.addEventListener("touchstart", handleTouchStart, { passive: true });
-      el.addEventListener("touchmove", handleTouchMove, { passive: false });
-
-      return () => {
-        el.removeEventListener("wheel", handleWheel);
-        el.removeEventListener("touchstart", handleTouchStart);
-        el.removeEventListener("touchmove", handleTouchMove);
-      };
+    const handleWheel = (e) => {
+      e.stopPropagation();
     };
 
-    const cleanupChat = attachScrollGuard(chatContainerRef.current);
+    el.addEventListener("wheel", handleWheel, { passive: true });
 
     return () => {
-      cleanupChat();
+      el.removeEventListener("wheel", handleWheel);
     };
   }, [isOpen]);
 
@@ -1055,31 +1034,51 @@ Strict rules:
     return null;
   }
 
-  // Calculate max chat popup height based on current visual viewport (above soft keyboard)
-  const calculatedMaxHeight = Math.min(
-    Math.max(viewportHeight - 110, 220),
-    480
-  );
+  // Calculate max chat popup height based on current visual viewport (above soft keyboard or screen edges)
+  const isLandscape = viewportDims.isLandscape;
+  const calculatedMaxHeight = isLandscape
+    ? Math.max(160, Math.min(viewportDims.height - 18, 420))
+    : Math.max(220, Math.min(viewportDims.height - (isInputFocused ? 24 : 85), 500));
 
   return createPortal(
     <>
+      {/* Tap-outside transparent backdrop to easily dismiss/close Emmy on mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-[890] bg-black/15 dark:bg-black/30 backdrop-blur-[1px] pointer-events-auto transition-opacity"
+          onClick={toggleOpen}
+          aria-hidden="true"
+        />
+      )}
+
       <aside
         aria-label="Emmy Island Guide"
-        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
-        className={`fixed bottom-6 sm:bottom-8 left-4 sm:left-12 lg:left-[calc(50vw-29rem)] z-[900] flex flex-col items-start pointer-events-none transition-all duration-1000 ${
-          isInitialFloating && !isOpen ? "animate-monkey-entry-wave" : ""
-        }`}
+        style={{
+          paddingBottom: isLandscape
+            ? "max(6px, env(safe-area-inset-bottom, 6px))"
+            : "env(safe-area-inset-bottom, 0px)",
+          paddingLeft: "env(safe-area-inset-left, 0px)",
+        }}
+        className={`fixed z-[900] flex flex-col items-start pointer-events-none transition-all duration-300 ${
+          isOpen
+            ? isLandscape
+              ? "bottom-2 sm:bottom-3 left-2 sm:left-4"
+              : "bottom-4 sm:bottom-8 left-3 sm:left-12 lg:left-[calc(50vw-29rem)]"
+            : "bottom-6 sm:bottom-8 left-4 sm:left-12 lg:left-[calc(50vw-29rem)]"
+        } ${isInitialFloating && !isOpen ? "animate-monkey-entry-wave" : ""}`}
       >
         {/* CHAT POPUP WINDOW */}
         {isOpen && (
           <div
-            onTouchStart={(e) => e.stopPropagation()}
-            onTouchMove={(e) => e.stopPropagation()}
             style={{
               maxHeight: `${calculatedMaxHeight}px`,
               height: `${calculatedMaxHeight}px`,
             }}
-            className={`pointer-events-auto mb-3 w-[calc(100vw-2rem)] max-w-[320px] sm:max-w-[360px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-left overscroll-contain ${
+            className={`pointer-events-auto ${
+              isLandscape ? "mb-0" : "mb-2 sm:mb-3"
+            } w-[calc(100vw-1rem)] ${
+              isLandscape ? "max-w-[420px] sm:max-w-[460px]" : "max-w-[330px] sm:max-w-[360px]"
+            } rounded-2xl border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform scale-100 origin-bottom-left overscroll-contain ${
               isNight
                 ? "bg-slate-900/95 backdrop-blur-md border-slate-700/80 text-slate-100 shadow-slate-950/80"
                 : "bg-white/95 backdrop-blur-md border-slate-200 text-slate-800 shadow-xl"
@@ -1087,7 +1086,9 @@ Strict rules:
           >
             {/* Chat Header */}
             <div
-              className={`px-4 py-3 flex items-center justify-between border-b shrink-0 ${
+              className={`flex items-center justify-between border-b shrink-0 ${
+                isLandscape ? "px-3 py-1.5" : "px-4 py-2.5 sm:py-3"
+              } ${
                 isNight
                   ? "bg-slate-800/80 border-slate-700/80"
                   : "bg-slate-100/80 border-slate-200"
@@ -1120,7 +1121,7 @@ Strict rules:
               <button
                 onClick={toggleOpen}
                 aria-label="Close Emmy Guide"
-                className={`p-1 rounded-lg transition-colors text-sm font-semibold ${
+                className={`p-1.5 rounded-lg transition-colors text-sm font-semibold active:scale-95 ${
                   isNight
                     ? "hover:bg-slate-700 text-slate-400 hover:text-slate-100"
                     : "hover:bg-slate-200 text-slate-500 hover:text-slate-900"
@@ -1133,7 +1134,9 @@ Strict rules:
             {/* Chat History Area */}
             <div
               ref={chatContainerRef}
-              className="flex-1 p-3.5 overflow-y-auto custom-scrollbar overscroll-contain space-y-3 text-xs sm:text-sm scroll-smooth"
+              className={`flex-1 overflow-y-auto custom-scrollbar overscroll-contain space-y-2.5 text-xs sm:text-sm scroll-smooth touch-pan-y ${
+                isLandscape ? "p-2.5" : "p-3.5"
+              }`}
             >
               {chatHistory.map((msg, index) => (
                 <div
@@ -1184,7 +1187,9 @@ Strict rules:
 
             {/* Quick Action Pills Area with Category Switcher & Smooth Swiping */}
             <div
-              className={`px-2.5 pt-2 pb-2 border-t flex flex-col gap-1.5 shrink-0 ${
+              className={`border-t flex flex-col gap-1 shrink-0 ${
+                isLandscape ? "px-2 py-1" : "px-2.5 pt-2 pb-2 gap-1.5"
+              } ${
                 isNight
                   ? "bg-slate-900/95 border-slate-800"
                   : "bg-slate-50/95 border-slate-200/80"
@@ -1235,7 +1240,9 @@ Strict rules:
             {/* Custom Message Keyboard Input Bar */}
             <form
               onSubmit={handleCustomSubmit}
-              className={`p-2 border-t flex items-center gap-1.5 shrink-0 ${
+              className={`border-t flex items-center gap-1.5 shrink-0 ${
+                isLandscape ? "p-1.5 px-2" : "p-2"
+              } ${
                 isNight
                   ? "bg-slate-900 border-slate-800 text-slate-100"
                   : "bg-white border-slate-200 text-slate-800"
@@ -1287,36 +1294,33 @@ Strict rules:
           </div>
         )}
 
-        {/* DOCK ANCHOR CONTAINER FOR FLOATING MONKEY AVATAR */}
-        <div className="relative pointer-events-auto flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 shrink-0">
+        {/* DOCK ANCHOR CONTAINER FOR FLOATING MONKEY AVATAR (Hidden when chat is open to avoid empty dead space below modal) */}
+        {!isOpen && (
+          <div className="relative pointer-events-auto flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 shrink-0">
+            {/* Boundary-Free 3D Floating Monkey Avatar Button */}
+            <button
+              onClick={toggleOpen}
+              aria-label="Open Emmy Guide"
+              type="button"
+              tabIndex={0}
+              className="relative group flex items-center justify-center focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-transparent border-none p-0 animate-monkey-float transition-all duration-300 transform w-full h-full z-10 scale-100 opacity-100 pointer-events-auto cursor-pointer"
+            >
+              {/* Soft Ambient Character Aura */}
+              <div
+                className={`absolute inset-1 rounded-full opacity-40 blur-lg group-hover:opacity-80 transition-opacity animate-pulse ${
+                  isSleeping
+                    ? "bg-indigo-500/40"
+                    : isNight
+                    ? "bg-indigo-500/60"
+                    : "bg-sky-400/60"
+                }`}
+              />
 
-          {/* Boundary-Free 3D Floating Monkey Avatar Button (Removes when chat mode is active, comes back when closed) */}
-          <button
-            onClick={toggleOpen}
-            aria-label={isOpen ? "Close Emmy Guide" : "Open Emmy Guide"}
-            type="button"
-            tabIndex={isOpen ? -1 : 0}
-            className={`relative group flex items-center justify-center focus:outline-none focus-visible:outline-none focus:ring-0 outline-none select-none bg-transparent border-none p-0 animate-monkey-float transition-all duration-300 transform w-full h-full z-10 ${
-              isOpen
-                ? "scale-0 opacity-0 pointer-events-none"
-                : "scale-100 opacity-100 pointer-events-auto cursor-pointer"
-            }`}
-          >
-            {/* Soft Ambient Character Aura */}
-            <div
-              className={`absolute inset-1 rounded-full opacity-40 blur-lg group-hover:opacity-80 transition-opacity animate-pulse ${
-                isSleeping
-                  ? "bg-indigo-500/40"
-                  : isNight
-                  ? "bg-indigo-500/60"
-                  : "bg-sky-400/60"
-              }`}
-            />
-
-            {/* Boundary-Free 3D Monkey Avatar */}
-            <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} className="relative z-10" />
-          </button>
-        </div>
+              {/* Boundary-Free 3D Monkey Avatar */}
+              <MonkeyAvatar size="lg" isNight={isNight} isSleeping={isSleeping} className="relative z-10" />
+            </button>
+          </div>
+        )}
       </aside>
 
       {/* Standalone Emmy Arcade Number Guessing Game Modal Overlay */}
